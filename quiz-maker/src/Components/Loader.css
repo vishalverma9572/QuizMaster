@@ -1,0 +1,32 @@
+/* Loader.css */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #2d3b45; /* background color of the loader */
+  }
+  
+  .loader-container .loader-logo {
+    width: 200px;
+    height: auto;
+    animation: color-change 4s infinite;
+  }
+  @keyframes color-change {
+    0% {
+      filter: invert(0%);
+    }
+    25% {
+      filter: invert(50%);
+    }
+    50% {
+      filter: invert(100%);
+    }
+    75% {
+      filter: invert(50%);
+    }
+    100% {
+      filter: invert(0%);
+    }
+  }
+  

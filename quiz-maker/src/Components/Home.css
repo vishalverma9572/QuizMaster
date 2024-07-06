@@ -20,6 +20,7 @@
   width: 200px;
   height: auto;
   margin-bottom: 20px;
+  filter:invert(100%);
 }
 
 .home-container h1 {

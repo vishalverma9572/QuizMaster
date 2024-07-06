@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import logo from '../images/quizmaster-high-resolution-logo-black-transparent.png'; // Import your logo image here
+import Loader from './Loader';
 
 const Home = () => {
+    const [isLoading, setIsLoading] = useState(true);
+
+    //when the component is loaded, set is Loading to false
+    setTimeout(() => {
+        setIsLoading(false);
+    }, 2000);
+
+    
+    
   const navigate = useNavigate();
   const isAuthenticated = (localStorage.getItem('token')!==null && localStorage.getItem('token')!==undefined);
   //set the document title
@@ -20,6 +30,8 @@ const Home = () => {
   };
 
   return (
+    <>
+    {(isLoading)?<Loader/>:
     <div className="home-container">
       <div className="logo">
         <img src={logo} alt="QuizMaster Logo" />
@@ -43,7 +55,8 @@ const Home = () => {
           
         
       </div>
-    </div>
+    </div>}
+    </>
   );
 };
 
