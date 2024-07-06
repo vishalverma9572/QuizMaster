@@ -1,13 +1,14 @@
 const express = require('express');
 const Quiz = require('../models/Quiz');
 const QuizResult = require('../models/QuizResult');
+const QuizProgress = require('../models/QuizProgress');
 const auth = require('../middleware/auth');
 const router = express.Router();
 const mongoose = require('mongoose');
 
 // Create Quiz
 router.post('/', auth, async (req, res) => {
-    let { title, quiz_id, questions } = req.body;
+    let { title, quiz_id, questions,timeLimit } = req.body;
     //add user_id to the quiz_id
     quiz_id = req.user.id + quiz_id;
     if (!title || !questions || questions.length === 0) {
@@ -24,7 +25,8 @@ router.post('/', auth, async (req, res) => {
             title,
             quiz_id,
             questions,
-            createdBy: req.user.id
+            createdBy: req.user.id,
+            timeLimit
         });
 
         const quiz = await newQuiz.save();
@@ -54,7 +56,7 @@ router.get('/:quiz_id', auth, async (req, res) => {
     try {
         const { quiz_id } = req.params;
         console.log(quiz_id);
-        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id });
+        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id }).select('-_id -__v');
         if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
         res.json(quiz);
     } catch (err) {
@@ -165,7 +167,7 @@ router.put('/:quiz_id', auth, async (req, res) => {
 //fetch quiz to take quiz
 router.get('/take/:quiz_id', auth, async (req, res) => {
     const { quiz_id } = req.params;
-
+    console.log("hi");
     try {
         const quiz = await Quiz.findOne({ quiz_id });
 
@@ -200,6 +202,9 @@ router.post('/take/:quiz_id', auth, async (req, res) => {
     const { answers } = req.body;  // Expect answers array from the frontend
 
     try {
+        
+
+
         let quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
 
         if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
@@ -207,6 +212,9 @@ router.post('/take/:quiz_id', auth, async (req, res) => {
         if (!quiz.takenBy.includes(req.user.id)) {
             quiz.takenBy.push(req.user.id);
             await quiz.save();
+        }
+        else{
+            return res.status(400).json({ msg: 'Quiz already taken' });
         }
 
         // Validate and process answers
@@ -292,6 +300,206 @@ router.get('/results/:quiz_id', auth, async (req, res) => {
     }
 });
 
+
+// Save Quiz Progress
+// Save Quiz Progress
+router.post('/progress/:quiz_id', auth, async (req, res) => {
+    const { answers, elapsedTime } = req.body; // Expect answers and elapsedTime from the frontend
+
+    try {
+        let quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
+
+        let quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+
+        if (!quizProgress) {
+            quizProgress = new QuizProgress({
+                quiz_id: req.params.quiz_id,
+                user_id: req.user.id,
+                answers,
+                elapsedTime
+            });
+        } else {
+            quizProgress.answers = answers;
+            quizProgress.elapsedTime = elapsedTime;
+        }
+
+        // Check if the time limit is reached
+        if (elapsedTime >= quiz.timeLimit * 60) { // timeLimit is in minutes, elapsedTime is in seconds
+            quizProgress.completed = true;
+
+            // Calculate score
+            let score = 0;
+            const answersWithCorrectness = quizProgress.answers.map(answer => {
+                const question = quiz.questions.id(answer.question_id);
+                const isCorrect = question.correctAnswer === answer.selectedOption;
+                if (isCorrect) score += 1;
+                return {
+                    ...answer,
+                    isCorrect
+                };
+            });
+
+            // Save to QuizResult
+            const quizResult = new QuizResult({
+                quiz_id: req.params.quiz_id,
+                user_id: req.user.id,
+                score,
+                answers: answersWithCorrectness
+            });
+
+            await quizResult.save();
+        }
+
+        await quizProgress.save();
+
+        res.json({ msg: 'Quiz progress saved' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+//CHECK QUIZ TAKEN OR IN PROGRESS OR NOT TAKEN
+router.post('/progress/:quiz_id', auth, async (req, res) => {
+    const { answers, elapsedTime } = req.body; // Expect answers and elapsedTime from the frontend
+
+    try {
+        let quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
+
+        let quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+
+        if (!quizProgress) {
+            // Create new QuizProgress if none exists for this user and quiz
+            quizProgress = new QuizProgress({
+                quiz_id: req.params.quiz_id,
+                user_id: req.user.id,
+                answers,
+                elapsedTime
+            });
+        } else {
+            // Update existing QuizProgress
+            quizProgress.answers = answers;
+            quizProgress.elapsedTime = elapsedTime;
+        }
+
+        // Check if the time limit is reached
+        if (elapsedTime >= quiz.timeLimit * 60) { // timeLimit is in minutes, elapsedTime is in seconds
+            quizProgress.completed = true;
+
+            // Calculate score
+            let score = 0;
+            const answersWithCorrectness = quizProgress.answers.map(answer => {
+                const question = quiz.questions.id(answer.question_id);
+                const isCorrect = question.correctAnswer === answer.selectedOption;
+                if (isCorrect) score += 1;
+                return {
+                    ...answer,
+                    isCorrect
+                };
+            });
+
+            // Save to QuizResult
+            const quizResult = new QuizResult({
+
+                quiz_id: req.params.quiz_id,
+                user_id: req.user.id,
+                score,
+                answers: answersWithCorrectness
+            });
+            //before saving check if quiz is already taken
+            const quizResultExists =    await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+            //if quiz is already taken then return error
+            if(quizResultExists){
+                return res.status(400).json({ msg: 'Quiz already taken' });
+            }
+            //PUSH THE USER ID TO TAKEN BY
+            if (!quiz.takenBy.includes(req.user.id)) {
+                quiz.takenBy.push(req.user.id);
+                await quiz.save();
+            }
+            await quizResult.save();
+        }
+
+        await quizProgress.save();
+
+        res.json({ msg: 'Quiz progress saved' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+// GET All users RESULTS OF QUIZ
+router.get('/scores/:quiz_id', auth, async (req, res) => {
+    try {
+        // Find the quiz by quiz_id
+        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        // Check if quiz exists
+        if (!quiz) {
+            return res.status(404).json({ msg: 'Quiz not found' });
+        }
+
+        // Check if the user is the creator of the quiz or has taken the quiz
+        if (quiz.createdBy.toString() !== req.user.id && !quiz.takenBy.includes(req.user.id)) {
+            return res.status(403).json({ msg: 'Unauthorized access' });
+        }
+
+        // Aggregate pipeline to match quiz_id and group scores by user_id
+        const results = await QuizResult.aggregate([
+            {
+                $match: { quiz_id: req.params.quiz_id }
+            },
+            {
+                $group: {
+                    _id: '$user_id',
+                    score: { $sum: '$score' }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: '_id',
+                    foreignField: '_id',
+                    as: 'user'
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    username: { $arrayElemAt: ['$user.username', 0] },
+                    score: 1
+                }
+            }
+        ]);
+
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+// Get all quiz results given by user
+router.get('/results', auth, async (req, res) => {
+    try {
+        const results = await QuizResult.find({ user_id: req.user.id }).select('quiz_id score');
+        res.json(results);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+
+
+
+
+// Get Statistics of a Specific Quiz
 // Get Statistics of a Specific Quiz
 router.get('/stats/:quiz_id', auth, async (req, res) => {
     try {
@@ -301,29 +509,77 @@ router.get('/stats/:quiz_id', auth, async (req, res) => {
             return res.status(404).json({ msg: 'No results found for this quiz' });
         }
 
+        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        // Check if the user is the creator of the quiz
+        if (quiz.createdBy.toString() !== req.user.id && !quiz.takenBy.includes(req.user.id)) {
+            return res.status(403).json({ msg: 'Unauthorized access' });
+        }
+
         // Calculate statistics
         const scores = quizResults.map(result => result.score);
-        const min = Math.min(...scores);
-        const max = Math.max(...scores);
+        const sortedScores = [...scores].sort((a, b) => a - b);
+        const count = sortedScores.length;
+
+        const min = sortedScores[0];
+        const max = sortedScores[count - 1];
+
         const sum = scores.reduce((acc, score) => acc + score, 0);
-        const mean = sum / scores.length;
+        const mean = sum / count;
 
-        scores.sort((a, b) => a - b);
-        const median = scores.length % 2 === 0 
-            ? (scores[scores.length / 2 - 1] + scores[scores.length / 2]) / 2 
-            : scores[Math.floor(scores.length / 2)];
+        let median;
+        if (count % 2 === 0) {
+            median = (sortedScores[count / 2 - 1] + sortedScores[count / 2]) / 2;
+        } else {
+            median = sortedScores[Math.floor(count / 2)];
+        }
 
-        const mode = scores.reduce((currentMode, score, index, array) => {
-            const count = array.filter(s => s === score).length;
-            return count > (currentMode.count || 0) ? { value: score, count } : currentMode;
-        }, {}).value || scores[0];
+        const lowerQuartile = findQuartile(sortedScores, 0.25);
+        const upperQuartile = findQuartile(sortedScores, 0.75);
 
-        res.json({ min, max, mean, median, mode });
+        res.json({ min, max, mean, median, lowerQuartile, upperQuartile });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
+// Helper function to find quartile
+function findQuartile(sortedArray, percentile) {
+    const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
+    return sortedArray[index];
+}
+
+// Delete Quiz
+router.delete('/:quiz_id', auth, async (req, res) => {
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        if (!quiz) {
+            return res.status(404).json({ msg: 'Quiz not found' });
+        }
+
+        if (quiz.createdBy.toString() !== req.user.id) {
+            return res.status(403).json({ msg: 'Unauthorized access' });
+        }
+
+        await quiz.remove();
+        res.json({ msg: 'Quiz deleted successfully' });
+        //remove results of quiz
+        await   QuizResult.deleteMany({ quiz_id: req.params.quiz_id }); 
+        //remove progress of quiz
+        await   QuizProgress.deleteMany({ quiz_id: req.params.quiz_id });
+
+
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+
+ 
 
 
 
