@@ -1,0 +1,89 @@
+/* Home.css */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #2d3b45;
+  transition: all 0.3s ease-in-out;
+  font-family: "Nunito", sans-serif;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.home-container .logo img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.home-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.home-container p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+.home-container .button-container {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+}
+.home-container .button-container2 .button{
+    margin-top: 30px;
+    width:400px;
+    background-color: #005795;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.home-container .button-container2 .button:hover{
+    background: #0b5fef;
+}
+
+.home-container .button {
+  background: #005795;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.home-container .button:hover {
+  background: #0b5fef;
+}
+
+@media (max-width: 500px) {
+    .home-container h1 {
+    font-size: 2rem;
+  }
+
+  .home-container p {
+    font-size: 1rem;
+  }
+
+  .home-container .button {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+    .home-container .button-container2 .button{
+        width:250px;
+        padding: 10px 20px;
+    }
+}

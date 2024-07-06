@@ -409,6 +409,7 @@ router.post('/progress/:quiz_id', auth, async (req, res) => {
                 user_id: req.user.id,
                 score,
                 answers: answersWithCorrectness
+                
             });
             //before saving check if quiz is already taken
             const quizResultExists =    await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
@@ -549,6 +550,38 @@ function findQuartile(sortedArray, percentile) {
     const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
     return sortedArray[index];
 }
+
+//quiz status
+router.get('/status/:quiz_id', auth, async (req, res) => {
+    try {
+        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        if (!quiz) {
+            return res.status(404).json({ msg: 'Quiz not found' });
+        }
+
+        let status = 'Not taken';
+        const quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+        if (quizProgress) {
+            if (quizProgress.completed) {
+                status = 'Pending for Evaluation';
+            } else {
+                status = 'In progress';
+            }
+        }
+        if (quiz.takenBy.includes(req.user.id)) {
+            status = 'Taken';
+        }
+        //check in progress or pending for evaluation if status is completed
+        
+
+
+        res.json({ status });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
 
 // Delete Quiz
 router.delete('/:quiz_id', auth, async (req, res) => {

@@ -1,2 +1,5 @@
 /backend/node_modules
+/backend/.env
+.env
 /quiz-maker/node_modules
+/quiz-maker/.env
