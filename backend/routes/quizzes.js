@@ -5,6 +5,9 @@ const QuizProgress = require('../models/QuizProgress');
 const auth = require('../middleware/auth');
 const router = express.Router();
 const mongoose = require('mongoose');
+const User = require('../models/User');
+const generateUniqueId = require('generate-unique-id');
+
 
 // Create Quiz
 router.use((req, res, next) => {
@@ -14,9 +17,18 @@ router.use((req, res, next) => {
   });   
 
 router.post('/', auth, async (req, res) => {
-    let { title, quiz_id, questions,timeLimit } = req.body;
+    let { title, questions,timeLimit } = req.body;
     //add user_id to the quiz_id
-    quiz_id = req.user.id + quiz_id;
+    let quiz_id = generateUniqueId({
+        length: 10 ,
+        useLetters: true,
+        useNumbers: true,
+        
+    });
+    //add username to quiz_id
+    //get user name
+    const user= await User.findById(req.user.id);
+    quiz_id=user.username+"_"+quiz_id;
     if (!title || !questions || questions.length === 0) {
         return res.status(400).json({ msg: 'Title and questions are required' });
     }
@@ -637,9 +649,15 @@ router.get('/:quiz_id', auth, async (req, res) => {
     try {
         const { quiz_id } = req.params;
         console.log(quiz_id);
-        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id }).select('-_id -__v');
+        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id })
+            .select('-_id -__v')
+            .populate('takenBy', 'username');
         if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
-        res.json(quiz);
+
+        const numberOfParticipants = quiz.takenBy.length;
+        const lastUpdated = quiz.lastUpdated;
+
+        res.json({ ...quiz.toObject(), numberOfParticipants, lastUpdated });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });

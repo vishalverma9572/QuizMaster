@@ -1,0 +1,114 @@
+.quiz-details {
+    background-color: #2d3b45;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .quiz-details .buttons {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-details .buttons button {
+    background-color: #1a2a33;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .quiz-details .buttons button:hover {
+    background-color: #13212c;
+  }
+  
+  .quiz-details h2 {
+    margin-bottom: 20px;
+  }
+  
+  .quiz-details .questions {
+    width: 100%;
+    max-width: 800px;
+  }
+  
+  .quiz-details .question {
+    background-color: #fff;
+    color: #2d3b45;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .quiz-details .question p {
+    margin-bottom: 10px;
+  }
+  
+  .quiz-details .question ul {
+    padding-left: 20px;
+  }
+  
+  .quiz-details .question ul li {
+    margin-bottom: 5px;
+  }
+  
+  .quiz-details .confirm-popup {
+    background-color: #2d3b45;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 80%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .quiz-details .confirm-popup button {
+    background-color: #1a2a33;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .quiz-details .confirm-popup button:hover {
+    background-color: #13212c;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .quiz-details .buttons {
+      flex-direction: column;
+    }
+  
+    .quiz-details .buttons button {
+      margin-bottom: 10px;
+    }
+  
+    .quiz-details .questions,
+    .quiz-details .confirm-popup {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+  

@@ -49,8 +49,15 @@ const Profile = () => {
 
   const handleUsernameSubmit = (e) => {
     e.preventDefault();
+    //username should not contain spaces
     if (newUsername.length <= 6) {
+
       setUsernameError('Username must be longer than 6 characters.');
+    }
+    else if(
+      newUsername.includes(' ')
+    ){
+      setUsernameError('Username should not contain spaces.');
     } else {
       setUsernameError('');
       // Update username logic here

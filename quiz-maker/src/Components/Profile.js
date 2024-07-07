@@ -80,7 +80,13 @@ const Profile = () => {
     e.preventDefault();
     if (newUsername.length <= 6) {
       setUsernameError('Username must be longer than 6 characters.');
-    } else {
+    } 
+    else if(
+      newUsername.includes(' ')
+    ){
+      setUsernameError('Username should not contain spaces.');
+    }
+    else {
       setUsernameError('');
       try {
         const url = process.env.REACT_APP_BACKEND_URL + "/users/update-username";

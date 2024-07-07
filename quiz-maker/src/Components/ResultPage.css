@@ -1,89 +1,52 @@
 .result-page {
-    padding: 30px;
-  }
-  
-  .result-page h2 {
-    margin-bottom: 20px;
-    font-family: "Wittgenstein", serif;
-    color: #235;
-    border-bottom: 1px solid #235;
-  }
-  
-  .result-page .stats-section {
-    margin-bottom: 20px;
-  }
-  
-  .result-page .statistics {
-    margin-bottom: 10px;
-  }
-  
+  background-color: #2d3b45;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-page .stats-section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-page .user-scores-section {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-page .user-scores-list {
+  margin-top: 20px;
+}
+
+.result-page .gobackbtn {
+  background-color: #1a2a33;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.result-page .gobackbtn:hover {
+  background-color: #13212c;
+}
+
+@media screen and (max-width: 600px) {
+  .result-page .stats-section,
   .result-page .user-scores-section {
-    margin-top: 20px;
-  }
-  
-  .result-page .user-scores-table {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    padding: 10px;
-  }
-  
-  .result-page .user-scores-table table {
     width: 100%;
-    border-collapse: collapse;
+    max-width: 100%;
   }
-  
-  .result-page .user-scores-table th,
-  .result-page .user-scores-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .result-page .user-scores-table th {
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .result-page .pagination-controls {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .result-page .pagination-controls button {
-    margin: 0 5px;
-    padding: 5px 10px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .result-page .pagination-controls button.active {
-    background-color: #2980b9;
-  }
-  .result-page .gobackbtn{
-    background-color: #235;
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 5px 10px;
-    margin-top: 20px;
-  }
-  .result-page .gobackbtn:hover{
-    background-color: rgb(27, 60, 126);
-  }
-  
-  @media (max-width: 768px) {
-    /* Responsive styles if needed */
-    .result-page{
-        width: 95%;
-        padding: 10px 0px;
-        margin: auto;
-        
-
-
-    }
-   
-  }
-  
+}
