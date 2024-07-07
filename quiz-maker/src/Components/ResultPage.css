@@ -1,56 +1,89 @@
 .result-page {
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    padding: 30px;
   }
   
-  .result-page .stats-section {
+  .result-page h2 {
     margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #ccc;
+    font-family: "Wittgenstein", serif;
+    color: #235;
+    border-bottom: 1px solid #235;
   }
   
-  .result-page .stats-section h2 {
-    font-size: 1.5rem;
+  .stats-section {
+    margin-bottom: 20px;
+  }
+  
+  .statistics {
     margin-bottom: 10px;
   }
   
-  .result-page .user-scores-section {
+  .user-scores-section {
     margin-top: 20px;
   }
   
-  .result-page .user-scores-section h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .result-page .user-scores-list {
-    display: grid;
-    gap: 10px;
-  }
-  
-  .result-page .user-score-item {
-    padding: 10px;
-    background-color: #fff;
+  .user-scores-table {
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 10px;
   }
   
-  .result-page .user-score-item p {
-    font-size: 1rem;
-    margin: 0;
+  .user-scores-table table {
+    width: 100%;
+    border-collapse: collapse;
   }
   
-  @media (max-width: 600px) {
-    .result-page {
-      padding: 10px;
-    }
+  .user-scores-table th,
+  .user-scores-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
   
-    .result-page .user-score-item {
-      padding: 8px;
+  .user-scores-table th {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .pagination-controls {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .pagination-controls button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .pagination-controls button.active {
+    background-color: #2980b9;
+  }
+  .result-page .gobackbtn{
+    background-color: #235;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-top: 20px;
+  }
+  .result-page .gobackbtn:hover{
+    background-color: rgb(27, 60, 126);
+  }
+  
+  @media (max-width: 768px) {
+    /* Responsive styles if needed */
+    .result-page{
+        width: 95%;
+        padding: 10px 0px;
+        margin: auto;
+        
+
+
     }
+   
   }
   

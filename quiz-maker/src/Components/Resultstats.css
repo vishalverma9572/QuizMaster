@@ -1,0 +1,95 @@
+.result-stats {
+    background-color: rgba(239, 243, 248, 0.789);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    /* max-width: 800px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial, sans-serif';
+  }
+  
+  .result-stats h2 {
+    font-family: "Wittgenstein", serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #235;
+    border-bottom: 2px solid #235;
+    padding-bottom: 10px;
+  }
+  
+  .stats-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .stats-container canvas {
+    max-width: 60%;
+    max-height: 400px;
+  }
+  
+  .stats-details {
+    max-width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .stat-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-label {
+    font-weight: bold;
+    color: #235;
+  }
+  
+  .stat-value {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  /* Responsive Design for Mobile */
+  @media (max-width: 768px) {
+    .result-stats {
+      /* padding: 10px; */
+      width:90%;
+      margin: 0px;
+    }
+    .stats-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .stats-container canvas {
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .stats-details {
+      max-width: 100%;
+      width: 100%;
+    }
+  
+    .stat-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .stat-label {
+      margin-bottom: 5px;
+    }
+    .stats-section h4{
+        padding: 10px;
+    }
+  }
+  

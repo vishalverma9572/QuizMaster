@@ -16,6 +16,7 @@ const Dashboard = () => {
   
   const path = window.location.pathname.split('/')[1];
   useEffect(() => {
+    document.title = "Dashboard | QuizMaster";
     if (path === 'my-tests') {
       setActiveSection('my-tests');
       document.title = "My Tests | QuizMaster";
@@ -46,7 +47,7 @@ const Dashboard = () => {
     window.location.href = "/login";
   }
 
-  document.title = "Dashboard | QuizMaster";
+  
 
   useEffect(() => {
     //checking if the token is present or not

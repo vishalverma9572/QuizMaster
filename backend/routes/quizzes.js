@@ -360,7 +360,9 @@ function calculateScore(answers, questions) {
 // Get Result of Specific Test
 router.get('/results/:quiz_id', auth, async (req, res) => {
     try {
-        const result = await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id }).populate('quiz_id', 'title');
+        //send only score
+        const result = await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id }).select('score');
+        
         if (!result) return res.status(404).json({ msg: 'Result not found' });
         res.json(result);
     } catch (err) {

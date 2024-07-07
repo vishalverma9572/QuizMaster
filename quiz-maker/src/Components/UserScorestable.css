@@ -1,0 +1,93 @@
+.user-scores-table {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin-top: 20px;
+  }
+  
+  .user-scores-table h2 {
+    margin-bottom: 10px;
+    font-family: "Wittgenstein", serif;
+    color: #235;
+    border-bottom: 2px solid #235;
+  }
+  
+  .user-scores-table .search-container {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: right;
+  }
+  
+  .user-scores-table input[type="text"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #235;
+    border-radius: 4px;
+    
+  }
+  .user-scores-table input[type="text"]:focus {
+    border-color: rgba(30, 44, 72, 0.9);
+    border-width: 2px;
+    outline: none;
+  }
+  
+  .user-scores-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .user-scores-table th,
+  .user-scores-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .user-scores-table th {
+    background-color: rgba(34, 51, 85, 0.75);
+    color: white;
+    text-align: center;
+  }
+  
+  .user-scores-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .user-scores-table .pagination {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .user-scores-table .pagination button {
+    margin: 0 5px;
+    padding: 5px 10px;
+    background-color: rgba(34, 51, 85, 0.90);
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .user-scores-table .pagination button.active {
+    background-color: #2980b9;
+  }
+  
+  @media (max-width: 768px) {
+    .user-scores-table input[type="text"] {
+        max-width: 100%;
+      }
+    
+      .user-scores-table th,
+      .user-scores-table td {
+        padding: 6px;
+      }
+    
+      .user-scores-table .pagination button {
+        padding: 4px 8px;
+        margin: 2px;
+      }
+
+  }
+  

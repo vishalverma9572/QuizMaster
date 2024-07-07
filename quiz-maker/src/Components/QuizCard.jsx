@@ -71,6 +71,7 @@ const QuizCard = ({ title, lastUpdated, numberOfQuestions, timeLimit, numberOfTa
         <Detail>Time Limit: {timeLimit} minutes</Detail>
         <Detail>Participants: {numberOfTakenBy}</Detail>
         <StyledButton variant="contained" onClick={onDetailsClick}>Details</StyledButton>
+        
       </StyledCardContent>
     </StyledCard>
   );
