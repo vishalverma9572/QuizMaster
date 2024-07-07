@@ -8,13 +8,13 @@ const mongoose = require('mongoose');
 const User = require('../models/User');
 const generateUniqueId = require('generate-unique-id');
 
-
-// Create Quiz
 router.use((req, res, next) => {
     //printing the route url
     console.log(req.originalUrl);
     next();
-  });   
+  });
+// Create Quiz
+  
 
 router.post('/', auth, async (req, res) => {
     let { title, questions,timeLimit } = req.body;
@@ -173,7 +173,7 @@ router.get('/taken', auth, async (req, res) => {
 
 
 router.put('/:quiz_id', auth, async (req, res) => {
-    const { title, questions } = req.body;
+    const { title,timeLimit, questions } = req.body;
     const { quiz_id } = req.params;
 
     try {
@@ -185,6 +185,7 @@ router.put('/:quiz_id', auth, async (req, res) => {
 
         // Update quiz details
         quiz.title = title || quiz.title;
+        quiz.timeLimit = timeLimit || quiz.timeLimit;
 
        // Update existing questions and add new ones
         if (questions) {
@@ -213,7 +214,7 @@ router.put('/:quiz_id', auth, async (req, res) => {
 
         
         quiz.lastUpdated = Date.now();
-
+        console.log(quiz);
         await quiz.save();
 
         // Re-evaluate results for all attendees
@@ -615,34 +616,30 @@ router.get('/status/:quiz_id', auth, async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 });
-
-// Delete Quiz
-router.delete('/:quiz_id', auth, async (req, res) => {
+ //delete quiz
+router.delete('/delete/:quiz_id', auth, async (req, res) => {
+    console.log("delete route reached");
     try {
-        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+        const quiz = await Quiz.findOneAndDelete({ quiz_id: req.params.quiz_id, createdBy: req.user.id });
 
         if (!quiz) {
             return res.status(404).json({ msg: 'Quiz not found' });
         }
 
-        if (quiz.createdBy.toString() !== req.user.id) {
-            return res.status(403).json({ msg: 'Unauthorized access' });
-        }
+        // Delete related quiz results
+        await QuizResult.deleteMany({ quiz_id: req.params.quiz_id });
+        
+        // Delete related quiz progress
+        await QuizProgress.deleteMany({ quiz_id: req.params.quiz_id });
 
-        await quiz.remove();
         res.json({ msg: 'Quiz deleted successfully' });
-        //remove results of quiz
-        await   QuizResult.deleteMany({ quiz_id: req.params.quiz_id }); 
-        //remove progress of quiz
-        await   QuizProgress.deleteMany({ quiz_id: req.params.quiz_id });
-
-
 
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
 
 // Get Single Quiz by quiz_id
 router.get('/:quiz_id', auth, async (req, res) => {
@@ -663,6 +660,9 @@ router.get('/:quiz_id', auth, async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
+
+
 
 
  

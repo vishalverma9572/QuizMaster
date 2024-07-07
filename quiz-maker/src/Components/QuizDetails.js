@@ -3,8 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './QuizDetails.css';
 
 const QuizDetails = () => {
+    const navigate = useNavigate();
+    //check user is logged in or not
+    if (!localStorage.getItem('token')|| localStorage.getItem('token')===null) {
+        navigate('/login');
+    }
+    document.title = 'Details Page | QuizMaster';
+
   const { quiz_id } = useParams();
-  const navigate = useNavigate();
+  
   const [quiz, setQuiz] = useState(null);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showConfirmEdit, setShowConfirmEdit] = useState(false);
@@ -34,7 +41,7 @@ const QuizDetails = () => {
 
   const handleDelete = async () => {
     try {
-      const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/${quiz_id}`;
+      const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/delete/${quiz_id}`;
       const response = await fetch(url, {
         method: 'DELETE',
         headers: {
@@ -63,10 +70,13 @@ const QuizDetails = () => {
 
   return (
     <div className="quiz-details">
+        {/* //gobackbtn */}
+        <button className='gobackbtn' onClick={() => navigate('/my-tests')}>&#8592; Go Back To My tests</button>
       <div className="buttons">
         <button onClick={() => setShowConfirmEdit(true)}>Edit Quiz</button>
         <button onClick={() => setShowConfirmDelete(true)}>Delete Quiz</button>
-        <button onClick={() => navigate(`/result/${quiz_id}`)}>See Stats</button>
+        { quiz.numberOfParticipants > 0 && 
+        <button onClick={() => navigate(`/result/${quiz_id}`)}>See Stats</button>}
       </div>
       <h2>{quiz.title}</h2>
       <p><strong>Time Limit:</strong> {quiz.timeLimit} minutes</p>

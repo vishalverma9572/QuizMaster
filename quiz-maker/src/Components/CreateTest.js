@@ -4,16 +4,17 @@ import { useNavigate } from 'react-router-dom';
 
 
 const CreateQuiz = () => {
+  const  navigate  = useNavigate();
 
   //check user is logged in or not
-  if (!localStorage.getItem('token')) {
+  if (!localStorage.getItem('token')|| localStorage.getItem('token')===null) {
     navigate('/login');
   }
   const [title, setTitle] = useState('');
   const [timeLimit, setTimeLimit] = useState('');
   const [questions, setQuestions] = useState([{ question: '', options: [''], correctAnswer: '' }]);
   const [error, setError] = useState('');
-  const { navigate } = useNavigate();
+  
 
   const handleTitleChange = (e) => setTitle(e.target.value);
 
@@ -79,9 +80,14 @@ const CreateQuiz = () => {
       });
       const data = await response.json();
       console.log(data);
-      alert('Quiz created successfully');
-      setError('');
-      navigate('/my-tests');
+      if(response.ok) {
+
+        alert('Quiz created successfully');
+        navigate(`/quiz/${data.quiz_id} `);
+      } else {
+        alert(data.msg);
+      }
+      
     } catch (error) {
       console.error('Error creating quiz:', error);
       alert('Error creating quiz. Please try again.');

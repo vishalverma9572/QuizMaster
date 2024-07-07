@@ -6,6 +6,7 @@ import Home from "./Components/Home";
 import Dashboard from "./Components/DashBoard";
 import ResultPage from "./Components/Resultpage";
 import QuizDetails from "./Components/QuizDetails";
+import EditQuiz from "./Components/EditQuiz";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/profile" element={<Dashboard/>} />
           <Route path="result/:quizid" element={<ResultPage/>} />
           <Route path='quiz/:quiz_id' element={<QuizDetails/>} />
+          <Route path='edit-quiz/:quiz_id' element={<EditQuiz/>} />
 
         </Routes>
       </Router>

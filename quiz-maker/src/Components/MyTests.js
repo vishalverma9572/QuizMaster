@@ -9,6 +9,10 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function MyTests() {
+  //check user is logged in or not
+  if (!localStorage.getItem('token')) {
+    navigate('/login');
+  }
   const [Loading, setLoading] = useState(true);
   const [quizzes, setQuizzes] = useState([]);
   const StyledTypography = styled(Typography)({
@@ -52,6 +56,7 @@ export default function MyTests() {
         <Grid item xs={12} sm={6} md={4} key={test.quiz_id}>
           <QuizCard
             title={test.title}
+            quiz_id={test.quiz_id}
             lastUpdated={test.lastUpdated}
             numberOfQuestions={test.numberOfQuestions}
             timeLimit={test.timeLimit}

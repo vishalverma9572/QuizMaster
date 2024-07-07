@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import './Profile.css';
+import { useNavigate } from 'react-router-dom';
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
 
 const Profile = () => {
+  const navigate= useNavigate();
+  //check user is logged in or not
+  
+  if (!localStorage.getItem('token')||localStorage.getItem('token')===null) {
+    navigate('/login');
+  }
   const [user, setUser] = useState({
     username: "",
     email: "",

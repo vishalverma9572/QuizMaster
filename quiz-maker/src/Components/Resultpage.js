@@ -24,7 +24,7 @@ const ResultPage = () => {
     paddingBottom: '25px', // Adjust padding to control space between text and line
   });
   
-    
+  document.title = 'Result Analysis | QuizMaster';
 
 
   useEffect(() => {

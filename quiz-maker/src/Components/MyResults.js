@@ -3,6 +3,7 @@ import './MyResults.css'; // Import your CSS file for styling
 import {  Typography, styled } from '@mui/material';
 import { Icon } from '@iconify-icon/react';
 import PageLoader from './PageLoader';
+import { useNavigate } from 'react-router-dom';
 
 // Mocked data (replace with actual data fetching logic)
 
@@ -18,6 +19,12 @@ const MyResults = () => {
     borderBottom: '2px solid #235',
     paddingBottom: '25px', // Adjust padding to control space between text and line
   });
+  const navigate=useNavigate();
+  //check user is logged in or not
+  if (!localStorage.getItem('token') || localStorage.getItem('token') === null){
+    navigate('/login');
+  }
+  
   useEffect(() => {
     const fetchResults = async () => {
       try{
