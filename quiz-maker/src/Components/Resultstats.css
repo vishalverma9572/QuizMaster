@@ -18,26 +18,26 @@
     padding-bottom: 10px;
   }
   
-  .stats-container {
+  .result-stats .stats-container {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
   }
   
-  .stats-container canvas {
+  .result-stats .stats-container canvas {
     max-width: 60%;
     max-height: 400px;
   }
   
-  .stats-details {
+  .result-stats .stats-details {
     max-width: 40%;
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
   
-  .stat-card {
+  .result-stats .stat-card {
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -48,12 +48,12 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .stat-label {
+  .result-stats .stat-label {
     font-weight: bold;
     color: #235;
   }
   
-  .stat-value {
+  .result-stats .stat-value {
     font-size: 18px;
     color: #333;
   }
@@ -65,30 +65,30 @@
       width:90%;
       margin: 0px;
     }
-    .stats-container {
+    .result-stats .stats-container {
       flex-direction: column;
       align-items: center;
     }
   
-    .stats-container canvas {
+    .result-stats.stats-container canvas {
       max-width: 100%;
       margin-bottom: 20px;
     }
   
-    .stats-details {
+    .result-stats .stats-details {
       max-width: 100%;
       width: 100%;
     }
   
-    .stat-card {
+    .result-stats .stat-card {
       flex-direction: column;
       align-items: flex-start;
     }
   
-    .stat-label {
+    .result-stats .stat-label {
       margin-bottom: 5px;
     }
-    .stats-section h4{
+    .result-stats .stats-section h4{
         padding: 10px;
     }
   }

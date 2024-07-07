@@ -9,48 +9,48 @@
     border-bottom: 1px solid #235;
   }
   
-  .stats-section {
+  .result-page .stats-section {
     margin-bottom: 20px;
   }
   
-  .statistics {
+  .result-page .statistics {
     margin-bottom: 10px;
   }
   
-  .user-scores-section {
+  .result-page .user-scores-section {
     margin-top: 20px;
   }
   
-  .user-scores-table {
+  .result-page .user-scores-table {
     border: 1px solid #ccc;
     border-radius: 5px;
     background-color: #f9f9f9;
     padding: 10px;
   }
   
-  .user-scores-table table {
+  .result-page .user-scores-table table {
     width: 100%;
     border-collapse: collapse;
   }
   
-  .user-scores-table th,
-  .user-scores-table td {
+  .result-page .user-scores-table th,
+  .result-page .user-scores-table td {
     border: 1px solid #ccc;
     padding: 8px;
     text-align: left;
   }
   
-  .user-scores-table th {
+  .result-page .user-scores-table th {
     background-color: #3498db;
     color: white;
   }
   
-  .pagination-controls {
+  .result-page .pagination-controls {
     margin-top: 20px;
     text-align: center;
   }
   
-  .pagination-controls button {
+  .result-page .pagination-controls button {
     margin: 0 5px;
     padding: 5px 10px;
     background-color: #3498db;
@@ -59,7 +59,7 @@
     cursor: pointer;
   }
   
-  .pagination-controls button.active {
+  .result-page .pagination-controls button.active {
     background-color: #2980b9;
   }
   .result-page .gobackbtn{

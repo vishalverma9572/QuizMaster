@@ -1,0 +1,138 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    /* max-width: 800px; */
+    margin: 0 auto;
+  }
+  
+  .profile h2 {
+    margin-bottom: 20px;
+    font-family: "Wittgenstein", serif;
+    color: #235;
+    border-bottom: 2px solid #235;
+    width:100%;
+    font-size: 34px;
+    font-weight: 500;
+  }
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff; /* White background */
+    color: #2d3b45; /* Text color */
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px; /* Adjust as needed */
+    margin-bottom: 60px; /* Space below */
+    border: 1px solid #235;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+
+  }
+  
+  .profile-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  
+  .profile-label {
+    font-weight: bold;
+  }
+  
+  .profile-value {
+    color: #666; /* Lighter text color */
+  }
+  
+  .profile-forms {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .profile-card {
+    background-color: #1a2a33e9;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-card h3 {
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #b0c4de;
+  }
+  
+  .form-group input {
+    width: calc(100% - 20px);
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #13212c;
+    color: #fff;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    box-shadow: 0 0 5px #1a2a33;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #212c34;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  button:hover {
+    background-color: #13212c;
+  }
+  
+  .error {
+    color: #ff4c4c;
+    font-size: 14px;
+  }
+
+    /* Responsive Design for Mobile */
+    @media (max-width: 768px) {
+        .profile {
+            padding: 10px;
+            width:90%;
+            margin: 0px;
+        }
+        .profile-info {
+            max-width: 100%;
+            width: 100%;
+        }
+        .profile-card {
+            padding: 10px;
+        }
+        .profile h2 {
+            font-size: 24px;
+        }
+        .profile-forms {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+  
