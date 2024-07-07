@@ -7,6 +7,12 @@ const router = express.Router();
 const mongoose = require('mongoose');
 
 // Create Quiz
+router.use((req, res, next) => {
+    //printing the route url
+    console.log(req.originalUrl);
+    next();
+  });   
+
 router.post('/', auth, async (req, res) => {
     let { title, quiz_id, questions,timeLimit } = req.body;
     //add user_id to the quiz_id
@@ -37,33 +43,115 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+router.get('/stats/:quiz_id', auth, async (req, res) => {
+    console.log("route reached");
+    try {
+        const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
+
+        if (quizResults.length === 0) {
+            return res.status(404).json({ msg: 'No results found for this quiz' });
+        }
+
+        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+        // Check if the user is the creator of the quiz
+        if (quiz.createdBy.toString() !== req.user.id && !quiz.takenBy.includes(req.user.id)) {
+            return res.status(403).json({ msg: 'Unauthorized access' });
+        }
+
+        // Calculate statistics
+        const scores = quizResults.map(result => result.score);
+        const sortedScores = [...scores].sort((a, b) => a - b);
+        const count = sortedScores.length;
+
+        const min = sortedScores[0];
+        const max = sortedScores[count - 1];
+
+        const sum = scores.reduce((acc, score) => acc + score, 0);
+        const mean = sum / count;
+
+        let median;
+        if (count % 2 === 0) {
+            median = (sortedScores[count / 2 - 1] + sortedScores[count / 2]) / 2;
+        } else {
+            median = sortedScores[Math.floor(count / 2)];
+        }
+
+        const lowerQuartile = findQuartile(sortedScores, 0.25);
+        const upperQuartile = findQuartile(sortedScores, 0.75);
+
+        res.json({ min, max, mean, median, lowerQuartile, upperQuartile });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
 // Get All Quizzes by User
 router.get('/', auth, async (req, res) => {
     try {
-        //send except object id
-        const quizzes = await Quiz.find({ createdBy: req.user.id }).select('-_id -__v');
-        
-        
-        res.json(quizzes);
+        const quizzes = await Quiz.find({ createdBy: req.user.id }).select('title lastUpdated quiz_id timeLimit questions takenBy');
+
+        const response = quizzes.map(quiz => ({
+            title: quiz.title,
+            quiz_id: quiz.quiz_id,
+            lastUpdated: quiz.lastUpdated,
+            numberOfQuestions: quiz.questions.length,
+            numberOfTakenBy: quiz.takenBy.length,
+            timeLimit: quiz.timeLimit
+        }));
+
+        res.json(response);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+// Get All Quizzes Taken by User
+
+router.get('/taken', auth, async (req, res) => {
+    console.log("route reached");
+    try {
+        const quizzes = await Quiz.find({ takenBy: req.user.id });
+        console.log(quizzes);
+        // If no quizzes found, return an empty array
+        if (!quizzes || quizzes.length === 0) {
+            return res.json([]);
+        }
+
+        // Prepare array to store results to be sent
+        const quizzesWithDetails = [];
+
+        // Iterate through quizzes
+        for (const quiz of quizzes) {
+            // Find quiz results for the current user and quiz_id
+            const quizResult = await QuizResult.findOne({
+                quiz_id: quiz.quiz_id,
+                user_id: req.user.id
+            });
+
+            // Calculate number of questions
+            const numQuestions = quiz.questions.length;
+
+            // Prepare the response object with required fields
+            const quizDetails = {
+                quiz_id: quiz.quiz_id,
+                title: quiz.title,
+                numQuestions,
+                quizScore: quizResult ? quizResult.score : null // Include quiz score if available
+            };
+
+            quizzesWithDetails.push(quizDetails);
+        }
+
+        console.log(quizzesWithDetails);
+        res.json(quizzesWithDetails);
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
 });
 
-// Get Single Quiz by quiz_id
-router.get('/:quiz_id', auth, async (req, res) => {
-    try {
-        const { quiz_id } = req.params;
-        console.log(quiz_id);
-        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id }).select('-_id -__v');
-        if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
-        res.json(quiz);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+
 
 // Update Quiz by quiz_id
 
@@ -163,11 +251,10 @@ router.put('/:quiz_id', auth, async (req, res) => {
     }
 });
 
-
 //fetch quiz to take quiz
 router.get('/take/:quiz_id', auth, async (req, res) => {
     const { quiz_id } = req.params;
-    console.log("hi");
+    
     try {
         const quiz = await Quiz.findOne({ quiz_id });
 
@@ -266,27 +353,9 @@ function calculateScore(answers, questions) {
     return score;
 }
 
-// Get All Quizzes Taken by User
-router.get('/taken', auth, async (req, res) => {
-    try {
-        const quizzes = await Quiz.find({ takenBy: req.user.id });
-        res.json(quizzes);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
 
-// Get All Results by User
-router.get('/results', auth, async (req, res) => {
-    try {
-        const results = await QuizResult.find({ user_id: req.user.id }).populate('quiz_id', 'title');
-        res.json(results);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+
+
 
 // Get Result of Specific Test
 router.get('/results/:quiz_id', auth, async (req, res) => {
@@ -485,16 +554,7 @@ router.get('/scores/:quiz_id', auth, async (req, res) => {
     }
 });
 
-// Get all quiz results given by user
-router.get('/results', auth, async (req, res) => {
-    try {
-        const results = await QuizResult.find({ user_id: req.user.id }).select('quiz_id score');
-        res.json(results);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+
 
 
 
@@ -502,48 +562,7 @@ router.get('/results', auth, async (req, res) => {
 
 // Get Statistics of a Specific Quiz
 // Get Statistics of a Specific Quiz
-router.get('/stats/:quiz_id', auth, async (req, res) => {
-    try {
-        const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
 
-        if (quizResults.length === 0) {
-            return res.status(404).json({ msg: 'No results found for this quiz' });
-        }
-
-        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
-
-        // Check if the user is the creator of the quiz
-        if (quiz.createdBy.toString() !== req.user.id && !quiz.takenBy.includes(req.user.id)) {
-            return res.status(403).json({ msg: 'Unauthorized access' });
-        }
-
-        // Calculate statistics
-        const scores = quizResults.map(result => result.score);
-        const sortedScores = [...scores].sort((a, b) => a - b);
-        const count = sortedScores.length;
-
-        const min = sortedScores[0];
-        const max = sortedScores[count - 1];
-
-        const sum = scores.reduce((acc, score) => acc + score, 0);
-        const mean = sum / count;
-
-        let median;
-        if (count % 2 === 0) {
-            median = (sortedScores[count / 2 - 1] + sortedScores[count / 2]) / 2;
-        } else {
-            median = sortedScores[Math.floor(count / 2)];
-        }
-
-        const lowerQuartile = findQuartile(sortedScores, 0.25);
-        const upperQuartile = findQuartile(sortedScores, 0.75);
-
-        res.json({ min, max, mean, median, lowerQuartile, upperQuartile });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
 
 // Helper function to find quartile
 function findQuartile(sortedArray, percentile) {
@@ -605,6 +624,20 @@ router.delete('/:quiz_id', auth, async (req, res) => {
 
 
 
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+// Get Single Quiz by quiz_id
+router.get('/:quiz_id', auth, async (req, res) => {
+    try {
+        const { quiz_id } = req.params;
+        console.log(quiz_id);
+        const quiz = await Quiz.findOne({ quiz_id, createdBy: req.user.id }).select('-_id -__v');
+        if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
+        res.json(quiz);
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });

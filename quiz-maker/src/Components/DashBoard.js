@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './DashBoard.css';
 import { Icon } from '@iconify-icon/react';
 import MyTests from './MyTests';
@@ -13,6 +13,34 @@ const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('my-tests');
   const [isLoading, setIsLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  const path = window.location.pathname.split('/')[1];
+  useEffect(() => {
+    if (path === 'my-tests') {
+      setActiveSection('my-tests');
+      document.title = "My Tests | QuizMaster";
+    } else if (path === 'my-results') {
+      setActiveSection('my-results');
+      document.title = "My Results | QuizMaster";
+    } else if (path === 'create-test') {
+      setActiveSection('create-test');
+      document.title = "Create Test | QuizMaster";
+    } else if (path === 'take-test') {
+      setActiveSection('take-test');
+      document.title = "Take Test | QuizMaster";
+
+    } else if (path === 'profile') {
+      setActiveSection('profile');
+      document.title = "Profile | QuizMaster";
+    }
+  }, [path]);
+
+
+
+  
+ 
+
+
 
   if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
     window.location.href = "/login";
@@ -20,9 +48,17 @@ const Dashboard = () => {
 
   document.title = "Dashboard | QuizMaster";
 
-  setTimeout(() => {
-    setIsLoading(false);
-  }, 2000);
+  useEffect(() => {
+    //checking if the token is present or not
+    if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
+      window.location.href = "/";
+
+    }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    
+  }, []);
 
   const renderSection = () => {
     switch (activeSection) {
@@ -52,8 +88,21 @@ const Dashboard = () => {
   const handleLinkClick = (section) => {
     setActiveSection(section);
     setSidebarOpen(false);
+    //change the url
+    window.history.pushState({}, '', `/${section}`);
+    //changing the title of the page
+    if (section === 'my-tests') {
+      document.title = "My Tests | QuizMaster";
+    } else if (section === 'my-results') {
+      document.title = "My Results | QuizMaster";
+    } else if (section === 'create-test') {
+      document.title = "Create Test | QuizMaster";
+    } else if (section === 'take-test') {
+      document.title = "Take Test | QuizMaster";
+    } else if (section === 'profile') {
+      document.title = "Profile | QuizMaster";
     }
-
+  } 
   return (
     <>
       {!isLoading && (

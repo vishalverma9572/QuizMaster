@@ -1,0 +1,67 @@
+.quiz-results-container {
+    
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+
+  
+  .quiz-results {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .quiz-result-card {
+    background-color: #fff;
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.337);
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #235;
+    border-radius: 5px;
+  }
+  
+  .card-content {
+    padding: 10px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  .card-text {
+    margin-bottom: 10px;
+  }
+  
+  .score-text {
+    font-weight: bold;
+    color: #173e56ee;
+    font-family: 'Wittgenstein', sans-serif;
+    text-align: right;
+  }
+  
+  .stats-button {
+    padding: 8px 16px;
+    background-color: #262e59;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+  }
+  
+  .stats-button:hover {
+    background-color: #1a235b;
+  }
+  .stats-button span{
+    font-weight: 600;
+    font-size: 25px;
+  }
+  

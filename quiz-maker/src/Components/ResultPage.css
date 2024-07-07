@@ -1,0 +1,56 @@
+.result-page {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .result-page .stats-section {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .result-page .stats-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .result-page .user-scores-section {
+    margin-top: 20px;
+  }
+  
+  .result-page .user-scores-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .result-page .user-scores-list {
+    display: grid;
+    gap: 10px;
+  }
+  
+  .result-page .user-score-item {
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .result-page .user-score-item p {
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  @media (max-width: 600px) {
+    .result-page {
+      padding: 10px;
+    }
+  
+    .result-page .user-score-item {
+      padding: 8px;
+    }
+  }
+  
