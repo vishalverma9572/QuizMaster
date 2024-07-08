@@ -171,11 +171,16 @@ const Authorisation = () => {
             {isSignUp ? "Sign Up" : "Sign In"}
           </button>
         </form>
+
         <button className="toggle-button" onClick={toggleForm}>
           {isSignUp
             ? "Already have an account? Sign In"
             : "Don't have an account? Sign Up"}
         </button>
+        {!isSignUp && <button className="toggle-button" onClick={()=>navigate("/forgot-password")}>
+          Forgot Password?
+        </button>}
+
       </div>
     </div>
   );

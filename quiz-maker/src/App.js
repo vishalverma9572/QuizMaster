@@ -8,6 +8,8 @@ import ResultPage from "./Components/Resultpage";
 import QuizDetails from "./Components/QuizDetails";
 import EditQuiz from "./Components/EditQuiz";
 import TestPage from "./Components/TestPage";
+import ForgotPassword from "./Components/ForGotPassword";
+import ResetPassword from "./Components/ResetPassword";
 
 function App() {
   return (
@@ -27,6 +29,9 @@ function App() {
           <Route path='quiz/:quiz_id' element={<QuizDetails/>} />
           <Route path='edit-quiz/:quiz_id' element={<EditQuiz/>} />
           <Route path="attempt/:quiz_id" element={<TestPage/>} />
+          <Route path="/forgot-password" element={<ForgotPassword/>} />
+          <Route path="/reset-password/:token" element={<ResetPassword/>} />
+          <Route path="*" element={<Home/>} />
 
         </Routes>
       </Router>
