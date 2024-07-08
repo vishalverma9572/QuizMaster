@@ -274,7 +274,7 @@ router.get('/take/:quiz_id', auth, async (req, res) => {
         if (!quiz) {
             return res.status(404).json({ msg: 'Quiz not found' });
         }
-
+        console.log(quiz);
         // Prepare questions without correctAnswer
         const questionsWithoutCorrectAnswer = quiz.questions.map(question => {
             const { correctAnswer, ...questionWithoutCorrectAnswer } = question.toObject();
@@ -283,13 +283,15 @@ router.get('/take/:quiz_id', auth, async (req, res) => {
 
         // Construct the response object
         const quizWithoutCorrectAnswers = {
-            _id: quiz._id,
+            
             title: quiz.title,
             quiz_id: quiz.quiz_id,
             questions: questionsWithoutCorrectAnswer,
             createdBy: quiz.createdBy,
-            lastUpdated: quiz.lastUpdated
+            lastUpdated: quiz.lastUpdated,
+            timeLimit: quiz.timeLimit
         };
+        console.log(quizWithoutCorrectAnswers);
 
         res.json(quizWithoutCorrectAnswers);
     } catch (err) {
@@ -297,6 +299,55 @@ router.get('/take/:quiz_id', auth, async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 }   );
+//search quiz by quiz_id
+router.get('/search/:quiz_id', auth, async (req, res) => {
+    console.log(" search route reached");
+    const { quiz_id } = req.params;
+    
+    try {
+        let quiz = await Quiz.findOne({ quiz_id }).select('title lastUpdated quiz_id timeLimit questions takenBy createdBy').select('-_id -__v');
+
+        if (!quiz) {
+            return res.status(404).json({ msg: 'Quiz not found' });
+        }
+        //remove _id and __v from the response
+        
+
+
+        // Check if `createdBy` exists before proceeding
+        let username = 'Unknown';
+        if (quiz.createdBy) {
+            const user = await User.findById(quiz.createdBy);
+            if (user) {
+                username = user.username;
+            } else {
+                username = 'Unknown';
+            }
+        } else {
+            username = 'Unknown';
+        }
+
+        quiz.takenBy = quiz.takenBy ? quiz.takenBy.length : 0;
+        quiz.questions = quiz.questions ? quiz.questions.length : 0;
+        const data = {
+            title: quiz.title,
+            quiz_id: quiz.quiz_id,
+            lastUpdated: quiz.lastUpdated,
+            timeLimit: quiz.timeLimit,
+            questions: quiz.questions.length || 0,
+            takenBy: quiz.takenBy.length || 0,
+            createdBy: username
+        };
+        res.json(data);
+        
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+
+
 // Mark Quiz as Taken
 router.post('/take/:quiz_id', auth, async (req, res) => {
     const { answers } = req.body;  // Expect answers array from the frontend
@@ -315,6 +366,13 @@ router.post('/take/:quiz_id', auth, async (req, res) => {
         }
         else{
             return res.status(400).json({ msg: 'Quiz already taken' });
+        }
+        // set QuizProcess to completed
+        let quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+        if (quizProgress) {
+            quizProgress.completed = true;
+            await quizProgress.save();
+            console.log("quiz progress updated");
         }
 
         // Validate and process answers
@@ -384,66 +442,7 @@ router.get('/results/:quiz_id', auth, async (req, res) => {
     }
 });
 
-
-// Save Quiz Progress
-// Save Quiz Progress
-router.post('/progress/:quiz_id', auth, async (req, res) => {
-    const { answers, elapsedTime } = req.body; // Expect answers and elapsedTime from the frontend
-
-    try {
-        let quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
-
-        if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
-
-        let quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
-
-        if (!quizProgress) {
-            quizProgress = new QuizProgress({
-                quiz_id: req.params.quiz_id,
-                user_id: req.user.id,
-                answers,
-                elapsedTime
-            });
-        } else {
-            quizProgress.answers = answers;
-            quizProgress.elapsedTime = elapsedTime;
-        }
-
-        // Check if the time limit is reached
-        if (elapsedTime >= quiz.timeLimit * 60) { // timeLimit is in minutes, elapsedTime is in seconds
-            quizProgress.completed = true;
-
-            // Calculate score
-            let score = 0;
-            const answersWithCorrectness = quizProgress.answers.map(answer => {
-                const question = quiz.questions.id(answer.question_id);
-                const isCorrect = question.correctAnswer === answer.selectedOption;
-                if (isCorrect) score += 1;
-                return {
-                    ...answer,
-                    isCorrect
-                };
-            });
-
-            // Save to QuizResult
-            const quizResult = new QuizResult({
-                quiz_id: req.params.quiz_id,
-                user_id: req.user.id,
-                score,
-                answers: answersWithCorrectness
-            });
-
-            await quizResult.save();
-        }
-
-        await quizProgress.save();
-
-        res.json({ msg: 'Quiz progress saved' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+//save progress of quiz
 
 //CHECK QUIZ TAKEN OR IN PROGRESS OR NOT TAKEN
 router.post('/progress/:quiz_id', auth, async (req, res) => {
@@ -517,6 +516,24 @@ router.post('/progress/:quiz_id', auth, async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 });
+
+//get the last progress of quiz
+router.get('/progress/:quiz_id', auth, async (req, res) => {
+    try {
+        console.log("progress route reached");
+        const quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+        if (!quizProgress) {
+            return res.status(404).json({ msg: 'Progress not found' });
+        }
+
+        res.json(quizProgress);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: 'Server error' });
+    }
+});
+
+
 
 // GET All users RESULTS OF QUIZ
 router.get('/scores/:quiz_id', auth, async (req, res) => {

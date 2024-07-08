@@ -57,7 +57,7 @@ const QuizCard = ({ title,quiz_id, lastUpdated, numberOfQuestions, timeLimit, nu
   };
   const copyToClipboard = () => {
     
-    const quizLink = process.env.REACT_APP_FRONTEND_URL+"/attempt-test/"+quiz_id; // Replace with actual quiz link
+    const quizLink = process.env.REACT_APP_FRONTEND_URL+"/attempt/"+quiz_id; // Replace with actual quiz link
     const message = `Check out this quiz!\nQuiz ID: ${quiz_id}\nQuiz Link: ${quizLink}`;
     navigator.clipboard.writeText(message);
     //share this message to other users
@@ -66,7 +66,7 @@ const QuizCard = ({ title,quiz_id, lastUpdated, numberOfQuestions, timeLimit, nu
 
 
   const browsershare=()=>{
-    const quizLink = process.env.REACT_APP_FRONTEND_URL+"/taketest/"+quiz_id;
+    const quizLink = process.env.REACT_APP_FRONTEND_URL+"/attempt/"+quiz_id;
     navigator.share({
       title: 'Check out this quiz!',
       text: `Quiz ID: ${quiz_id}`,

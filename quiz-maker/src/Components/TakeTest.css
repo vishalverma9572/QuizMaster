@@ -1,0 +1,75 @@
+.take-test {
+    background-color: #2d3b45;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    
+  }
+  
+  .take-test h2 {
+    margin-bottom: 20px;
+    font-family: "Wittgenstein", serif;
+    padding-bottom: 10px;
+    
+  }
+  
+  .take-test .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .take-test .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .take-test .form-group input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .take-test .button {
+    background-color: #1a2a33;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .take-test .button:hover {
+    background-color: #13212c;
+  }
+  
+  .take-test .error {
+    color: #ff4c4c;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .take-test .quiz-card {
+    background-color: #fff;
+    color: #2d3b45;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  
+  .take-test .instructions {
+    margin-top: 20px;
+  }
+  
+  .take-test .instructions h3 {
+    margin-bottom: 10px;
+  }
+  
+  .take-test .instructions p {
+    margin-bottom: 5px;
+  }
+  

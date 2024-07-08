@@ -82,6 +82,7 @@ const QuizDetails = () => {
       <p><strong>Time Limit:</strong> {quiz.timeLimit} minutes</p>
       <p><strong>Last Updated:</strong> {new Date(quiz.lastUpdated).toLocaleString()}</p>
       <p><strong>Number of Participants:</strong> {quiz.numberOfParticipants}</p>
+      <p><strong>Quiz Id:</strong> {quiz.quiz_id}</p>
       <div className="questions">
         {quiz.questions.map((question, index) => (
           <div key={index} className="question">
