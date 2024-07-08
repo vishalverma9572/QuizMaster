@@ -7,7 +7,7 @@ const QuizResult = require('./models/QuizResult');
 const QuizProgress = require('./models/QuizProgress');
 
 require('dotenv').config();
-
+//auto submit quiz
 async function autoSubmitQuizzes() {
     try {
         const quizProgressList = await QuizProgress.find({ completed: false });
@@ -18,10 +18,11 @@ async function autoSubmitQuizzes() {
             if (!quiz) continue;
 
             const elapsedTime = (Date.now() - quizProgress.lastUpdated.getTime()) / 1000; // Time in seconds
+            const totalElapsedTime = quizProgress.elapsedTime + elapsedTime;
 
-            if (quizProgress.elapsedTime + elapsedTime >= quiz.timeLimit * 60) {
+            if (totalElapsedTime >= quiz.timeLimit * 60) {
                 // Time limit reached, auto-submit quiz
-                quizProgress.elapsedTime += elapsedTime;
+                quizProgress.elapsedTime = totalElapsedTime;
                 quizProgress.completed = true;
 
                 let score = 0;
@@ -57,14 +58,21 @@ async function autoSubmitQuizzes() {
                     quiz.takenBy.push(quizProgress.user_id);
                     await quiz.save();
                 }
-                quizProgress.save();
+            } else {
+                // Time limit not reached, update elapsedTime
+                quizProgress.elapsedTime = totalElapsedTime;
             }
+
+            // Save the quiz progress
+            quizProgress.lastUpdated = new Date();
+            await quizProgress.save();
         }
     } catch (err) {
         console.error('Error in autoSubmitQuizzes:', err);
     }
     console.log('autoSubmitQuizzes ran');
 }
+
 
 
 // Periodically check every minute

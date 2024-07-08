@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './TestPage.css';
 
@@ -12,6 +12,9 @@ const TakeTestPage = () => {
   const [error, setError] = useState('');
   const [confirmation, setConfirmation] = useState(false);
   const navigate = useNavigate();
+
+  const progressRef = useRef(progress);
+  const elapsedTimeRef = useRef(elapsedTime);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -54,6 +57,10 @@ const TakeTestPage = () => {
 
   const fetchProgress = async () => {
     try {
+      // Fetch quiz first
+      await fetchQuiz();
+
+      // Fetch progress after fetching quiz
       const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/progress/${quiz_id}`;
       const response = await fetch(url, {
         headers: {
@@ -81,7 +88,7 @@ const TakeTestPage = () => {
 
   const handleSubmit = async () => {
     console.log(progress);
-    
+
     try {
       const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/take/${quiz_id}`;
       const response = await fetch(url, {
@@ -93,13 +100,11 @@ const TakeTestPage = () => {
         body: JSON.stringify({ answers: progress?.answers || [] }),
       });
 
-      if (!response.ok) {
-        throw new Error('Error submitting quiz');
-      }
+      
 
       const data = await response.json();
       console.log(data);
-      navigate('/result');
+      navigate(`/result/${quiz_id}`);
     } catch (err) {
       console.error(err);
       setError('Error submitting quiz');
@@ -107,8 +112,8 @@ const TakeTestPage = () => {
   };
 
   const autoSaveProgress = async () => {
-    console.log(progress);
-    console.log(elapsedTime);
+    console.log(progressRef.current);
+    console.log(elapsedTimeRef.current);
     console.log("auto save");
     try {
       const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/progress/${quiz_id}`;
@@ -118,7 +123,7 @@ const TakeTestPage = () => {
           'Content-Type': 'application/json',
           'x-auth-token': localStorage.getItem('token'),
         },
-        body: JSON.stringify({ answers: progress?.answers || [], elapsedTime }),
+        body: JSON.stringify({ answers: progressRef.current?.answers || [], elapsedTime: elapsedTimeRef.current }),
       });
 
       if (!response.ok) {
@@ -134,6 +139,11 @@ const TakeTestPage = () => {
   };
 
   useEffect(() => {
+    progressRef.current = progress;
+    elapsedTimeRef.current = elapsedTime;
+  }, [progress, elapsedTime]);
+
+  useEffect(() => {
     if (confirmation && quiz) {
       const interval = setInterval(() => {
         setElapsedTime(prevTime => prevTime + 1);
@@ -144,22 +154,16 @@ const TakeTestPage = () => {
     }
   }, [confirmation, quiz]);
 
-  //autosave progress every 30 seconds with a confirmation only
- useEffect(() => {
+  // Autosave progress every 5 seconds with confirmation only
+  useEffect(() => {
     if (confirmation && quiz) {
-        const interval = setInterval(() => {
-            setElapsedTime(prevTime => prevTime + 30);
-            autoSaveProgress();
-        }, 5000);
-    
-        setTimer(interval);
-        return () => clearInterval(interval);
-        }
+      const interval = setInterval(() => {
+        autoSaveProgress();
+      }, 5000);
+
+      return () => clearInterval(interval);
     }
-    , [confirmation, quiz]);
-
-
-
+  }, [confirmation, quiz]);
 
   useEffect(() => {
     if (elapsedTime >= quiz?.timeLimit * 60) {
