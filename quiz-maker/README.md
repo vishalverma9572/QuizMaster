@@ -1,70 +1,133 @@
-# Getting Started with Create React App
+# QuizMaster Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+QuizMaster is a comprehensive quiz application that allows users to create, take, and manage quizzes. The frontend is built using React and provides a smooth and interactive user experience. This application includes features such as user authentication, quiz management, progress tracking, and viewing detailed quiz statistics.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **User Authentication:** Sign In, Sign Up
+- **Dashboard Navigation:** My Tests, My Results, Create Test, Take Test, Profile, Logout
+- **Quiz Management:** Create, Edit, Delete quizzes
+- **Progress Tracking:** Save progress, auto-submit quizzes after time limit is reached
+- **Detailed Statistics:** View quiz results, detailed statistics, and ranking of users
+- **Responsive Design:** Ensures compatibility across various devices
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Folder Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+QuizMaster
+├── node_modules
+├── public
+├── src
+│   ├── Authorisation.css
+│   ├── Authorisation.js
+│   ├── CreateTest.css
+│   ├── CreateTest.js
+│   ├── DashBoard.css
+│   ├── DashBoard.js
+│   ├── EditQuiz.css
+│   ├── EditQuiz.js
+│   ├── ForGotPassword.js
+│   ├── Home.css
+│   ├── Home.js
+│   ├── Loader.css
+│   ├── Loader.js
+│   ├── MyResults.css
+│   ├── MyResults.js
+│   ├── MyTests.css
+│   ├── MyTests.js
+│   ├── PageLoader.css
+│   ├── PageLoader.js
+│   ├── Profile.css
+│   ├── Profile.js
+│   ├── QuizCard.jsx
+│   ├── QuizDetails.css
+│   ├── QuizDetails.js
+│   ├── ResetPassword.js
+│   ├── ResultPage.css
+│   ├── Resultpage.js
+│   ├── Resultstats.css
+│   ├── ResultStats.js
+│   ├── TakeTest.css
+│   ├── TakeTest.js
+│   ├── TestPage.css
+│   ├── TestPage.js
+│   ├── UserScorestable.css
+│   ├── UserScorestable.js
+├── .env
+├── .gitignore
+├── env_sample.txt
+├── package-lock.json
+├── package.json
+├── README.md
+```
 
-### `npm test`
+## Pages and Components
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Home Page
+- **Sign In** and **Sign Up** buttons
+- If logged in, shows a **Go to Dashboard** button
 
-### `npm run build`
+### Dashboard
+- Navigation options:
+  - My Tests
+  - My Results
+  - Create Test
+  - Take Test
+  - Profile
+  - Logout
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### My Tests
+- Displays all tests created by the user
+- Each quiz card has options to view details and share the quiz
+- **Details Page:** Includes buttons to view stats, edit, or delete the quiz
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Edit Quiz Page
+- Allows editing of quiz details and questions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Show Stats Page (ResultPage)
+- Displays statistical data such as min, max, median, upper quartile, lower quartile in bar graph
+- Pagination for ranking of all users who have taken the quiz
 
-### `npm run eject`
+### My Results Page
+- Displays all tests taken by the user along with their scores
+- Button to view detailed stats, redirecting to the ResultPage
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Create Test Page
+- Allows users to create a new test by adding questions and setting a time limit
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Profile Page
+- Allows users to change their username and password
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Take Test Page
+- Users can search for a test by ID
+- Displays a card with test details and a button to attempt the test
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Test Page
+- Shows instructions for the test
+- Users can access the test if the status is not taken or in progress
 
-## Learn More
+## Environment Variables
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **REACT_APP_BACKEND_URL:** `http://localhost:5000/api`
+- **REACT_APP_FRONTEND_URL:** `http://localhost:3000`
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Usage
 
-### Code Splitting
+1. Install the dependencies
+    ```sh
+    npm install
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+2. Start the development server
+    ```sh
+    npm start
+    ```
 
-### Analyzing the Bundle Size
+3. The application will start on `http://localhost:3000`
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Notes
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Ensure the backend server is running and connected to the MongoDB database for full functionality.
+- Customize environment variables as needed for your setup.

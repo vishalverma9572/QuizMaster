@@ -114,6 +114,7 @@
     .dashboard .sidebar {
       width: 290px;
       display: none;
+      z-index: 100000;
     }
     .dashboard .open {
       display: block;
