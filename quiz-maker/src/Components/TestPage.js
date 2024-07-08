@@ -6,12 +6,11 @@ const TakeTestPage = () => {
   const { quiz_id } = useParams();
   const [status, setStatus] = useState(null);
   const [quiz, setQuiz] = useState(null);
-  const [progress, setProgress] = useState({ answers: [] })
+  const [progress, setProgress] = useState({ answers: [] });
   const [elapsedTime, setElapsedTime] = useState(0);
   const [timer, setTimer] = useState(null);
   const [error, setError] = useState('');
   const [confirmation, setConfirmation] = useState(false);
-  const [answers, setAnswers] = useState([]); // [ { question_id: '123', selectedOption: 'A' }, ...
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -109,7 +108,8 @@ const TakeTestPage = () => {
 
   const autoSaveProgress = async () => {
     console.log(progress);
-    return;
+    console.log(elapsedTime);
+    console.log("auto save");
     try {
       const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/progress/${quiz_id}`;
       const response = await fetch(url, {
@@ -144,15 +144,22 @@ const TakeTestPage = () => {
     }
   }, [confirmation, quiz]);
 
-  useEffect(() => {
-    if (confirmation) {
-      const saveInterval = setInterval(() => {
-        autoSaveProgress();
-      }, 5000); // auto-save every 30 seconds
-
-      return () => clearInterval(saveInterval);
+  //autosave progress every 30 seconds with a confirmation only
+ useEffect(() => {
+    if (confirmation && quiz) {
+        const interval = setInterval(() => {
+            setElapsedTime(prevTime => prevTime + 30);
+            autoSaveProgress();
+        }, 5000);
+    
+        setTimer(interval);
+        return () => clearInterval(interval);
+        }
     }
-  }, [confirmation, elapsedTime]);
+    , [confirmation, quiz]);
+
+
+
 
   useEffect(() => {
     if (elapsedTime >= quiz?.timeLimit * 60) {
@@ -162,8 +169,6 @@ const TakeTestPage = () => {
   }, [elapsedTime, quiz, timer]);
 
   const handleOptionChange = (questionId, selectedOption) => {
-    //if progress is null, set it to an empty object
-    
     const newAnswers = [...progress.answers];
     const answerIndex = newAnswers.findIndex(a => a.question_id === questionId);
 
