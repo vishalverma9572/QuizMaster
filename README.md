@@ -190,7 +190,7 @@ The frontend of QuizMaster is built using React. It provides a user-friendly int
 
 ## Contribution
 
-Contributions are welcome! Please fork the repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.
+Contributions are welcome! Please fork the repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change. For detailed Info refer to [Contribution.md](/Contribution.md).
 
 ## License
 
