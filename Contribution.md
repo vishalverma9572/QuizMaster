@@ -1,6 +1,17 @@
 # Contribution Guide
 
-Thank you for your interest in contributing to **QuizMaster**! We welcome all contributions, whether it's fixing bugs, improving documentation, adding new features, or optimizing the code. Here's how you can get started:
+Thank you for your interest in contributing to **QuizMaster**! We welcome all contributions, whether it's fixing bugs, improving documentation, adding new features, or optimizing the code.
+
+### 💬 Join the Conversation on GitTalks
+
+I’m active on **GitTalks**, a Discord community for developers, where we share knowledge, collaborate on projects, and discuss the latest in tech. Join us to connect with like-minded individuals!
+
+[![Discord](https://img.shields.io/badge/Join%20Us%20on%20Discord-7289DA?style=flat&logo=discord&logoColor=white)](https://discord.gg/2bk8FCeN)
+
+
+
+
+Here's how you can get started:
 
 ## Table of Contents
 
