@@ -1,0 +1,41 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+.about-us-container {
+  padding: 20px;
+  background: #2d3b45; 
+  color: #fff; 
+  font-family: "Nunito", sans-serif; 
+
+}
+
+.about-us-container h4 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #fff;
+  text-align: center; 
+}
+
+.about-us-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.faq-container {
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 700px;
+  margin-left: 400px;
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.faq-question {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px; 
+}
+
+
