@@ -8,6 +8,7 @@ import TakeTest from './TakeTest';
 import Profile from './Profile';
 import logo from '../images/quizmaster-high-resolution-logo-white-transparent.png';
 import Loader from './Loader';
+import Aboutus from './Aboutus';
 
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('my-tests');
@@ -29,7 +30,9 @@ const Dashboard = () => {
     } else if (path === 'take-test') {
       setActiveSection('take-test');
       document.title = "Take Test | QuizMaster";
-
+    }else if (path === 'about-us') {
+        setActiveSection('about-us');
+        document.title = "About Us | QuizMaster";
     } else if (path === 'profile') {
       setActiveSection('profile');
       document.title = "Profile | QuizMaster";
@@ -73,6 +76,8 @@ const Dashboard = () => {
         return <TakeTest />;
       case 'profile':
         return <Profile />;
+      case 'about-us':
+        return <Aboutus />;
       default:
         return <MyTests />;
     }
@@ -102,6 +107,9 @@ const Dashboard = () => {
       document.title = "Take Test | QuizMaster";
     } else if (section === 'profile') {
       document.title = "Profile | QuizMaster";
+    } else if (section == 'about-us')
+    {
+      document.title = "About US | QuizMaster";
     }
   } 
   return (
@@ -128,6 +136,9 @@ const Dashboard = () => {
                 </li>
                 <li className={activeSection === 'profile' ? 'active' : ''} onClick={() => handleLinkClick('profile')}>
                   <span><Icon icon="carbon:user-profile" /></span>Profile
+                </li>
+                <li className={activeSection === 'about-us' ? 'active' : ''} onClick={() => handleLinkClick('about-us')}>
+                  <span><Icon icon="carbon:events" /></span>Aboutus
                 </li>
               </ul>
             </nav>
