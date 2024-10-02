@@ -1,32 +1,81 @@
-/* Loader.css */
 .loader-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #2d3b45; /* background color of the loader */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #2d3b45;
+  animation: fade-in 0.5s;
+}
+
+.loader-logo {
+  width: 200px;
+  height: auto;
+  animation: color-change 4s infinite;
+  margin-bottom: 20px;
+}
+
+.loading-text {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  animation: fade-in-text 0.5s;
+}
+
+.spinner {
+  border: 8px solid rgba(255, 255, 255, 0.3);
+  border-top: 8px solid #ffffff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes color-change {
+  0% {
+    filter: invert(0%);
   }
-  
-  .loader-container .loader-logo {
-    width: 200px;
-    height: auto;
-    animation: color-change 4s infinite;
+  25% {
+    filter: invert(50%);
   }
-  @keyframes color-change {
-    0% {
-      filter: invert(0%);
-    }
-    25% {
-      filter: invert(50%);
-    }
-    50% {
-      filter: invert(100%);
-    }
-    75% {
-      filter: invert(50%);
-    }
-    100% {
-      filter: invert(0%);
-    }
+  50% {
+    filter: invert(100%);
   }
-  
+  75% {
+    filter: invert(50%);
+  }
+  100% {
+    filter: invert(0%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-text {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
