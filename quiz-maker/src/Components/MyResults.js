@@ -54,7 +54,7 @@ const MyResults = () => {
     {Loading && <PageLoader/>}
     {!Loading &&
     <div className="quiz-results-container">
-      <StyledTypography variant="h4">My Tests</StyledTypography>
+      <StyledTypography variant="h4">My Results</StyledTypography>
       <div className="quiz-results">
         {results.map((quizResult) => (
           <div key={quizResult.quiz_id} className="quiz-result-card">
