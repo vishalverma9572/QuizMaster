@@ -5,19 +5,19 @@ import logo from '../images/quizmaster-high-resolution-logo-black-transparent.pn
 import Loader from './Loader';
 
 const Home = () => {
-    const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
-    //when the component is loaded, set is Loading to false
-    setTimeout(() => {
-        setIsLoading(false);
-    }, 2000);
+  // when the component is loaded, set isLoading to false after 2 seconds
+  setTimeout(() => {
+    setIsLoading(false);
+  }, 2000);
 
-    
-    
   const navigate = useNavigate();
-  const isAuthenticated = (localStorage.getItem('token')!==null && localStorage.getItem('token')!==undefined);
-  //set the document title
-    document.title="Home | QuizMaster";
+  const isAuthenticated = localStorage.getItem('token') !== null;
+
+  // Set the document title
+  document.title = 'Home | QuizMaster';
+
   const handleSignUp = () => {
     navigate('/register');
   };
@@ -25,37 +25,41 @@ const Home = () => {
   const handleSignIn = () => {
     navigate('/login');
   };
+
   const handleDashboard = () => {
     navigate('/dashboard');
   };
 
+
+  const handleAboutUs = () => {
+    navigate('/aboutus');
+  };
+
   return (
     <>
-    {(isLoading)?<Loader/>:
-    <div className="home-container">
-      <div className="logo">
-        <img src={logo} alt="QuizMaster Logo" />
-      </div>
-      <h1>Welcome to QuizMaster</h1>
-      <p>Your ultimate destination to create quizzes and take quizzes. Join us to challenge your knowledge and improve your skills in a fun and engaging way.</p>
-      <div className="button-container">
-        
-          
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="home-container">
+          <div className="logo">
+            <img src={logo} alt="QuizMaster Logo" />
+          </div>
+          <h1>Welcome to QuizMaster</h1>
+          <p>
+            Your ultimate destination to create quizzes and take quizzes. Join us to challenge your knowledge and improve your skills in a fun and engaging way.
+          </p>
+          <div className="button-container">
             <button className="button" onClick={handleSignUp}>Sign Up</button>
             <button className="button" onClick={handleSignIn}>Sign In</button>
-          
-        
-      </div>
-      <div className="button-container2">
-        
-          
-      {isAuthenticated && (
-          <button className="button" onClick={handleDashboard}>Go to Dashboard</button>
-        )}
-          
-        
-      </div>
-    </div>}
+            <button className="button" onClick={handleAboutUs}>About Us</button>
+          </div>
+          {isAuthenticated && (
+            <div className="button-container2">
+              <button className="button" onClick={handleDashboard}>Go to Dashboard</button>
+            </div>
+          )}
+        </div>
+      )}
     </>
   );
 };
