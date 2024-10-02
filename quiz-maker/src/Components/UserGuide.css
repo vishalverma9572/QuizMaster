@@ -3,7 +3,7 @@ body{
 }
 
 hr{
-    height: 2px;
+    height: 3px;
     background: #000;
 }
 
@@ -36,5 +36,12 @@ hr{
 }
 
 #testCreation > h1{
-    
+    text-decoration: underline;
+}
+
+#user-guid-img{
+    height: 50vh;
+    width: 50vw;
+    margin-left: 15%;
+    margin-right: 25%;
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import './UserGuide.css'
+import createQuizImg from '../images/user-guide-images/CreateQuizImg.png'
 
 const UserGuide = () => {
   return (
@@ -27,6 +28,16 @@ const UserGuide = () => {
             </div>
             <div id='testCreation'>
                 <h1>Create Tests</h1>
+                <h3>1. How to create new test?</h3>
+                <img id="user-guid-img" src={createQuizImg} alt='create-quiz'/>
+                <p>
+                    On the create test page, while creating a new test,&ensp;user can see the above dialog box where the user
+                    can create quiz by entering the necessary details of the quiz,&ensp;such as <span style={{fontWeight: "bold"}}>Quiz Title</span>,&ensp;<span style={{fontWeight: "bold"}}>Time Limit</span>.
+                    <br/>
+                    The quiz maker can add various number of questions for each quiz and for each question the user can enter various options.&ensp;If a question entered is
+                    wrong, user is free to remove that question.<br/>
+                    For each question the user also has to specify which among the following options is the correct one.
+                </p>
             </div>
             </div>
         </div>
