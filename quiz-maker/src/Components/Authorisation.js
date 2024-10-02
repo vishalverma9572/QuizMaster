@@ -1,4 +1,4 @@
-import React, { useEffect, useRef , useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./Authorisation.css";
@@ -16,15 +16,15 @@ const Authorisation = () => {
   const emailInputRef = useRef(null);
   const usernameInputRef = useRef(null);
   const passwordInputRef = useRef(null);
-//   set the document title according to the path
-    useEffect(() => {
-        if(isSignUp){
-            document.title="Sign Up | QuizMaster";
-        }
-        else{
-            document.title="Sign In | QuizMaster";
-        }
-    }, [isSignUp]);
+  //   set the document title according to the path
+  useEffect(() => {
+    if (isSignUp) {
+      document.title = "Sign Up | QuizMaster";
+    }
+    else {
+      document.title = "Sign In | QuizMaster";
+    }
+  }, [isSignUp]);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -33,80 +33,80 @@ const Authorisation = () => {
   };
   //if url is "/register" then set isSignUp to true
   useEffect(() => {
-    if(window.location.pathname==="/register"){
-        setIsSignUp(true);
+    if (window.location.pathname === "/register") {
+      setIsSignUp(true);
     }
-    if(window.location.pathname==="/login"){
-        setIsSignUp(false);
+    if (window.location.pathname === "/login") {
+      setIsSignUp(false);
     }
   }, []);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     //verify password has alphanumaric and special haracter and min 6 digits using regex
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
-    if (isSignUp && !passwordRegex.test(formData.password)   ) {
-        setError("Password must contain at least 6 characters, including UPPER/lowercase and numbers");
-        passwordInputRef.current.focus();
-        return;
+    if (isSignUp && !passwordRegex.test(formData.password)) {
+      setError("Password must contain at least 6 characters, including UPPER/lowercase and numbers");
+      passwordInputRef.current.focus();
+      return;
     }
     //check if email is valid using regex
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    if (isSignUp && !emailRegex.test(formData.email)  ) {
-        setError("Invalid email");
-        emailInputRef.current.focus();
-        return;
+    if (isSignUp && !emailRegex.test(formData.email)) {
+      setError("Invalid email");
+      emailInputRef.current.focus();
+      return;
     }
     //check if username's length is > 6
     if (isSignUp && formData.username.length < 6) {
-        setError("Username must contain at least 6 characters");
-        usernameInputRef.current.focus();
-        return;
-    }else if(formData.username.includes(" ")){
-        setError("Username must not contain spaces");
-        usernameInputRef.current.focus();
-        return;
+      setError("Username must contain at least 6 characters");
+      usernameInputRef.current.focus();
+      return;
+    } else if (formData.username.includes(" ")) {
+      setError("Username must not contain spaces");
+      usernameInputRef.current.focus();
+      return;
     }
-    
 
-    
+
+
     const url = isSignUp ? "/users/register" : "/users/login";
     try {
-        let requesturl=process.env.REACT_APP_BACKEND_URL+url;
-        console.log(requesturl);
+      let requesturl = process.env.REACT_APP_BACKEND_URL + url;
+      console.log(requesturl);
       const response = await axios.post(requesturl, formData);
       console.log(response.data);
-        localStorage.setItem("token", response.data.token);
-        setError(null);
-        setFormData({
-            username: "",
-            email: "",
-            password: "",
-        });
+      localStorage.setItem("token", response.data.token);
+      setError(null);
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+      });
 
-        navigate("/dashboard");
-        
+      navigate("/dashboard");
+
     } catch (err) {
-        console.log("error");
+      console.log("error");
       console.error(err.response.data);
 
-        if(url==="/users/register"){
-            if(err.response.data.msg=="User already exists"){
-                setError("Email already exists");
-                //set focus on email
-                emailInputRef.current.focus();
-            }
-            else{
-                setError("Username already exists try another one");
-                //set focus on username
-                usernameInputRef.current.focus();
-                
-            }
-            
+      if (url === "/users/register") {
+        if (err.response.data.msg == "User already exists") {
+          setError("Email already exists");
+          //set focus on email
+          emailInputRef.current.focus();
         }
-        if(url==="/users/login"){
-            setError("Invalid credentials");
+        else {
+          setError("Username already exists try another one");
+          //set focus on username
+          usernameInputRef.current.focus();
+
         }
+
+      }
+      if (url === "/users/login") {
+        setError("Invalid credentials");
+      }
 
     }
   };
@@ -114,17 +114,17 @@ const Authorisation = () => {
   const toggleForm = () => {
     setIsSignUp(!isSignUp);
     //set the path to register or login
-    if(isSignUp){
-        navigate("/login");
+    if (isSignUp) {
+      navigate("/login");
     }
-    else{
-        navigate("/register");
+    else {
+      navigate("/register");
     }
     setFormData({
-        username: "",
-        email: "",
-        password: "",
-        
+      username: "",
+      email: "",
+      password: "",
+
     })
     setError(null);
   };
@@ -144,7 +144,7 @@ const Authorisation = () => {
               placeholder="Username"
               value={formData.username}
               onChange={handleChange}
-                ref={usernameInputRef}
+              ref={usernameInputRef}
               required
             />
           )}
@@ -166,7 +166,7 @@ const Authorisation = () => {
             ref={passwordInputRef}
             required
           />
-            {error && <p className="error">{error}</p>}
+          {error && <p className="error">{error}</p>}
           <button className="button" type="submit">
             {isSignUp ? "Sign Up" : "Sign In"}
           </button>
@@ -177,10 +177,36 @@ const Authorisation = () => {
             ? "Already have an account? Sign In"
             : "Don't have an account? Sign Up"}
         </button>
-        {!isSignUp && <button className="toggle-button" onClick={()=>navigate("/forgot-password")}>
+        {!isSignUp && <button className="toggle-button" onClick={() => navigate("/forgot-password")}>
           Forgot Password?
         </button>}
+      </div>
 
+      <div className="social-logins">
+        <h2 className="title">
+          <span className="sub-title">
+            {isSignUp ? "Signup" : "Login"} with
+          </span>
+          Socials
+        </h2>
+        <div className="social-icons-wrapper">
+          <button className="social-icon">
+            <img src="/png/Google.png" alt="Google"></img>
+            Google
+          </button>
+          <button className="social-icon">
+            <img src="/png/Facebook.png" alt="Facebook"></img>
+            Facebook
+          </button>
+          <button className="social-icon">
+            <img src="/png/GitHub.png" alt="GitHub"></img>
+            GitHub
+          </button>
+          <button className="social-icon">
+            <img src="/png/Twitter.png" alt="Twitter"></img>
+            Twitter
+          </button>
+        </div>
       </div>
     </div>
   );
