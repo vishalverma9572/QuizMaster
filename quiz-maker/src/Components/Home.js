@@ -28,6 +28,9 @@ const Home = () => {
   const handleDashboard = () => {
     navigate('/dashboard');
   };
+  const handleAboutUs =() => {
+    navigate('/about-us');
+  }
 
   return (
     <>
@@ -43,6 +46,7 @@ const Home = () => {
           
             <button className="button" onClick={handleSignUp}>Sign Up</button>
             <button className="button" onClick={handleSignIn}>Sign In</button>
+            <button className="button" onClick={handleAboutUs}>AboutUs</button>
           
         
       </div>
