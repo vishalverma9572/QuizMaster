@@ -10,40 +10,45 @@ const validations = require('../validators/validations');
 require('dotenv').config();
 
 // Register
-router.post('/register', async (req, res) => {
-  const zodResult = validations.registrationSchema.safeParse(req.body);
+router.post('/', auth, async (req, res) => {
+  const zodResult = quizSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
     return res.status(400).json({ msg: errors });
   }
 
-  const { username, email, password } = zodResult.data;
+  const { title, questions, timeLimit } = zodResult.data;
 
   try {
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+    // Generate quiz_id with user information
+    let quiz_id = generateUniqueId({
+      length: 10,
+      useLetters: true,
+      useNumbers: true,
+    });
 
-    user = new User({ username, email, password });
+    const user = await User.findById(req.user.id);
+    quiz_id = `${user.username}_${quiz_id}`;
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-    await user.save();
+    // Check if the quiz ID already exists
+    let existingQuiz = await Quiz.findOne({ quiz_id });
+    if (existingQuiz) {
+      return res.status(400).json({ msg: 'Quiz ID already exists' });
+    }
 
-    const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' },
-      (err, token) => {
-        if (err) throw err;
+    // Create a new quiz
+    const newQuiz = new Quiz({
+      title,
+      quiz_id,
+      questions,
+      createdBy: req.user.id,
+      timeLimit,
+    });
 
-        // Send welcome email
-        sendWelcomeEmail(email);
-
-        res.json({ token });
-      }
-    );
+    // Save the quiz
+    const quiz = await newQuiz.save();
+    res.status(201).json(quiz);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
@@ -118,77 +123,100 @@ router.post('/login', async (req, res) => {
 
 // Update Username
 router.put('/update-username', auth, async (req, res) => {
-    const { username } = req.body;
-    try {
-        const userExists = await User.findOne({ username });
-        if (userExists) return res.status(400).json({ msg: 'Username already exists' });
+  const zodResult = validations.updateUsernameSchema.safeParse(req.body);
 
-        const user = await User.findById(req.user.id);
-        user.username = username;
-        await user.save();
-        res.json({ msg: 'Username updated' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
+
+  const { username } = zodResult.data;
+  try {
+    const userExists = await User.findOne({ username });
+    if (userExists)
+      return res.status(400).json({ msg: 'Username already exists' });
+
+    const user = await User.findById(req.user.id);
+    user.username = username;
+    await user.save();
+    res.json({ msg: 'Username updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 // Update Password
 router.put('/update-password', auth, async (req, res) => {
-    const { password } = req.body;
-    try {
-        const user = await User.findById(req.user.id);
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-        await user.save();
-        res.json({ msg: 'Password updated' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
+  const zodResult = validations.updatePasswordSchema.safeParse(req.body);
+
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
+
+  const { password } = zodResult.data;
+
+  try {
+    const user = await User.findById(req.user.id);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    res.json({ msg: 'Password updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 // Get Current User's Details
 router.get('/me', auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password -__v -_id');
-        if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
-        }
-        res.json(user);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
+  try {
+    const user = await User.findById(req.user.id).select('-password -__v -_id');
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
     }
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 // Request reset password
 router.post('/request-reset-password', async (req, res) => {
-    const { email } = req.body;
-    
-    try {
-        const user = await User.findOne({ email });
-        
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+  const zodResult = validations.requestPasswordResetSchema.safeParse(req.body);
 
-        // Generate reset token and expiry
-        const resetToken = generateUniqueId({ length: 20 });
-        const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ message: errors });
+  }
 
-        user.resetToken = resetToken;
-        user.resetTokenExpiry = resetTokenExpiry;
-        await user.save();
+  const { email } = req.body;
 
-        // Send request reset password email
-        sendRequestResetPasswordEmail(user.email, resetToken);
+  try {
+    const user = await User.findOne({ email });
 
-        res.json({ message: 'Password reset email sent' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
+
+    // Generate reset token and expiry
+    const resetToken = generateUniqueId({ length: 20 });
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = resetTokenExpiry;
+    await user.save();
+
+    // Send request reset password email
+    sendRequestResetPasswordEmail(user.email, resetToken);
+
+    res.json({ message: 'Password reset email sent' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 // Function to send request reset password email
