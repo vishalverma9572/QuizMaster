@@ -1,0 +1,40 @@
+body{
+    font-family: "Wittgenstein", serif;
+}
+
+hr{
+    height: 2px;
+    background: #000;
+}
+
+#userguide-container{
+    margin-left: 20px;
+}
+
+#tableOfContent{
+    display: flex;
+}
+
+#vertical-line{
+    height: 200px;
+    width: 2px;
+    background: #000;
+}
+
+#tableOfContent-items{
+    list-style: none;
+}
+
+.content-item{
+    padding: 6px;
+    cursor: pointer;
+    line-height: 25px;
+}
+
+.content-item:hover{
+    text-decoration: underline;
+}
+
+#testCreation > h1{
+    
+}
