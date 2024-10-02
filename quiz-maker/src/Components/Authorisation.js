@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "./Authorisation.css";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
+import { auth, googleProvider, facebookProvider, githubProvider, twitterProvider } from "../firebase/Firebase";
+import { signInWithPopup } from "firebase/auth";
 
 const Authorisation = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -129,6 +131,20 @@ const Authorisation = () => {
     setError(null);
   };
 
+  const handleSocialLogin = async (provider) => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // Get the user token from result
+      const token = result.user.getIdToken();
+      localStorage.setItem("token", token);
+      setError(null);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err.message);
+      setError("Failed to login with social account");
+    }
+  };
+
   return (
     <div className="auth_container">
       <div className="form-wrapper">
@@ -190,19 +206,19 @@ const Authorisation = () => {
           Socials
         </h2>
         <div className="social-icons-wrapper">
-          <button className="social-icon">
+          <button className="social-icon" onClick={() => handleSocialLogin(googleProvider)}>
             <img src="/png/Google.png" alt="Google"></img>
             Google
           </button>
-          <button className="social-icon">
+          <button className="social-icon" onClick={() => handleSocialLogin(facebookProvider)}>
             <img src="/png/Facebook.png" alt="Facebook"></img>
             Facebook
           </button>
-          <button className="social-icon">
+          <button className="social-icon" onClick={() => handleSocialLogin(githubProvider)}>
             <img src="/png/GitHub.png" alt="GitHub"></img>
             GitHub
           </button>
-          <button className="social-icon">
+          <button className="social-icon" onClick={() => handleSocialLogin(twitterProvider)}>
             <img src="/png/Twitter.png" alt="Twitter"></img>
             Twitter
           </button>
