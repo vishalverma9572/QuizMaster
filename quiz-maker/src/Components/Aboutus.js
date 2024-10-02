@@ -3,7 +3,7 @@ import React from 'react';
 import PageLoader from './PageLoader';
 import { Typography, styled } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import './Aboutus.css'; // Import the new CSS file
+import './Aboutus.css'; 
 import Loader from './Loader';
 
 
@@ -24,13 +24,6 @@ const AboutUs = () => {
     setIsLoading(false);
   }, 2000);
 
-  useEffect(() => {
-    if (!localStorage.getItem('token')) {
-      navigate('/login');
-    } else {
-      setLoading(false);
-    }
-  }, [navigate]);
 
   return (
     <>
