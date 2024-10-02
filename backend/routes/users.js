@@ -6,90 +6,114 @@ const router = express.Router();
 const auth = require('../middleware/auth');
 const nodemailer = require('nodemailer');
 const generateUniqueId = require('generate-unique-id');
+const validations = require('../validators/validations');
 require('dotenv').config();
 
 // Register
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+  const zodResult = validations.registrationSchema.safeParse(req.body);
 
-    try {
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: 'User already exists' });
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
 
-        user = new User({ username, email, password });
+  const { username, email, password } = zodResult.data;
 
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-        await user.save();
+  try {
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ msg: 'User already exists' });
 
-        const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
-            if (err) throw err;
+    user = new User({ username, email, password });
 
-            // Send welcome email
-            sendWelcomeEmail(email);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
 
-            res.json({ token });
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' },
+      (err, token) => {
+        if (err) throw err;
+
+        // Send welcome email
+        sendWelcomeEmail(email);
+
+        res.json({ token });
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 // Function to send welcome email
 const sendWelcomeEmail = async (email) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER, // Your email
-                pass: process.env.EMAIL_PASSWORD // Your email password
-            }
-        });
+  try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email password
+      },
+    });
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Welcome to QuizMaster!',
-            html: `
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Welcome to QuizMaster!',
+      html: `
                 <p>Dear User,</p>
                 <p>Thank you for registering with QuizMaster!</p>
                 <p>Click the button below to visit our website:</p>
                 <a href="${process.env.FRONTEND_URL}" target="_blank" style="display: inline-block; background-color: #2d3b45; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit QuizMaster</a>
                 <p>Best regards,</p>
                 <p>The QuizMaster Team</p>
-            `
-        };
+            `,
+    };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`Welcome email sent to ${email}`);
-    } catch (err) {
-        console.error('Error sending welcome email:', err);
-    }
+    await transporter.sendMail(mailOptions);
+    console.log(`Welcome email sent to ${email}`);
+  } catch (err) {
+    console.error('Error sending welcome email:', err);
+  }
 };
-
 
 // Login
 router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+  const zodResult = validations.loginSchema.safeParse(req.body);
 
-    try {
-        let user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+  const { email, password } = zodResult.data;
 
-        const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
+  try {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
 });
 
 // Update Username
