@@ -1,188 +1,221 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 const router = express.Router();
-const auth = require('../middleware/auth');
-const nodemailer = require('nodemailer');
-const generateUniqueId = require('generate-unique-id');
-require('dotenv').config();
+const auth = require("../middleware/auth");
+const nodemailer = require("nodemailer");
+const generateUniqueId = require("generate-unique-id");
+const catchAsync = require("../utils/catchAsync");
+const AppError = require("../utils/appError");
+require("dotenv").config();
 
 // Register
-router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+router.post(
+    "/register",
+    catchAsync(async (req, res, next) => {
+      const { username, email, password } = req.body;
+      console.log(username);
+  
+      let user = await User.findOne({ email });
+      if (user) return next(new AppError("User already exists", 400));
+      const otp = crypto.randomBytes(3).toString('hex'); // 6-digit OTP
+      const otpExpires = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+  
+      req.session.preSignup={username, email, password, otp}
+    // Send welcome email
+        sendWelcomeEmail(email,otp);
 
-    try {
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: 'User already exists' });
-
-        user = new User({ username, email, password });
-
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-        await user.save();
-
-        const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
-            if (err) throw err;
-
-            // Send welcome email
-            sendWelcomeEmail(email);
-
-            res.json({ token });
+        res.status(200).json({
+        status: 'success',
+        message: 'OTP sent to your email.',
         });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+        
+      ;
+    })
+  );
+
+
+router.post(
+  "/register-verify",
+  catchAsync(async (req, res, next) => {
+    const { otp } = req.body;
+    const { username, email, password,otp: storedOtp, otpExpires} = req.session.preSignup || {};
+    console.log(username);
+
+    let user = await User.findOne({ email });
+    if (user) return next(new AppError("User already exists", 400));
+    if (!storedOtp || otp !== storedOtp || Date.now() > otpExpires) {
+        return next(new AppError('Code is invalid or has expired', 400));
+      }
+
+    user = await User.create({ username, email, password });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    
+
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" },
+      (err, token) => {
+        if (err) throw err;
+
+        // Send welcome email
+        sendWelcomeEmail(email);
+
+        res.json({ token });
+      }
+    );
+  })
+);
 
 // Function to send welcome email
-const sendWelcomeEmail = async (email) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER, // Your email
-                pass: process.env.EMAIL_PASSWORD // Your email password
-            }
-        });
+const sendWelcomeEmail = async (email,otp) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email password
+      },
+    });
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Welcome to QuizMaster!',
-            html: `
-                <p>Dear User,</p>
-                <p>Thank you for registering with QuizMaster!</p>
-                <p>Click the button below to visit our website:</p>
-                <a href="${process.env.FRONTEND_URL}" target="_blank" style="display: inline-block; background-color: #2d3b45; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit QuizMaster</a>
-                <p>Best regards,</p>
-                <p>The QuizMaster Team</p>
-            `
-        };
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Welcome to QuizMaster!",
+      html: `
+        <p>Dear User,</p>
+        <p>Thank you for registering with QuizMaster!</p>
+        ${otp ? `<p>'${otp} is your verification code'</p>` : ''}
+        <p>Click the button below to visit our website:</p>
+        <a href="${process.env.FRONTEND_URL}" target="_blank" style="display: inline-block; background-color: #2d3b45; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Visit QuizMaster</a>
+        <p>Best regards,</p>
+        <p>The QuizMaster Team</p>
+    `,
+    };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`Welcome email sent to ${email}`);
-    } catch (err) {
-        console.error('Error sending welcome email:', err);
-    }
+    await transporter.sendMail(mailOptions);
+    console.log(`Welcome email sent to ${email}`);
+  } catch (err) {
+    console.error("Error sending welcome email:", err);
+  }
 };
 
-
 // Login
-router.post('/login', async (req, res) => {
+router.post(
+  "/login",
+  catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
-    try {
-        let user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+    let user = await User.findOne({ email });
+    if (!user) return next(new AppError("Invalid credentials", 400));
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
-        const payload = { user: { id: user.id } };
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '24h' }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" },
+      (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      }
+    );
+  })
+);
 
 // Update Username
-router.put('/update-username', auth, async (req, res) => {
+router.put(
+  "/update-username",
+  auth,
+  catchAsync(async (req, res, next) => {
     const { username } = req.body;
-    try {
-        const userExists = await User.findOne({ username });
-        if (userExists) return res.status(400).json({ msg: 'Username already exists' });
 
-        const user = await User.findById(req.user.id);
-        user.username = username;
-        await user.save();
-        res.json({ msg: 'Username updated' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+    const userExists = await User.findOne({ username });
+    if (userExists) return next(new AppError("username already exists", 400));
+
+    const user = await User.findById(req.user.id);
+    user.username = username;
+    await user.save();
+    res.json({ msg: "Username updated" });
+  })
+);
 
 // Update Password
-router.put('/update-password', auth, async (req, res) => {
+router.put(
+  "/update-password",
+  auth,
+  catchAsync(async (req, res, next) => {
     const { password } = req.body;
-    try {
-        const user = await User.findById(req.user.id);
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
-        await user.save();
-        res.json({ msg: 'Password updated' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-});
+    const user = await User.findById(req.user.id);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
+    res.json({ msg: "Password updated" });
+  })
+);
 
 // Get Current User's Details
-router.get('/me', auth, async (req, res) => {
-    try {
-        const user = await User.findById(req.user.id).select('-password -__v -_id');
-        if (!user) {
-            return res.status(404).json({ msg: 'User not found' });
-        }
-        res.json(user);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
+router.get(
+  "/me",
+  auth,
+  catchAsync(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select("-password -__v -_id");
+    if (!user) {
+      return next(new AppError("User Not Found", 404));
     }
-});
+    res.json(user);
+  })
+);
 
 // Request reset password
-router.post('/request-reset-password', async (req, res) => {
+router.post(
+  "/request-reset-password",
+  catchAsync(async (req, res, next) => {
     const { email } = req.body;
-    
-    try {
-        const user = await User.findOne({ email });
-        
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
 
-        // Generate reset token and expiry
-        const resetToken = generateUniqueId({ length: 20 });
-        const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+    const user = await User.findOne({ email });
 
-        user.resetToken = resetToken;
-        user.resetTokenExpiry = resetTokenExpiry;
-        await user.save();
+    if (!user) return next(new AppError("User Not Found", 404));
 
-        // Send request reset password email
-        sendRequestResetPasswordEmail(user.email, resetToken);
+    // Generate reset token and expiry
+    const resetToken = generateUniqueId({ length: 20 });
+    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
 
-        res.json({ message: 'Password reset email sent' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+    user.resetToken = resetToken;
+    user.resetTokenExpiry = resetTokenExpiry;
+    await user.save();
+
+    // Send request reset password email
+    sendRequestResetPasswordEmail(user.email, resetToken);
+
+    res.json({ message: "Password reset email sent" });
+  })
+);
 
 // Function to send request reset password email
 const sendRequestResetPasswordEmail = async (email, token) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER, // Your email
-                pass: process.env.EMAIL_PASSWORD // Your email password
-            }
-        });
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email password
+      },
+    });
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Reset Your Password',
-            html: `
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Reset Your Password",
+      html: `
                 <p>Dear User,</p>
                 <p>You have requested to reset your password.</p>
                 <p>Please click the link below to reset your password:</p>
@@ -190,78 +223,75 @@ const sendRequestResetPasswordEmail = async (email, token) => {
                 <p>If you did not request this change, please ignore this email.</p>
                 <p>Best regards,</p>
                 <p>The QuizMaster Team</p>
-            `
-        };
+            `,
+    };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`Request reset password email sent to ${email}`);
-    } catch (err) {
-        console.error('Error sending request reset password email:', err);
-    }
+    await transporter.sendMail(mailOptions);
+    console.log(`Request reset password email sent to ${email}`);
+  } catch (err) {
+    console.error("Error sending request reset password email:", err);
+  }
 };
 
-
 // Reset password
-router.post('/reset-password/:token', async (req, res) => {
+router.post(
+  "/reset-password/:token",
+  catchAsync(async (req, res, next) => {
     const { token } = req.params;
     const { newPassword } = req.body;
-    
-    try {
-        const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
-        
-        if (!user) {
-            return res.status(400).json({ message: 'Invalid or expired token' });
-        }
 
-        const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(newPassword, salt);
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
 
-        // Clear reset token and expiry
-        user.resetToken = undefined;
-        user.resetTokenExpiry = undefined;
-        await user.save();
+    if (!user) return next(new AppError("Invalid or Expired Token", 400));
 
-        // Send reset password email
-        sendResetPasswordEmail(user.email);
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
 
-        res.json({ message: 'Password has been reset' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
-    }
-});
+    // Clear reset token and expiry
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+
+    // Send reset password email
+    sendResetPasswordEmail(user.email);
+
+    res.json({ message: "Password has been reset" });
+  })
+);
 
 // Function to send reset password email
 const sendResetPasswordEmail = async (email) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER, // Your email
-                pass: process.env.EMAIL_PASSWORD // Your email password
-            }
-        });
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER, // Your email
+        pass: process.env.EMAIL_PASSWORD, // Your email password
+      },
+    });
 
-        const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: 'Password Reset Confirmation',
-            html: `
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset Confirmation",
+      html: `
                 <p>Dear User,</p>
                 <p>Your password has been successfully reset.</p>
                 <p>If you did not request this change, please contact us immediately.</p>
                 <p><strong>Caution:</strong> If this change was not done by you, we recommend changing your password immediately.</p>
                 <p>Best regards,</p>
                 <p>The QuizMaster Team</p>
-            `
-        };
+            `,
+    };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`Reset password email sent to ${email}`);
-    } catch (err) {
-        console.error('Error sending reset password email:', err);
-    }
+    await transporter.sendMail(mailOptions);
+    console.log(`Reset password email sent to ${email}`);
+  } catch (err) {
+    console.error("Error sending reset password email:", err);
+  }
 };
-
 
 module.exports = router;
