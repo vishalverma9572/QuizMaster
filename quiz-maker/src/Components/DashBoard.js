@@ -9,6 +9,7 @@ import Profile from './Profile';
 import logo from '../images/quizmaster-high-resolution-logo-white-transparent.png';
 import Loader from './Loader';
 
+
 const Dashboard = () => {
   const [activeSection, setActiveSection] = useState('my-tests');
   const [isLoading, setIsLoading] = useState(true);
@@ -29,7 +30,6 @@ const Dashboard = () => {
     } else if (path === 'take-test') {
       setActiveSection('take-test');
       document.title = "Take Test | QuizMaster";
-
     } else if (path === 'profile') {
       setActiveSection('profile');
       document.title = "Profile | QuizMaster";
@@ -102,7 +102,7 @@ const Dashboard = () => {
       document.title = "Take Test | QuizMaster";
     } else if (section === 'profile') {
       document.title = "Profile | QuizMaster";
-    }
+    } 
   } 
   return (
     <>
