@@ -39,7 +39,11 @@ hr{
     text-decoration: underline;
 }
 
-#testCreation > h1{
+#usrg-testCreation > h1{
+    text-decoration: underline;
+}
+
+#usrg-myTests > h1{
     text-decoration: underline;
 }
 

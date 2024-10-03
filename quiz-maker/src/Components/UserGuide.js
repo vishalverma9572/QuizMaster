@@ -3,6 +3,10 @@ import './UserGuide.css'
 import createQuizImg from '../images/user-guide-images/CreateQuizImg.png'
 import quizDetImg from '../images/user-guide-images/QuizDet.png'
 import editQuizImg from '../images/user-guide-images/EditQuiz.png'
+import MyTestImg from '../images/user-guide-images/MyTestImg.png'
+import TestImg from '../images/user-guide-images/search_quizImg.png'
+import startTest from '../images/user-guide-images/startTest.png'
+import startImg from '../images/user-guide-images/startImg.jpeg'
 
 const UserGuide = () => {
   return (
@@ -16,8 +20,8 @@ const UserGuide = () => {
                     <div id='vertical-line'></div>
                     <ul id='tableOfContent-items'>
                         <li className='content-item'>How to create tests?</li>
+                        <li className='content-item'>See your tests</li>
                         <li className='content-item'>Where and how to take tests?</li>
-                        <li className='content-item'>See your scheduled tests</li>
                         <li className='content-item'>Results section</li>
                         <li className='content-item'>Manage your Profile</li>
                     </ul>
@@ -28,7 +32,7 @@ const UserGuide = () => {
                     and to review the results of the quiz that have been taken.<br/>
                     This is an easy-to-read user guide to help you get started with QuizMaster.
                 </div>
-                <div id='testCreation'>
+                <div id='usrg-testCreation'>
                     <h1>Create Tests</h1>
                     <h3>1.&ensp;How to create new test?</h3>
                     <img id="user-guid-img" src={createQuizImg} alt='create-quiz'/>
@@ -54,7 +58,28 @@ const UserGuide = () => {
                         &ensp;Here, the user can change the <span style={{fontWeight: "bold"}}>Quiz Title</span>,&ensp; <span style={{fontWeight: "bold"}}>Time limit</span>,&ensp;<span style={{fontWeight: "bold"}}>number of questions</span>,&ensp;<span style={{fontWeight: "bold"}}>options of each question</span>.
                     </p>
                 </div>
-                <div id=''></div>
+                <div id='usrg-myTests'>
+                    <h1>See Tests</h1>
+                    <img id="user-guid-img" src={MyTestImg} alt='all-quizes'/>
+                    <p>
+                        Upon Clicking on <span style={{fontWeight: "bold"}}>My Tests</span>,&ensp;The user can oversee all the quizes that have been created so far.&ensp;
+                        <span style={{fontWeight: "bold"}}>Details</span> button on each quiz enables user to edit and update the quiz whereas the <span style={{fontWeight: "bold"}}>Share</span> button copies the quiz id to the clipboard and
+                        enables the user to share the quiz id through various sharing platforms.
+                    </p>
+                </div>
+                <div id='usrg-myTests'>
+                    <h1>Take Test</h1>
+                    <h3>Step 1.</h3>
+                    <img id="user-guid-img" src={TestImg} alt='all-quizes'/>
+                    <h3>Step 2.</h3>
+                    <img id="user-guid-img" src={startTest} alt='all-quizes'/>
+                    <img id="user-guid-img" src={startImg} alt='all-quizes' style={{width: "55vw"}}/>
+                    <p>
+                        After starting the quiz, Complete the quiz and attempt all the questions of the quiz by ticking the option
+                        and after all the questions are attempted, click on the <span style={{fontWeight: "bold"}}>Submit Quiz</span> button to submit the quiz.
+                    </p>
+                    <h3>Step 3.</h3>
+                </div>
            </div>
         </div>
     </>
