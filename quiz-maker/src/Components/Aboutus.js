@@ -50,7 +50,7 @@ const AboutUs = () => {
             <h2>Frequently Asked Questions</h2>
             <ul class="accordion">
               <li>
-                <input type="radio" name="accordion" id="first" />
+                <input type="checkbox" name="accordion" id="first" />
                 <label for="first">How do I create a quiz?</label>
                 <div class="content">
                   <p>
@@ -59,7 +59,7 @@ const AboutUs = () => {
                 </div>
               </li>
               <li>
-                <input type="radio" name="accordion" id="second" />
+                <input type="checkbox" name="accordion" id="second" />
                 <label for="second">Can I track my quiz performance?</label>
                 <div class="content">
                   <p>
@@ -68,7 +68,7 @@ const AboutUs = () => {
                 </div>
               </li>
               <li>
-                <input type="radio" name="accordion" id="third" />
+                <input type="checkbox" name="accordion" id="third" />
                 <label for="third">Is there a limit to the number of quizzes I can create?</label>
                 <div class="content">
                   <p>
@@ -77,7 +77,7 @@ const AboutUs = () => {
                 </div>
               </li>
               <li>
-                <input type="radio" name="accordion" id="fourth" />
+                <input type="checkbox" name="accordion" id="fourth" />
                 <label for="fourth"> How do I reset my password?</label>
                 <div class="content">
                   <p>
@@ -86,7 +86,7 @@ const AboutUs = () => {
                 </div>
               </li>
               <li>
-                <input type="radio" name="accordion" id="fifth" />
+                <input type="checkbox" name="accordion" id="fifth" />
                 <label for="fifth">Can I collaborate with others on quizzes?</label>
                 <div class="content">
                   <p>
@@ -95,7 +95,7 @@ const AboutUs = () => {
                 </div>
               </li>
               <li>
-                <input type="radio" name="accordion" id="sixth" />
+                <input type="checkbox" name="accordion" id="sixth" />
                 <label for="sixth">How do I report a bug or request a feature?</label>
                 <div class="content">
                   <p>
