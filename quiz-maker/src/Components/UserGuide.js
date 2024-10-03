@@ -25,7 +25,7 @@ const UserGuide = () => {
                     <ul id='tableOfContent-items'>
                         <li className='content-item'>How to create tests?</li>
                         <li className='content-item'>See your tests</li>
-                        <li className='content-item'>Where and how to take tests?</li>
+                        <li className='content-item'><a href='#usrg-myTests'>Where and how to take tests?</a></li>
                         <li className='content-item'>Results section</li>
                         <li className='content-item'>Manage your Profile</li>
                     </ul>
