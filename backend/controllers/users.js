@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 const generateUniqueId = require('generate-unique-id');
 require('dotenv').config();
 
-export const register = async (req, res) => {
+const register = async (req, res) => {
     const { username, email, password } = req.body;
     try {
         let user = await User.findOne({ email });
@@ -63,7 +63,7 @@ const sendWelcomeEmail = async (email) => {
     }
 };
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -84,7 +84,7 @@ export const login = async (req, res) => {
     }
 }
 
-export const updateUsername = async (req, res) => {
+const updateUsername = async (req, res) => {
     const { username } = req.body;
     try {
         const userExists = await User.findOne({ username });
@@ -100,7 +100,7 @@ export const updateUsername = async (req, res) => {
     }
 }
 
-export const updatePassword = async (req, res) => {
+const updatePassword = async (req, res) => {
     const { password } = req.body;
     try {
         const user = await User.findById(req.user.id);
@@ -114,7 +114,7 @@ export const updatePassword = async (req, res) => {
     }
 }
 
-export const me = async (req, res) => {
+const me = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password -__v -_id');
         if (!user) {
@@ -127,7 +127,7 @@ export const me = async (req, res) => {
     }
 }
 
-export const requestResetPAssword = async (req, res) => {
+const requestResetPAssword = async (req, res) => {
     const { email } = req.body;
 
     try {
@@ -187,7 +187,7 @@ const sendRequestResetPasswordEmail = async (email, token) => {
     }
 };
 
-export const resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
 
@@ -245,4 +245,14 @@ const sendResetPasswordEmail = async (email) => {
     } catch (err) {
         console.error('Error sending reset password email:', err);
     }
+};
+
+module.exports = {
+    register,
+    login,
+    updateUsername,
+    updatePassword,
+    me,
+    requestResetPAssword,
+    resetPassword
 };

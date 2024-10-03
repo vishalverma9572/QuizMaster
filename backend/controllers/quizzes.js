@@ -21,7 +21,7 @@ function findQuartile(sortedArray, percentile) {
     return sortedArray[index];
 }
 
-export const createQuiz = async (req, res) => {
+const createQuiz = async (req, res) => {
     let { title, questions, timeLimit } = req.body;
     //add user_id to the quiz_id
     let quiz_id = generateUniqueId({
@@ -60,7 +60,7 @@ export const createQuiz = async (req, res) => {
     }
 }
 
-export const getQuizStats = async (req, res) => {
+const getQuizStats = async (req, res) => {
     console.log("route reached");
     try {
         const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
@@ -104,7 +104,7 @@ export const getQuizStats = async (req, res) => {
     }
 }
 
-export const getQuizByUser = async (req, res) => {
+const getQuizByUser = async (req, res) => {
     try {
         const quizzes = await Quiz.find({ createdBy: req.user.id }).select('title lastUpdated quiz_id timeLimit questions takenBy');
 
@@ -124,7 +124,7 @@ export const getQuizByUser = async (req, res) => {
     }
 }
 
-export const getQuizTakenByUser = async (req, res) => {
+const getQuizTakenByUser = async (req, res) => {
     console.log("route reached");
     try {
         const quizzes = await Quiz.find({ takenBy: req.user.id });
@@ -167,7 +167,7 @@ export const getQuizTakenByUser = async (req, res) => {
     }
 }
 
-export const updateQuizById = async (req, res) => {
+const updateQuizById = async (req, res) => {
     const { title, timeLimit, questions } = req.body;
     const { quiz_id } = req.params;
 
@@ -259,7 +259,7 @@ export const updateQuizById = async (req, res) => {
     }
 }
 
-export const fetchQuizToTake = async (req, res) => {
+const fetchQuizToTake = async (req, res) => {
     const { quiz_id } = req.params;
 
     try {
@@ -294,7 +294,7 @@ export const fetchQuizToTake = async (req, res) => {
     }
 }
 
-export const searchQuiz = async (req, res) => {
+const searchQuiz = async (req, res) => {
     console.log(" search route reached");
     const { quiz_id } = req.params;
 
@@ -340,7 +340,7 @@ export const searchQuiz = async (req, res) => {
     }
 }
 
-export const markQuizAsTaken = async (req, res) => {
+const markQuizAsTaken = async (req, res) => {
     const { answers } = req.body;  // Expect answers array from the frontend
 
     try {
@@ -400,7 +400,7 @@ export const markQuizAsTaken = async (req, res) => {
     }
 }
 
-export const getResult = async (req, res) => {
+const getResult = async (req, res) => {
     try {
         //send only score
         const result = await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id }).select('score');
@@ -413,7 +413,7 @@ export const getResult = async (req, res) => {
     }
 }
 
-export const checkQuizTaken = async (req, res) => {
+const checkQuizTaken = async (req, res) => {
     const { answers, elapsedTime } = req.body; // Expect answers and elapsedTime from the frontend
 
     try {
@@ -485,7 +485,7 @@ export const checkQuizTaken = async (req, res) => {
     }
 }
 
-export const getQuizProgress = async (req, res) => {
+const getQuizProgress = async (req, res) => {
     try {
         console.log("progress route reached");
         const quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
@@ -500,7 +500,7 @@ export const getQuizProgress = async (req, res) => {
     }
 }
 
-export const getAllUserResult = async (req, res) => {
+const getAllUserResult = async (req, res) => {
     try {
         // Find the quiz by quiz_id
         const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
@@ -550,7 +550,7 @@ export const getAllUserResult = async (req, res) => {
     }
 }
 
-export const getQuizStatsById = async (req, res) => {
+const getQuizStatsById = async (req, res) => {
     try {
         const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
 
@@ -581,7 +581,7 @@ export const getQuizStatsById = async (req, res) => {
     }
 }
 
-export const deleteQuiz = async (req, res) => {
+const deleteQuiz = async (req, res) => {
     console.log("delete route reached");
     try {
         const quiz = await Quiz.findOneAndDelete({ quiz_id: req.params.quiz_id, createdBy: req.user.id });
@@ -604,7 +604,7 @@ export const deleteQuiz = async (req, res) => {
     }
 }
 
-export const getSingleQuiz = async (req, res) => {
+const getSingleQuiz = async (req, res) => {
     try {
         const { quiz_id } = req.params;
         console.log(quiz_id);
@@ -622,3 +622,21 @@ export const getSingleQuiz = async (req, res) => {
         res.status(500).json({ msg: 'Server error' });
     }
 }
+
+module.exports = {
+    createQuiz,
+    getQuizStats,
+    getQuizByUser,
+    getQuizTakenByUser,
+    updateQuizById,
+    fetchQuizToTake,
+    searchQuiz,
+    markQuizAsTaken,
+    getResult,
+    checkQuizTaken,
+    getQuizProgress,
+    getAllUserResult,
+    getQuizStatsById,
+    deleteQuiz,
+    getSingleQuiz
+};
