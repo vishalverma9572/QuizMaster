@@ -11,6 +11,7 @@ import TestPage from "./Components/TestPage";
 import ForgotPassword from "./Components/ForGotPassword";
 import ResetPassword from "./Components/ResetPassword";
 import Aboutus from "./Components/Aboutus";
+import UserGuide from "./Components/UserGuide";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/take-test" element={<Dashboard/>} />
           <Route path="/profile" element={<Dashboard/>} />
           <Route path="/aboutus" element={<Aboutus/>} />
+          <Route path="/userguide" element={<UserGuide/>} />
           <Route path="result/:quizid" element={<ResultPage/>} />
           <Route path='quiz/:quiz_id' element={<QuizDetails/>} />
           <Route path='edit-quiz/:quiz_id' element={<EditQuiz/>} />
