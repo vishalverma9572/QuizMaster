@@ -52,7 +52,7 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
-  color: #333;
+  /* color: #333; */
 }
 
 .form-group input[type="text"]:focus {
@@ -90,9 +90,9 @@
   border-radius: 15px;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
- #quizId{
+ /* #quizId{
   background: #ccc;
- }
+ } */
 
 /* Quiz details card layout */
 .quiz-card {
