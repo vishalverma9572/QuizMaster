@@ -13,6 +13,7 @@
   text-align: center;
   padding: 20px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .home-container .logo img {
@@ -139,5 +140,9 @@
   .home-container .button-container2 .button {
     width: 250px;
     padding: 10px 20px;
+  }
+  
+  .usrg{
+    display: block;
   }
 }
