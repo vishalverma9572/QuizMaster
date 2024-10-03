@@ -13,6 +13,21 @@ import standingImg from '../images/user-guide-images/ranking-two.jpeg'
 import profileImg from '../images/user-guide-images/profileImg.png'
 
 const UserGuide = () => {
+    const scrollCreate = ()=>{
+        document.getElementById('usrg-testCreation').scrollIntoView({ behavior: 'smooth' });
+    }
+    const scrollTests = ()=>{
+        document.getElementById('usrg-myTests').scrollIntoView({ behavior: 'smooth' });
+    }
+    const scrollTake = ()=>{
+        document.getElementById('usrg-myTests').scrollIntoView({ behavior: 'smooth' });
+    }
+    const scrollResult = ()=>{
+        document.getElementById('usrg-results').scrollIntoView({ behavior: 'smooth' });
+    }
+    const scrollProfile = ()=>{
+        document.getElementById('usrg-profile').scrollIntoView({ behavior: 'smooth' });
+    }
   return (
     <>
         <div id='header'>
@@ -23,11 +38,11 @@ const UserGuide = () => {
                 <div id='tableOfContent'>
                     <div id='vertical-line'></div>
                     <ul id='tableOfContent-items'>
-                        <li className='content-item'>How to create tests?</li>
-                        <li className='content-item'>See your tests</li>
-                        <li className='content-item'><a href='#usrg-myTests'>Where and how to take tests?</a></li>
-                        <li className='content-item'>Results section</li>
-                        <li className='content-item'>Manage your Profile</li>
+                        <li className='content-item'><button onClick={scrollCreate}>How to create tests?</button></li>
+                        <li className='content-item'><button onClick={scrollTests}>See your tests</button></li>
+                        <li className='content-item'><button onClick={scrollTake}>Where and how to take tests?</button></li>
+                        <li className='content-item'><button onClick={scrollResult}>Results section</button></li>
+                        <li className='content-item'><button onClick={scrollProfile}>Manage your Profile</button></li>
                     </ul>
                 </div>
                 <div id='introduction'>
