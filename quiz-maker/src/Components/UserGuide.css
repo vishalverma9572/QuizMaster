@@ -12,7 +12,7 @@ hr{
 }
 
 #userguide-container{
-    margin-left: 20px;
+    margin-left: 50px;
 }
 
 #tableOfContent{
@@ -44,6 +44,14 @@ hr{
 }
 
 #usrg-myTests > h1{
+    text-decoration: underline;
+}
+
+#usrg-results > h1{
+    text-decoration: underline;
+}
+
+#usrg-profile > h1{
     text-decoration: underline;
 }
 

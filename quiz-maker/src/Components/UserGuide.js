@@ -7,6 +7,10 @@ import MyTestImg from '../images/user-guide-images/MyTestImg.png'
 import TestImg from '../images/user-guide-images/search_quizImg.png'
 import startTest from '../images/user-guide-images/startTest.png'
 import startImg from '../images/user-guide-images/startImg.jpeg'
+import resultsImg from '../images/user-guide-images/results-main.png'
+import listImg from '../images/user-guide-images/ranking-one.jpeg'
+import standingImg from '../images/user-guide-images/ranking-two.jpeg'
+import profileImg from '../images/user-guide-images/profileImg.png'
 
 const UserGuide = () => {
   return (
@@ -70,15 +74,27 @@ const UserGuide = () => {
                 <div id='usrg-myTests'>
                     <h1>Take Test</h1>
                     <h3>Step 1.</h3>
-                    <img id="user-guid-img" src={TestImg} alt='all-quizes'/>
+                    <img id="user-guid-img" src={TestImg} alt='test-id'/>
                     <h3>Step 2.</h3>
-                    <img id="user-guid-img" src={startTest} alt='all-quizes'/>
-                    <img id="user-guid-img" src={startImg} alt='all-quizes' style={{width: "55vw"}}/>
+                    <img id="user-guid-img" src={startTest} alt='start-test'/>
+                    <img id="user-guid-img" src={startImg} alt='attempt-quiz' style={{width: "55vw"}}/>
                     <p>
                         After starting the quiz, Complete the quiz and attempt all the questions of the quiz by ticking the option
                         and after all the questions are attempted, click on the <span style={{fontWeight: "bold"}}>Submit Quiz</span> button to submit the quiz.
                     </p>
-                    <h3>Step 3.</h3>
+                </div>
+                <div id='usrg-results'>
+                    <h1>See result of quiz</h1>
+                    <img id="user-guid-img" src={resultsImg} alt='result'/>
+                    <p>Clicking on the <span style={{fontWeight: "bold"}}>Stats</span> button will show the ranking list and the standing of attendee among other peers</p>
+                    <img id="user-guid-img" src={listImg} alt='ranking'/>
+                    <img id="user-guid-img" src={standingImg} alt='standing'/>
+                    <p>See the <span style={{fontWeight: "bold"}}>Result Statistics</span> of the quiz along with your standing in the quiz among other attendees as <span style={{fontWeight: "bold"}}>User Scores</span></p>
+                </div>
+                <div id='usrg-profile'>
+                    <h1>Profile Section</h1>
+                    <img id="user-guid-img" src={profileImg} alt='profile-dashboard'/>
+                    <p>Here, user can change the username of the account associated with the email to a different username, and also have the ability to change old password to a new password.</p>
                 </div>
            </div>
         </div>
