@@ -87,6 +87,7 @@ const quizSchema = z.object({
 
 const questionUpdateSchema = z.object({
   question: z.string().optional(),
+  _id: z.string().optional(),
   options: z
     .array(z.string().optional())
     .min(2, 'At least two options are required')
@@ -95,10 +96,24 @@ const questionUpdateSchema = z.object({
 });
 
 const quizUpdateSchema = z.object({
-  title: z.string().optional(),
-  questions: z.array(questionUpdateSchema).optional(),
-  timeLimit: z.number().optional(),
+  title: z
+    .string({
+      required_error: 'Title is required if provided',
+    })
+    .optional(),
+
+  questions: z
+    .array(questionUpdateSchema)
+    .nonempty('At least one question is required if questions are provided')
+    .optional(),
+
+  timeLimit: z
+    .number({
+      required_error: 'Time limit is required if provided',
+    })
+    .optional(),
 });
+
 
 module.exports = {
   registrationSchema,

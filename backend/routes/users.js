@@ -10,45 +10,37 @@ const validations = require('../validators/validations');
 require('dotenv').config();
 
 // Register
-router.post('/', auth, async (req, res) => {
-  const zodResult = quizSchema.safeParse(req.body);
+router.post('/register', async (req, res) => {
+  const zodResult = validations.registrationSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
     return res.status(400).json({ msg: errors });
   }
 
-  const { title, questions, timeLimit } = zodResult.data;
+  const { username, email, password } = zodResult.data;
 
   try {
-    // Generate quiz_id with user information
-    let quiz_id = generateUniqueId({
-      length: 10,
-      useLetters: true,
-      useNumbers: true,
-    });
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ msg: 'User already exists' });
 
-    const user = await User.findById(req.user.id);
-    quiz_id = `${user.username}_${quiz_id}`;
+    user = new User({ username, email, password });
 
-    // Check if the quiz ID already exists
-    let existingQuiz = await Quiz.findOne({ quiz_id });
-    if (existingQuiz) {
-      return res.status(400).json({ msg: 'Quiz ID already exists' });
-    }
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    await user.save();
 
-    // Create a new quiz
-    const newQuiz = new Quiz({
-      title,
-      quiz_id,
-      questions,
-      createdBy: req.user.id,
-      timeLimit,
-    });
-
-    // Save the quiz
-    const quiz = await newQuiz.save();
-    res.status(201).json(quiz);
+    const payload = { user: { id: user.id } };
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' },
+      (err, token) => {
+        if (err) throw err;
+        sendWelcomeEmail(email);
+        res.json({ token });
+      }
+    );
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });

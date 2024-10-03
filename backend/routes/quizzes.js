@@ -17,15 +17,32 @@ router.use((req, res, next) => {
 // Create Quiz
 
 router.post('/', auth, async (req, res) => {
-  // let { title, questions, timeLimit } = req.body;
   const zodResult = quizSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ msg: errors });
+    const errors = zodResult.error.errors;
+
+    const missingQuestionsError = errors.find(
+      (err) =>
+        err.code === 'invalid_type' &&
+        err.expected === 'array' &&
+        err.received === 'undefined' &&
+        err.path[0] === 'questions' &&
+        err.message === 'Required'
+    );
+
+    if (missingQuestionsError) {
+      return res
+        .status(400)
+        .json({ msg: 'Questions are required but not provided' });
+    }
+
+    const errorMessages = errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errorMessages });
   }
 
   const { title, questions, timeLimit } = zodResult.data;
+
   //add user_id to the quiz_id
   let quiz_id = generateUniqueId({
     length: 10,
