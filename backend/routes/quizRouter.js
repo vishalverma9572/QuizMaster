@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const { createQuiz, getQuizStats, getQuizByUser, getQuizTakenByUser, updateQuizById, fetchQuizToTake, searchQuiz, markQuizAsTaken, getResult, checkQuizTaken, getQuizProgress, getAllUserResult, getQuizStatsById, deleteQuiz, getSingleQuiz } = require('../controllers/quizzes');
+const { createQuiz, getQuizStats, getQuizByUser, getQuizTakenByUser, updateQuizById, fetchQuizToTake, searchQuiz, markQuizAsTaken, getResult, checkQuizTaken, getQuizProgress, getAllUserResult, getQuizStatsById, deleteQuiz, getSingleQuiz } = require('../controllers/quizController');
 const router = express.Router()
 // router.use((req, res, next) => {
 //     //printing the route url

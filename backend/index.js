@@ -1,5 +1,4 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const Quiz = require('./models/Quiz');
 
@@ -7,8 +6,8 @@ const QuizResult = require('./models/QuizResult');
 const QuizProgress = require('./models/QuizProgress');
 const { connectDB } = require('./db/connectDb');
 
-const userRouter = require("./routes/users")
-const quizRouter = require("./routes/quizzes")
+const userRouter = require("./routes/userRouter")
+const quizRouter = require("./routes/quizRouter")
 
 require('dotenv').config();
 
@@ -92,7 +91,9 @@ app.use(cors());
 
 app.use('/api/users', userRouter);
 app.use('/api/quizzes', quizRouter);
+
 app.use('/', (req, res) => res.send('Hello World!'));
+
 const PORT = process.env.PORT || 5000;
 //print req res status
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

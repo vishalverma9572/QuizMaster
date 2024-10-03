@@ -22,7 +22,7 @@ const register = async (req, res) => {
             if (err) throw err;
 
             // Send welcome email
-            sendWelcomeEmail(email);
+            // sendWelcomeEmail(email);
 
             res.json({ token });
         });
@@ -64,6 +64,7 @@ const sendWelcomeEmail = async (email) => {
 };
 
 const login = async (req, res) => {
+    console.log("Login called");
     const { email, password } = req.body;
 
     try {
