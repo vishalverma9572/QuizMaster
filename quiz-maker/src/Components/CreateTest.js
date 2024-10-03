@@ -75,6 +75,11 @@ const CreateQuiz = () => {
       }
     }
 
+    if (timeLimit <= 0) {
+      setError("Enter appropriate time limit. Shouldn't be 0 or negative");
+      return;
+    }
+
     try {
       const url = process.env.REACT_APP_BACKEND_URL + "/quizzes";
       const response = await fetch(url, {
