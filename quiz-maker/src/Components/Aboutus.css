@@ -75,6 +75,7 @@ input[type="checkbox"]{
   transition: max-height 0.5s, padding 0.5s;
 
 }
+
 .accordion input[type="checkbox"]:checked + label + .content{
   max-height: 600px;
   padding: 30px 20px;
@@ -83,10 +84,12 @@ input[type="checkbox"]{
 .accordion input[type="checkbox"]:checked + label::after{
   transform: rotate(135deg);
 }
+
 .faq .email-signup{
   max-width: 600px;
   margin: 20px auto 60px;
 }
+
 .faq small{
   font-size: 13px;
 }
