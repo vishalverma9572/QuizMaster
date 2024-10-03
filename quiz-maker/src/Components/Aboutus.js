@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import React from "react";
-import PageLoader from "./PageLoader";
 import { Typography, styled } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import "./Aboutus.css";
 import Loader from "./Loader";
 
@@ -15,9 +13,9 @@ const StyledTypography = styled(Typography)(() => ({
 }));
 
 const AboutUs = () => {
-  const [loading, setLoading] = useState(true);
+
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
+ 
 
   setTimeout(() => {
     setIsLoading(false);

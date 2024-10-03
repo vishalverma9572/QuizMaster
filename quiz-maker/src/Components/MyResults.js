@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './MyResults.css'; // Import your CSS file for styling
 import {  Typography, styled } from '@mui/material';
-import { Icon } from '@iconify-icon/react';
 import PageLoader from './PageLoader';
 import { useNavigate } from 'react-router-dom';
 

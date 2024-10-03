@@ -16,6 +16,7 @@ const ResultPage = () => {
   const [userScores, setUserScores] = useState([]);
   const [myScore, setMyScore] = useState(0);
   const navigate=useNavigate();
+  
   const StyledTypography = styled(Typography)({
     marginBottom: '30px',
     fontFamily: "Wittgenstein, serif",
