@@ -100,6 +100,7 @@ const quizUpdateSchema = z.object({
     .string({
       required_error: 'Title is required if provided',
     })
+    .min(3, 'Title should be of minimum 3 characters')
     .optional(),
 
   questions: z
