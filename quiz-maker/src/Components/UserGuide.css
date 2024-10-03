@@ -2,6 +2,10 @@ body{
     font-family: "Wittgenstein", serif;
 }
 
+.heading{
+    font-size: 3rem;
+}
+
 hr{
     height: 3px;
     background: #000;
