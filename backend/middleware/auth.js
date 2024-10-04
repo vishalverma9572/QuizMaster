@@ -31,22 +31,14 @@ module.exports = function (req, res, next) {
                 })
                 .catch(err => { console.log(err) })
         }
-    }
-
     try {
         token_valid_or_not();
         find_user(id_user);
         next();
     } catch (err) {
         console.log(err);
-    }
-
-    try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
         console.log('success..', req.user);
-        next();
-    } catch (err) {
         res.status(401).json({ msg: 'Token is not valid' });
-    }
-};
+}}}
