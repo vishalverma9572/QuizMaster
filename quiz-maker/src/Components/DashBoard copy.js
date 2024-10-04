@@ -139,7 +139,7 @@ const Dashboard = () => {
                   <span><Icon icon="carbon:user-profile" /></span>Profile
                 </li>
                 <li className={activeSection === 'userguide' ? 'active' : ''} onClick={() => handleLinkClick('userguide')}>
-                  <span><Icon icon="solar:book-bold" /></span>User Guide
+                  <span><Icon icon="carbon:user-profile" /></span>User Guide
                 </li>
               </ul>
             </nav>

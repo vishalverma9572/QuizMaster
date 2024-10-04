@@ -1,12 +1,17 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const Quiz = require('./models/Quiz');
 
 const QuizResult = require('./models/QuizResult');
 const QuizProgress = require('./models/QuizProgress');
+const { connectDB } = require('./db/connectDb');
+
+const userRouter = require("./routes/userRouter")
+const quizRouter = require("./routes/quizRouter")
 
 require('dotenv').config();
+
+connectDB()
 //auto submit quiz
 async function autoSubmitQuizzes() {
     try {
@@ -84,17 +89,11 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {  }) .catch(err => console.error('Error connecting to MongoDB:', err));
+app.use('/api/users', userRouter);
+app.use('/api/quizzes', quizRouter);
 
-// Routes
+app.use('/', (req, res) => res.send('Hello World!'));
 
-
-
-app.use('/api/users', require('./routes/users'));
-app.use('/api/quizzes', require('./routes/quizzes'));
-app.use('/',(req,res)=>res.send('Hello World!'));
 const PORT = process.env.PORT || 5000;
 //print req res status
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
