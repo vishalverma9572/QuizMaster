@@ -4,10 +4,10 @@ const user = require('../models/User');
 
 module.exports = function (req, res, next) {
     const token = req.header('x-auth-token');
-     const id_user =req.user.id;
     console.log(token);
     if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
-
+    
+    const id_user =req.user.id;
 
 
      //check the user still exists
@@ -25,7 +25,8 @@ module.exports = function (req, res, next) {
         });
     }
 
-    if(req.user){
+    const token_valid_or_not=()=>{
+        if(req.user){
         user.findById(req.user.id)
         .then(user=>{ 
             if(user.resetTokenExpiry < Date.now()){
@@ -34,12 +35,21 @@ module.exports = function (req, res, next) {
         })
         .catch(err=>{console.log(err)})
     }
+}
+
+   try{ 
+       token_valid_or_not();
+       find_user(id_user);
+       next();
+   }
+    catch(err){
+        console.log(err);
+    }
 
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
-        find_user(id_user);
         next();
     } catch (err) {
         res.status(401).json({ msg: 'Token is not valid' });
