@@ -141,8 +141,18 @@
     width: 250px;
     padding: 10px 20px;
   }
-  
   .usrg{
     display: block;
+  }
+}
+
+@media (max-width: 340px){
+  .home-container .button-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button{
+    margin-top: 0px !important;
   }
 }
