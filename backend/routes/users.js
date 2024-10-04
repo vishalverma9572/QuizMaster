@@ -131,6 +131,10 @@ router.get('/me', auth, async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
+        // if these values exist do not send them to the user
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined
+        user.passwordChangedDate = undefined;
         res.json(user);
     } catch (err) {
         console.error(err);
@@ -219,6 +223,9 @@ router.post('/reset-password/:token', async (req, res) => {
         // Clear reset token and expiry
         user.resetToken = undefined;
         user.resetTokenExpiry = undefined;
+
+        // set the passwordChangedAt field
+        user.passwordChangedDate = Date.now() - 1000;
         await user.save();
 
         // Send reset password email
