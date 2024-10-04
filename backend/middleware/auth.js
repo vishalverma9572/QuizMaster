@@ -6,7 +6,6 @@ module.exports = function (req, res, next) {
     console.log(token);
     if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
     const id_user = req.user.id;
-
     // Check if the user still exists
     const find_user = (id) => {
         user.findById(id)
