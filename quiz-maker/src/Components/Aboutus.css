@@ -16,7 +16,7 @@
   text-align: center; 
 }
 
-.about-us-description {
+.about-us-container .about-us-description {
   font-size: 1.2rem;
   margin-bottom: 30px;
   max-width: 700px;
@@ -25,26 +25,26 @@
   
 }
 
-.faq{
+.about-us-container .faq{
   padding: 10px 12%;
   text-align: center;
   font-size: 18px;
  }
-.faq h2{
+ .about-us-container .faq h2{
   font-weight: 600;
   font-size: 40px;
 }
-.accordion{
+.about-us-container .accordion{
    margin: 60px auto;
    width: 100%;
    max-width: 750px;
 }
-.accordion li{
+.about-us-container .accordion li{
   list-style: none;
   width: 100%;
   padding: 5px;
 }
-.accordion li label{
+.about-us-container .accordion li label{
   display: flex;
   align-items: center;
   padding: 20px; 
@@ -56,17 +56,17 @@
   position: relative;
 
 }
-label::after{
+.about-us-container label::after{
   content: '+';
   font-size: 28px;
   position: absolute;
   right: 20px;
   transition: transform 0.5s;
 }
-input[type="checkbox"]{
+.about-us-container input[type="checkbox"]{
   display: none;
 }
-.accordion .content {
+.about-us-container .accordion .content {
   background: #303033;
   text-align: left;
   padding: 0 20px;
@@ -76,21 +76,21 @@ input[type="checkbox"]{
 
 }
 
-.accordion input[type="checkbox"]:checked + label + .content{
+.about-us-container .accordion input[type="checkbox"]:checked + label + .content{
   max-height: 600px;
   padding: 30px 20px;
 
 }
-.accordion input[type="checkbox"]:checked + label::after{
+.about-us-container .accordion input[type="checkbox"]:checked + label::after{
   transform: rotate(135deg);
 }
 
-.faq .email-signup{
+.about-us-container .faq .email-signup{
   max-width: 600px;
   margin: 20px auto 60px;
 }
 
-.faq small{
+.about-us-container .faq small{
   font-size: 13px;
 }
 
