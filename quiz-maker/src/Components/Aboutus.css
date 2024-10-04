@@ -1,0 +1,98 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+.about-us-container {
+  padding: 20px;
+  background: #2d3b45; 
+  color: #fff; 
+  font-family: "Nunito", sans-serif; 
+
+}
+
+.about-us-container h4 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #fff;
+  text-align: center; 
+}
+
+.about-us-container .about-us-description {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  
+}
+
+.about-us-container .faq{
+  padding: 10px 12%;
+  text-align: center;
+  font-size: 18px;
+ }
+ .about-us-container .faq h2{
+  font-weight: 600;
+  font-size: 40px;
+}
+.about-us-container .accordion{
+   margin: 60px auto;
+   width: 100%;
+   max-width: 750px;
+}
+.about-us-container .accordion li{
+  list-style: none;
+  width: 100%;
+  padding: 5px;
+}
+.about-us-container .accordion li label{
+  display: flex;
+  align-items: center;
+  padding: 20px; 
+  font-size: 18px;
+  font-weight: 500;
+  background: #303033;
+  margin-bottom: 2px;
+  cursor: pointer;
+  position: relative;
+
+}
+.about-us-container label::after{
+  content: '+';
+  font-size: 28px;
+  position: absolute;
+  right: 20px;
+  transition: transform 0.5s;
+}
+.about-us-container input[type="checkbox"]{
+  display: none;
+}
+.about-us-container .accordion .content {
+  background: #303033;
+  text-align: left;
+  padding: 0 20px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s, padding 0.5s;
+
+}
+
+.about-us-container .accordion input[type="checkbox"]:checked + label + .content{
+  max-height: 600px;
+  padding: 30px 20px;
+
+}
+.about-us-container .accordion input[type="checkbox"]:checked + label::after{
+  transform: rotate(135deg);
+}
+
+.about-us-container .faq .email-signup{
+  max-width: 600px;
+  margin: 20px auto 60px;
+}
+
+.about-us-container .faq small{
+  font-size: 13px;
+}
+
+
+
