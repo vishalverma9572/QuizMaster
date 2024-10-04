@@ -2,8 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
-import { auth, googleProvider, facebookProvider, githubProvider, twitterProvider } from "../firebase/Firebase";
-import { signInWithPopup } from "firebase/auth";
 
 const Authorisation = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -113,18 +111,6 @@ const Authorisation = () => {
     setError(null);
   };
 
-  const handleSocialLogin = async (provider) => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const token = result.user.getIdToken();
-      localStorage.setItem("token", token);
-      setError(null);
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Failed to login with social account");
-    }
-  };
-
   return (
     <div className="flex justify-center items-center gap-20 h-screen bg-[#2d3b45] transition-all duration-300 ease-in-out">
       <div className="bg-white p-10 rounded-lg shadow-lg border-2 border-gray-300 w-full max-w-lg mb-12 mt-12">
@@ -175,30 +161,6 @@ const Authorisation = () => {
             {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
           </div>
           {!isSignUp && <div className="mt-5 text-blue-700 hover:-translate-y-1 font-semibold cursor-pointer transition duration-300 ease-in-out" onClick={() => navigate("/forgot-password")}>Forgot Password?</div>}
-        </div>
-      </div>
-
-      <div className="bg-white p-8 rounded-lg shadow-lg border-2 border-gray-300 flex flex-col items-center w-80">
-        <h2 className="text-4xl text-center mb-5 border-b pb-5 border-[#2d3b45] w-full font-nunito">
-          <span className="text-sm">
-            {isSignUp ? "Signup" : "Login"} with
-          </span>
-          <br />
-          Socials
-        </h2>
-        <div className="flex flex-col gap-5 w-full font-nunito">
-          <div className="border-[1px] border-[#2d3b45] rounded-md cursor-pointer transition duration-200 ease-in-out hover:bg-[#909599] hover:text-white bg-white text-black w-full p-3 flex items-center justify-center gap-3 font-bold text-lg" onClick={() => handleSocialLogin(googleProvider)}>
-            <img src="/png/Google.png" alt="Google" className="w-6" /> Google
-          </div>
-          <div className="border-[1px] border-[#2d3b45] rounded-md cursor-pointer transition duration-200 ease-in-out hover:bg-[#909599] hover:text-white bg-white text-black w-full p-3 flex items-center justify-center gap-3 font-bold text-lg" onClick={() => handleSocialLogin(facebookProvider)}>
-            <img src="/png/Facebook.png" alt="Facebook" className="w-6" /> Facebook
-          </div>
-          <div className="border-[1px] border-[#2d3b45] rounded-md cursor-pointer transition duration-200 ease-in-out hover:bg-[#909599] hover:text-white bg-white text-black w-full p-3 flex items-center justify-center gap-3 font-bold text-lg" onClick={() => handleSocialLogin(githubProvider)}>
-            <img src="/png/GitHub.png" alt="GitHub" className="w-6" /> GitHub
-          </div>
-          <div className="border-[1px] border-[#2d3b45] rounded-md cursor-pointer transition duration-200 ease-in-out hover:bg-[#909599] hover:text-white bg-white text-black w-full p-3 flex items-center justify-center gap-3 font-bold text-lg" onClick={() => handleSocialLogin(twitterProvider)}>
-            <img src="/png/Twitter.png" alt="Twitter" className="w-6" /> Twitter
-          </div>
         </div>
       </div>
     </div>
