@@ -4,15 +4,15 @@ const user = require('../models/User');
 
 module.exports = function (req, res, next) {
     const token = req.header('x-auth-token');
-   
+     const id_user =req.user.id;
     console.log(token);
     if (!token) return res.status(401).json({ msg: 'No token, authorization denied' });
 
 
 
      //check the user still exists
-    const find_user=()=>{
-        user.findById(req.user.id)
+    const find_user=(id)=>{
+        user.findById(id)
         .then(foundUser => {
             if (!foundUser) {
                 return res.status(404).json({ msg: 'User not found' });
@@ -39,7 +39,7 @@ module.exports = function (req, res, next) {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
-        find_user();
+        find_user(id_user);
         next();
     } catch (err) {
         res.status(401).json({ msg: 'Token is not valid' });
