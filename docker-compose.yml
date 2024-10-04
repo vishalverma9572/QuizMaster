@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    container_name: backend
+    build: ./backend
+    depends_on:
+      - mongodb
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: "mongodb://mongodb:27017/mern-quiz-app"
+
+  frontend:
+    container_name: frontend
+    build: ./quiz-maker
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongodb_data:
