@@ -155,4 +155,8 @@
   .button{
     margin-top: 0px !important;
   }
+
+  .button-container2{
+    margin-top: 20px;
+  }
 }
