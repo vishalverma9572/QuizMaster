@@ -153,8 +153,11 @@ const Profile = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                if (data.msg === 'Invalid old password') {
-                    setOldPasswordError(data.msg);
+                if (data.msg === 'Invalid old password') { 
+                  setOldPasswordError(data.msg);
+                  setTimeout(() => {
+                  setOldPasswordError('');
+                  }, 5000);
                 }
                 else {
                 setPasswordError(data.msg || 'Failed to update password. Please try again.')
