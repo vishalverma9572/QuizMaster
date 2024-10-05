@@ -41,7 +41,8 @@ const Home = () => {
   };
 
   const handleUserGuide = () => {
-    navigate('/userguide');
+
+    navigate('/user-guide');
   };
 
   return (
