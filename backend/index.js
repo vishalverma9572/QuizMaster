@@ -1,3 +1,23 @@
+require('dotenv').config();
+
+if (process.env.NODE_ENV === 'production') {
+    const originalLog = console.log;
+
+    // Replacing console.log with a custom function
+    console.log = function (message) {
+        const importantMessages = [
+            'Server',
+            'Database',
+            'MongoDB',
+            'Error' 
+        ];
+
+        if (importantMessages.some((important) => message.includes(important))) {
+            originalLog(message);  // Uses the original console.log to log the message
+        }
+    };
+}
+
 const express = require('express');
 const cors = require('cors');
 const Quiz = require('./models/Quiz');
@@ -8,8 +28,6 @@ const { connectDB } = require('./db/connectDb');
 
 const userRouter = require("./routes/userRouter")
 const quizRouter = require("./routes/quizRouter")
-
-require('dotenv').config();
 
 connectDB()
 //auto submit quiz
