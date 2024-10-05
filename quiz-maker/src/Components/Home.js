@@ -43,7 +43,7 @@ const Home = () => {
   const handleUserGuide = () => {
 
     navigate('/user-guide');
-  }
+  };
 
   return (
     <>
