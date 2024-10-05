@@ -101,15 +101,10 @@ const updateUsername = async (req, res) => {
     }
 }
 
-// Update Password
-router.put('/update-password', auth, async (req, res) => {
-    const { password, oldPassword } = req.body;
+const updatePassword = async (req, res) => {
+    const { password } = req.body;
     try {
         const user = await User.findById(req.user.id);
-        const isMatch = await bcrypt.compare(oldPassword, user.password);
-        if (!isMatch) {
-            return res.status(400).json({ msg: 'Invalid old password' });
-        }
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
