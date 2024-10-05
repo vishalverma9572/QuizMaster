@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './QuizDetails.css';
+import Layout from './Layout';
 
 const QuizDetails = () => {
     const navigate = useNavigate();
@@ -69,9 +70,10 @@ const QuizDetails = () => {
   }
 
   return (
+    <Layout >
+
     <div className="quiz-details">
-        {/* //gobackbtn */}
-        <button className='gobackbtn' onClick={() => navigate('/my-tests')}>&#8592; Go Back To My tests</button>
+      
       <div className="buttons">
         <button onClick={() => setShowConfirmEdit(true)}>Edit Quiz</button>
         <button onClick={() => setShowConfirmDelete(true)}>Delete Quiz</button>
@@ -111,6 +113,7 @@ const QuizDetails = () => {
         </div>
       )}
     </div>
+    </Layout >
   );
 };
 

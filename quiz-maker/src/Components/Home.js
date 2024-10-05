@@ -35,6 +35,10 @@ const Home = () => {
     navigate('/aboutus');
   };
 
+  const handleUserGuide = () => {
+    navigate('/userguide');
+  }
+
   return (
     <>
       {isLoading ? (
@@ -52,6 +56,7 @@ const Home = () => {
             <button className="button" onClick={handleSignUp}>Sign Up</button>
             <button className="button" onClick={handleSignIn}>Sign In</button>
             <button className="button" onClick={handleAboutUs}>About Us</button>
+            <button className="button usrg" onClick={handleUserGuide}>User Guide</button>
           </div>
           {isAuthenticated && (
             <div className="button-container2">

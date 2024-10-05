@@ -1,34 +1,39 @@
-const express = require('express');
 const Quiz = require('../models/Quiz');
 const QuizResult = require('../models/QuizResult');
 const QuizProgress = require('../models/QuizProgress');
-const auth = require('../middleware/auth');
-const router = express.Router();
-const mongoose = require('mongoose');
-const User = require('../models/User');
+const User = require("../models/User")
 const generateUniqueId = require('generate-unique-id');
 
-router.use((req, res, next) => {
-    //printing the route url
-    console.log(req.originalUrl);
-    next();
-  });
-// Create Quiz
-  
+// Function to calculate score based on correct answers (if needed)
+function calculateScore(answers, questions) {
+    let score = 0;
+    answers.forEach(answer => {
+        const question = questions.find(q => q._id.toString() === answer.question_id);
+        if (question && question.correctAnswer === answer.selectedOption) {
+            score++;
+        }
+    });
+    return score;
+}
 
-router.post('/', auth, async (req, res) => {
-    let { title, questions,timeLimit } = req.body;
+function findQuartile(sortedArray, percentile) {
+    const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
+    return sortedArray[index];
+}
+
+const createQuiz = async (req, res) => {
+    let { title, questions, timeLimit } = req.body;
     //add user_id to the quiz_id
     let quiz_id = generateUniqueId({
-        length: 10 ,
+        length: 10,
         useLetters: true,
         useNumbers: true,
-        
+
     });
     //add username to quiz_id
     //get user name
-    const user= await User.findById(req.user.id);
-    quiz_id=user.username+"_"+quiz_id;
+    const user = await User.findById(req.user.id);
+    quiz_id = user.username + "_" + quiz_id;
     if (!title || !questions || questions.length === 0) {
         return res.status(400).json({ msg: 'Title and questions are required' });
     }
@@ -53,9 +58,9 @@ router.post('/', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-router.get('/stats/:quiz_id', auth, async (req, res) => {
+const getQuizStats = async (req, res) => {
     console.log("route reached");
     try {
         const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
@@ -97,9 +102,9 @@ router.get('/stats/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
-// Get All Quizzes by User
-router.get('/', auth, async (req, res) => {
+}
+
+const getQuizByUser = async (req, res) => {
     try {
         const quizzes = await Quiz.find({ createdBy: req.user.id }).select('title lastUpdated quiz_id timeLimit questions takenBy');
 
@@ -117,10 +122,9 @@ router.get('/', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
-// Get All Quizzes Taken by User
+}
 
-router.get('/taken', auth, async (req, res) => {
+const getQuizTakenByUser = async (req, res) => {
     console.log("route reached");
     try {
         const quizzes = await Quiz.find({ takenBy: req.user.id });
@@ -161,19 +165,10 @@ router.get('/taken', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-
-
-// Update Quiz by quiz_id
-
-// Update Quiz and Results for All Attendees
-
-
-
-
-router.put('/:quiz_id', auth, async (req, res) => {
-    const { title,timeLimit, questions } = req.body;
+const updateQuizById = async (req, res) => {
+    const { title, timeLimit, questions } = req.body;
     const { quiz_id } = req.params;
 
     try {
@@ -187,7 +182,7 @@ router.put('/:quiz_id', auth, async (req, res) => {
         quiz.title = title || quiz.title;
         quiz.timeLimit = timeLimit || quiz.timeLimit;
 
-       // Update existing questions and add new ones
+        // Update existing questions and add new ones
         if (questions) {
             questions.forEach(q => {
                 if (q._id) {
@@ -201,7 +196,7 @@ router.put('/:quiz_id', auth, async (req, res) => {
                     }
                 } else {
                     // If question does not have _id, add new question
-                    
+
                     const newQuestion = {
                         question: q.question,
                         options: q.options,
@@ -210,9 +205,9 @@ router.put('/:quiz_id', auth, async (req, res) => {
                     quiz.questions.push(newQuestion);
                 }
             });
-}
+        }
 
-        
+
         quiz.lastUpdated = Date.now();
         console.log(quiz);
         await quiz.save();
@@ -248,26 +243,25 @@ router.put('/:quiz_id', auth, async (req, res) => {
                         };
                     }
                 });
-        
+
                 userResults.score = newScore;
                 userResults.answers = newAnswers;
-        
+
                 await userResults.save();
             }
         }
-        
+
 
         res.json({ msg: 'Quiz and results updated successfully' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-//fetch quiz to take quiz
-router.get('/take/:quiz_id', auth, async (req, res) => {
+const fetchQuizToTake = async (req, res) => {
     const { quiz_id } = req.params;
-    
+
     try {
         const quiz = await Quiz.findOne({ quiz_id });
 
@@ -283,7 +277,7 @@ router.get('/take/:quiz_id', auth, async (req, res) => {
 
         // Construct the response object
         const quizWithoutCorrectAnswers = {
-            
+
             title: quiz.title,
             quiz_id: quiz.quiz_id,
             questions: questionsWithoutCorrectAnswer,
@@ -298,12 +292,12 @@ router.get('/take/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-}   );
-//search quiz by quiz_id
-router.get('/search/:quiz_id', auth, async (req, res) => {
+}
+
+const searchQuiz = async (req, res) => {
     console.log(" search route reached");
     const { quiz_id } = req.params;
-    
+
     try {
         let quiz = await Quiz.findOne({ quiz_id }).select('title lastUpdated quiz_id timeLimit questions takenBy createdBy').select('-_id -__v');
 
@@ -311,7 +305,7 @@ router.get('/search/:quiz_id', auth, async (req, res) => {
             return res.status(404).json({ msg: 'Quiz not found' });
         }
         //remove _id and __v from the response
-        
+
 
 
         // Check if `createdBy` exists before proceeding
@@ -339,23 +333,17 @@ router.get('/search/:quiz_id', auth, async (req, res) => {
             createdBy: username
         };
         res.json(data);
-        
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-
-
-// Mark Quiz as Taken
-router.post('/take/:quiz_id', auth, async (req, res) => {
+const markQuizAsTaken = async (req, res) => {
     const { answers } = req.body;  // Expect answers array from the frontend
 
     try {
-        
-
-
         let quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
 
         if (!quiz) return res.status(404).json({ msg: 'Quiz not found' });
@@ -364,7 +352,7 @@ router.post('/take/:quiz_id', auth, async (req, res) => {
             quiz.takenBy.push(req.user.id);
             await quiz.save();
         }
-        else{
+        else {
             return res.status(400).json({ msg: 'Quiz already taken' });
         }
         // set QuizProcess to completed
@@ -410,42 +398,22 @@ router.post('/take/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
-
-// Function to calculate score based on correct answers (if needed)
-function calculateScore(answers, questions) {
-    let score = 0;
-    answers.forEach(answer => {
-        const question = questions.find(q => q._id.toString() === answer.question_id);
-        if (question && question.correctAnswer === answer.selectedOption) {
-            score++;
-        }
-    });
-    return score;
 }
 
-
-
-
-
-// Get Result of Specific Test
-router.get('/results/:quiz_id', auth, async (req, res) => {
+const getResult = async (req, res) => {
     try {
         //send only score
         const result = await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id }).select('score');
-        
+
         if (!result) return res.status(404).json({ msg: 'Result not found' });
         res.json(result);
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-//save progress of quiz
-
-//CHECK QUIZ TAKEN OR IN PROGRESS OR NOT TAKEN
-router.post('/progress/:quiz_id', auth, async (req, res) => {
+const checkQuizTaken = async (req, res) => {
     const { answers, elapsedTime } = req.body; // Expect answers and elapsedTime from the frontend
 
     try {
@@ -492,12 +460,12 @@ router.post('/progress/:quiz_id', auth, async (req, res) => {
                 user_id: req.user.id,
                 score,
                 answers: answersWithCorrectness
-                
+
             });
             //before saving check if quiz is already taken
-            const quizResultExists =    await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
+            const quizResultExists = await QuizResult.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
             //if quiz is already taken then return error
-            if(quizResultExists){
+            if (quizResultExists) {
                 return res.status(400).json({ msg: 'Quiz already taken' });
             }
             //PUSH THE USER ID TO TAKEN BY
@@ -515,10 +483,9 @@ router.post('/progress/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-//get the last progress of quiz
-router.get('/progress/:quiz_id', auth, async (req, res) => {
+const getQuizProgress = async (req, res) => {
     try {
         console.log("progress route reached");
         const quizProgress = await QuizProgress.findOne({ quiz_id: req.params.quiz_id, user_id: req.user.id });
@@ -531,12 +498,9 @@ router.get('/progress/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-
-
-// GET All users RESULTS OF QUIZ
-router.get('/scores/:quiz_id', auth, async (req, res) => {
+const getAllUserResult = async (req, res) => {
     try {
         // Find the quiz by quiz_id
         const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
@@ -584,26 +548,9 @@ router.get('/scores/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
-
-
-
-
-
-
-
-// Get Statistics of a Specific Quiz
-// Get Statistics of a Specific Quiz
-
-
-// Helper function to find quartile
-function findQuartile(sortedArray, percentile) {
-    const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
-    return sortedArray[index];
 }
 
-//quiz status
-router.get('/status/:quiz_id', auth, async (req, res) => {
+const getQuizStatsById = async (req, res) => {
     try {
         const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
 
@@ -624,7 +571,7 @@ router.get('/status/:quiz_id', auth, async (req, res) => {
             status = 'Taken';
         }
         //check in progress or pending for evaluation if status is completed
-        
+
 
 
         res.json({ status });
@@ -632,9 +579,9 @@ router.get('/status/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
- //delete quiz
-router.delete('/delete/:quiz_id', auth, async (req, res) => {
+}
+
+const deleteQuiz = async (req, res) => {
     console.log("delete route reached");
     try {
         const quiz = await Quiz.findOneAndDelete({ quiz_id: req.params.quiz_id, createdBy: req.user.id });
@@ -645,7 +592,7 @@ router.delete('/delete/:quiz_id', auth, async (req, res) => {
 
         // Delete related quiz results
         await QuizResult.deleteMany({ quiz_id: req.params.quiz_id });
-        
+
         // Delete related quiz progress
         await QuizProgress.deleteMany({ quiz_id: req.params.quiz_id });
 
@@ -655,11 +602,9 @@ router.delete('/delete/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-
-// Get Single Quiz by quiz_id
-router.get('/:quiz_id', auth, async (req, res) => {
+const getSingleQuiz = async (req, res) => {
     try {
         const { quiz_id } = req.params;
         console.log(quiz_id);
@@ -676,20 +621,22 @@ router.get('/:quiz_id', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-module.exports = router;
+module.exports = {
+    createQuiz,
+    getQuizStats,
+    getQuizByUser,
+    getQuizTakenByUser,
+    updateQuizById,
+    fetchQuizToTake,
+    searchQuiz,
+    markQuizAsTaken,
+    getResult,
+    checkQuizTaken,
+    getQuizProgress,
+    getAllUserResult,
+    getQuizStatsById,
+    deleteQuiz,
+    getSingleQuiz
+};

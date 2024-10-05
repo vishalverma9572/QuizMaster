@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EditQuiz.css';
 import { useNavigate, useParams } from 'react-router-dom';
+import Layout from './Layout';
 
 const EditQuiz = () => {
     const navigate = useNavigate();
@@ -137,9 +138,9 @@ const EditQuiz = () => {
   };
 
   return (
+    <Layout >
     <div className="edit-quiz">
-        {/* //gobackbtn */}
-        <button className='gobackbtn' onClick={() => navigate(`/quiz/${quiz_id}`)}>&#8592; Go Back To Details Page</button>
+      
       <h2>Edit Quiz</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -207,6 +208,7 @@ const EditQuiz = () => {
         <button type="submit">Update Quiz</button>
       </form>
     </div>
+    </Layout >
   );
 };
 

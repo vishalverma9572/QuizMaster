@@ -1,17 +1,12 @@
-const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const router = express.Router();
-const auth = require('../middleware/auth');
 const nodemailer = require('nodemailer');
 const generateUniqueId = require('generate-unique-id');
 require('dotenv').config();
 
-// Register
-router.post('/register', async (req, res) => {
+const register = async (req, res) => {
     const { username, email, password } = req.body;
-
     try {
         let user = await User.findOne({ email });
         if (user) return res.status(400).json({ msg: 'User already exists' });
@@ -27,17 +22,16 @@ router.post('/register', async (req, res) => {
             if (err) throw err;
 
             // Send welcome email
-            sendWelcomeEmail(email);
+            // sendWelcomeEmail(email);
 
             res.json({ token });
         });
-    } catch (err) {
+    } catch (error) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-// Function to send welcome email
 const sendWelcomeEmail = async (email) => {
     try {
         const transporter = nodemailer.createTransport({
@@ -69,9 +63,8 @@ const sendWelcomeEmail = async (email) => {
     }
 };
 
-
-// Login
-router.post('/login', async (req, res) => {
+const login = async (req, res) => {
+    console.log("Login called");
     const { email, password } = req.body;
 
     try {
@@ -90,10 +83,9 @@ router.post('/login', async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-// Update Username
-router.put('/update-username', auth, async (req, res) => {
+const updateUsername = async (req, res) => {
     const { username } = req.body;
     try {
         const userExists = await User.findOne({ username });
@@ -107,7 +99,7 @@ router.put('/update-username', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
 // Update Password
 router.put('/update-password', auth, async (req, res) => {
@@ -126,10 +118,9 @@ router.put('/update-password', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-// Get Current User's Details
-router.get('/me', auth, async (req, res) => {
+const me = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password -__v -_id');
         if (!user) {
@@ -140,15 +131,14 @@ router.get('/me', auth, async (req, res) => {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
     }
-});
+}
 
-// Request reset password
-router.post('/request-reset-password', async (req, res) => {
+const requestResetPAssword = async (req, res) => {
     const { email } = req.body;
-    
+
     try {
         const user = await User.findOne({ email });
-        
+
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -169,9 +159,8 @@ router.post('/request-reset-password', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
-});
+}
 
-// Function to send request reset password email
 const sendRequestResetPasswordEmail = async (email, token) => {
     try {
         const transporter = nodemailer.createTransport({
@@ -204,15 +193,13 @@ const sendRequestResetPasswordEmail = async (email, token) => {
     }
 };
 
-
-// Reset password
-router.post('/reset-password/:token', async (req, res) => {
+const resetPassword = async (req, res) => {
     const { token } = req.params;
     const { newPassword } = req.body;
-    
+
     try {
         const user = await User.findOne({ resetToken: token, resetTokenExpiry: { $gt: Date.now() } });
-        
+
         if (!user) {
             return res.status(400).json({ message: 'Invalid or expired token' });
         }
@@ -233,9 +220,8 @@ router.post('/reset-password/:token', async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Server error' });
     }
-});
+}
 
-// Function to send reset password email
 const sendResetPasswordEmail = async (email) => {
     try {
         const transporter = nodemailer.createTransport({
@@ -267,5 +253,12 @@ const sendResetPasswordEmail = async (email) => {
     }
 };
 
-
-module.exports = router;
+module.exports = {
+    register,
+    login,
+    updateUsername,
+    updatePassword,
+    me,
+    requestResetPAssword,
+    resetPassword
+};
