@@ -51,8 +51,7 @@ const Profile = () => {
   const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
   const [usernameError, setUsernameError] = useState('');
-  const [oldPassword, setOldPassword] = useState('');
-  const [oldPasswordError, setOldPasswordError] = useState('');
+
   const handleUsernameChange = (e) => {
     setNewUsername(e.target.value);
   };
@@ -79,16 +78,9 @@ const Profile = () => {
     setConfirmPassword(value);
     if (value !== password) {
       setConfirmPasswordError('Passwords do not match.');
-    } else if (password === oldPassword) {
-      setConfirmPasswordError('New password must be different from the old password.');
-    
     } else {
       setConfirmPasswordError('');
     }
-  };
-
-  const handleOldPasswordChange = (e) => {
-      setOldPassword(e.target.value)
   };
 
   const handleUsernameSubmit = async (e) => {
@@ -147,21 +139,13 @@ const Profile = () => {
                     'Content-Type': 'application/json',
                     'x-auth-token': localStorage.getItem('token'),
                 },
-                body: JSON.stringify({ password, oldPassword }), // Send password in the request body
+                body: JSON.stringify({ password }), // Send password in the request body
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                if (data.msg === 'Invalid old password') { 
-                  setOldPasswordError(data.msg);
-                  setTimeout(() => {
-                  setOldPasswordError('');
-                  }, 5000);
-                }
-                else {
-                setPasswordError(data.msg || 'Failed to update password. Please try again.')
-                }
+                setPasswordError(data.msg || 'Failed to update password. Please try again.');
             } else {
                 alert('Password updated successfully');
                 // Refresh the page or update state to reflect the password change
@@ -209,17 +193,6 @@ const Profile = () => {
         <div className="profile-card">
           <form className="profile-form" onSubmit={handlePasswordSubmit}>
             <h3>Update Password</h3>
-            <div className="form-group">
-              <label htmlFor="oldPassword">Old Password:</label>
-              <input
-                type="oldPassword"
-                id="oldPassword"
-                value={oldPassword}
-                onChange={handleOldPasswordChange}
-                required
-              />
-              {oldPasswordError && <p className="error">{oldPasswordError}</p>}
-            </div>
             <div className="form-group">
               <label htmlFor="password">New Password:</label>
               <input
