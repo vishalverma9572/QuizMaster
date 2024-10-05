@@ -16,13 +16,19 @@
 
 .create-quiz .form-group {
   margin-bottom: 15px;
+
 }
+
 
 .create-quiz .form-group label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
+  padding-right: 10px;
+  padding-top: 5px;
+  
 }
+
 
 .create-quiz .form-group input[type="text"],
 .create-quiz .form-group input[type="number"] {
@@ -79,8 +85,39 @@
 
 .create-quiz .remove-button:hover {
   background-color: #ff1a1a;
+ 
+  color: white;
+  border-color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
-
+.Add-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  margin-right: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.Add-button:hover {
+  background-color: #212c34;
+  color: white;
+  border-color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+.Add-option {
+  padding: 8px;
+  font-size: 16px;
+  color: #fff;
+  margin-right: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 .create-quiz .button {
   background-color: #1a2a33;
   color: #fff;
