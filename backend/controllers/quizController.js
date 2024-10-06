@@ -3,261 +3,286 @@ const QuizResult = require('../models/QuizResult');
 const QuizProgress = require('../models/QuizProgress');
 const User = require("../models/User")
 const generateUniqueId = require('generate-unique-id');
+const validations = require('../validators/validations');
 
 // Function to calculate score based on correct answers (if needed)
 function calculateScore(answers, questions) {
-    let score = 0;
-    answers.forEach(answer => {
-        const question = questions.find(q => q._id.toString() === answer.question_id);
-        if (question && question.correctAnswer === answer.selectedOption) {
-            score++;
-        }
-    });
-    return score;
+  let score = 0;
+  answers.forEach((answer) => {
+    const question = questions.find(
+      (q) => q._id.toString() === answer.question_id
+    );
+    if (question && question.correctAnswer === answer.selectedOption) {
+      score++;
+    }
+  });
+  return score;
 }
 
 function findQuartile(sortedArray, percentile) {
-    const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
-    return sortedArray[index];
+  const index = Math.ceil(percentile * (sortedArray.length + 1)) - 1;
+  return sortedArray[index];
 }
 
 const createQuiz = async (req, res) => {
-    let { title, questions, timeLimit } = req.body;
-    //add user_id to the quiz_id
-    let quiz_id = generateUniqueId({
-        length: 10,
-        useLetters: true,
-        useNumbers: true,
+  const zodResult = validations.quizSchema.safeParse(req.body);
 
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
+
+  let { title, questions, timeLimit } = zodResult.data;
+  //add user_id to the quiz_id
+  let quiz_id = generateUniqueId({
+    length: 10,
+    useLetters: true,
+    useNumbers: true,
+  });
+  //add username to quiz_id
+  //get user name
+  const user = await User.findById(req.user.id);
+  quiz_id = user.username + '_' + quiz_id;
+
+  try {
+    let existingQuiz = await Quiz.findOne({ quiz_id });
+    if (existingQuiz) {
+      return res.status(400).json({ msg: 'Quiz ID already exists' });
+    }
+
+    const newQuiz = new Quiz({
+      title,
+      quiz_id,
+      questions,
+      createdBy: req.user.id,
+      timeLimit,
     });
-    //add username to quiz_id
-    //get user name
-    const user = await User.findById(req.user.id);
-    quiz_id = user.username + "_" + quiz_id;
-    if (!title || !questions || questions.length === 0) {
-        return res.status(400).json({ msg: 'Title and questions are required' });
-    }
 
-    try {
-        let existingQuiz = await Quiz.findOne({ quiz_id });
-        if (existingQuiz) {
-            return res.status(400).json({ msg: 'Quiz ID already exists' });
-        }
-
-        const newQuiz = new Quiz({
-            title,
-            quiz_id,
-            questions,
-            createdBy: req.user.id,
-            timeLimit
-        });
-
-        const quiz = await newQuiz.save();
-        res.status(201).json(quiz);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-}
+    const quiz = await newQuiz.save();
+    res.status(201).json(quiz);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 const getQuizStats = async (req, res) => {
-    console.log("route reached");
-    try {
-        const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
+  console.log('route reached');
+  try {
+    const quizResults = await QuizResult.find({ quiz_id: req.params.quiz_id });
 
-        if (quizResults.length === 0) {
-            return res.status(404).json({ msg: 'No results found for this quiz' });
-        }
-
-        const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
-
-        // Check if the user is the creator of the quiz
-        if (quiz.createdBy.toString() !== req.user.id && !quiz.takenBy.includes(req.user.id)) {
-            return res.status(403).json({ msg: 'Unauthorized access' });
-        }
-
-        // Calculate statistics
-        const scores = quizResults.map(result => result.score);
-        const sortedScores = [...scores].sort((a, b) => a - b);
-        const count = sortedScores.length;
-
-        const min = sortedScores[0];
-        const max = sortedScores[count - 1];
-
-        const sum = scores.reduce((acc, score) => acc + score, 0);
-        const mean = sum / count;
-
-        let median;
-        if (count % 2 === 0) {
-            median = (sortedScores[count / 2 - 1] + sortedScores[count / 2]) / 2;
-        } else {
-            median = sortedScores[Math.floor(count / 2)];
-        }
-
-        const lowerQuartile = findQuartile(sortedScores, 0.25);
-        const upperQuartile = findQuartile(sortedScores, 0.75);
-
-        res.json({ min, max, mean, median, lowerQuartile, upperQuartile });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
+    if (quizResults.length === 0) {
+      return res.status(404).json({ msg: 'No results found for this quiz' });
     }
-}
+
+    const quiz = await Quiz.findOne({ quiz_id: req.params.quiz_id });
+
+    // Check if the user is the creator of the quiz
+    if (
+      quiz.createdBy.toString() !== req.user.id &&
+      !quiz.takenBy.includes(req.user.id)
+    ) {
+      return res.status(403).json({ msg: 'Unauthorized access' });
+    }
+
+    // Calculate statistics
+    const scores = quizResults.map((result) => result.score);
+    const sortedScores = [...scores].sort((a, b) => a - b);
+    const count = sortedScores.length;
+
+    const min = sortedScores[0];
+    const max = sortedScores[count - 1];
+
+    const sum = scores.reduce((acc, score) => acc + score, 0);
+    const mean = sum / count;
+
+    let median;
+    if (count % 2 === 0) {
+      median = (sortedScores[count / 2 - 1] + sortedScores[count / 2]) / 2;
+    } else {
+      median = sortedScores[Math.floor(count / 2)];
+    }
+
+    const lowerQuartile = findQuartile(sortedScores, 0.25);
+    const upperQuartile = findQuartile(sortedScores, 0.75);
+
+    res.json({ min, max, mean, median, lowerQuartile, upperQuartile });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 const getQuizByUser = async (req, res) => {
-    try {
-        const quizzes = await Quiz.find({ createdBy: req.user.id }).select('title lastUpdated quiz_id timeLimit questions takenBy');
+  try {
+    const quizzes = await Quiz.find({ createdBy: req.user.id }).select(
+      'title lastUpdated quiz_id timeLimit questions takenBy'
+    );
 
-        const response = quizzes.map(quiz => ({
-            title: quiz.title,
-            quiz_id: quiz.quiz_id,
-            lastUpdated: quiz.lastUpdated,
-            numberOfQuestions: quiz.questions.length,
-            numberOfTakenBy: quiz.takenBy.length,
-            timeLimit: quiz.timeLimit
-        }));
+    const response = quizzes.map((quiz) => ({
+      title: quiz.title,
+      quiz_id: quiz.quiz_id,
+      lastUpdated: quiz.lastUpdated,
+      numberOfQuestions: quiz.questions.length,
+      numberOfTakenBy: quiz.takenBy.length,
+      timeLimit: quiz.timeLimit,
+    }));
 
-        res.json(response);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
-    }
-}
+    res.json(response);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 const getQuizTakenByUser = async (req, res) => {
-    console.log("route reached");
-    try {
-        const quizzes = await Quiz.find({ takenBy: req.user.id });
-        console.log(quizzes);
-        // If no quizzes found, return an empty array
-        if (!quizzes || quizzes.length === 0) {
-            return res.json([]);
-        }
-
-        // Prepare array to store results to be sent
-        const quizzesWithDetails = [];
-
-        // Iterate through quizzes
-        for (const quiz of quizzes) {
-            // Find quiz results for the current user and quiz_id
-            const quizResult = await QuizResult.findOne({
-                quiz_id: quiz.quiz_id,
-                user_id: req.user.id
-            });
-
-            // Calculate number of questions
-            const numQuestions = quiz.questions.length;
-
-            // Prepare the response object with required fields
-            const quizDetails = {
-                quiz_id: quiz.quiz_id,
-                title: quiz.title,
-                numQuestions,
-                quizScore: quizResult ? quizResult.score : null // Include quiz score if available
-            };
-
-            quizzesWithDetails.push(quizDetails);
-        }
-
-        console.log(quizzesWithDetails);
-        res.json(quizzesWithDetails);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
+  console.log('route reached');
+  try {
+    const quizzes = await Quiz.find({ takenBy: req.user.id });
+    console.log(quizzes);
+    // If no quizzes found, return an empty array
+    if (!quizzes || quizzes.length === 0) {
+      return res.json([]);
     }
-}
+
+    // Prepare array to store results to be sent
+    const quizzesWithDetails = [];
+
+    // Iterate through quizzes
+    for (const quiz of quizzes) {
+      // Find quiz results for the current user and quiz_id
+      const quizResult = await QuizResult.findOne({
+        quiz_id: quiz.quiz_id,
+        user_id: req.user.id,
+      });
+
+      // Calculate number of questions
+      const numQuestions = quiz.questions.length;
+
+      // Prepare the response object with required fields
+      const quizDetails = {
+        quiz_id: quiz.quiz_id,
+        title: quiz.title,
+        numQuestions,
+        quizScore: quizResult ? quizResult.score : null, // Include quiz score if available
+      };
+
+      quizzesWithDetails.push(quizDetails);
+    }
+
+    console.log(quizzesWithDetails);
+    res.json(quizzesWithDetails);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 const updateQuizById = async (req, res) => {
-    const { title, timeLimit, questions } = req.body;
-    const { quiz_id } = req.params;
+  const zodResult = validations.quizUpdateSchema.safeParse(req.body);
 
-    try {
-        let quiz = await Quiz.findOne({ quiz_id });
+  if (!zodResult.success) {
+    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    return res.status(400).json({ msg: errors });
+  }
 
-        if (!quiz) {
-            return res.status(404).json({ msg: 'Quiz not found' });
-        }
+  const { title, timeLimit, questions } = zodResult.data;
+  const { quiz_id } = req.params;
 
-        // Update quiz details
-        quiz.title = title || quiz.title;
-        quiz.timeLimit = timeLimit || quiz.timeLimit;
+  try {
+    let quiz = await Quiz.findOne({ quiz_id });
 
-        // Update existing questions and add new ones
-        if (questions) {
-            questions.forEach(q => {
-                if (q._id) {
-                    // If question has _id, update existing question
-                    const existingQuestion = quiz.questions.find(existingQ => existingQ._id.toString() === q._id);
-                    console.log(existingQuestion);
-                    if (existingQuestion) {
-                        existingQuestion.question = q.question;
-                        existingQuestion.options = q.options;
-                        existingQuestion.correctAnswer = q.correctAnswer;
-                    }
-                } else {
-                    // If question does not have _id, add new question
-
-                    const newQuestion = {
-                        question: q.question,
-                        options: q.options,
-                        correctAnswer: q.correctAnswer
-                    };
-                    quiz.questions.push(newQuestion);
-                }
-            });
-        }
-
-
-        quiz.lastUpdated = Date.now();
-        console.log(quiz);
-        await quiz.save();
-
-        // Re-evaluate results for all attendees
-        const attendees = quiz.takenBy;
-
-        for (const userId of attendees) {
-            const userResults = await QuizResult.findOne({ quiz_id, user_id: userId });
-            console.log("Printing user results");
-            console.log(userResults);
-            if (userResults) {
-                let newScore = 0;
-                const newAnswers = userResults.answers.map(answer => {
-                    const question = quiz.questions.find(q => q._id.toString() === answer.question_id.toString());
-                    console.log("Printing question");
-                    console.log(question);
-                    if (question) {
-                        const isCorrect = question.correctAnswer === answer.selectedOption;
-                        if (isCorrect) {
-                            newScore += 1;
-                        }
-                        return {
-                            ...answer,
-                            isCorrect
-                        };
-                    } else {
-                        // Handle case where question is not found
-                        console.log(`Question with ID ${answer.question_id} not found in quiz.`);
-                        return {
-                            ...answer,
-                            isCorrect: false  // Assuming default behavior when question is not found
-                        };
-                    }
-                });
-
-                userResults.score = newScore;
-                userResults.answers = newAnswers;
-
-                await userResults.save();
-            }
-        }
-
-
-        res.json({ msg: 'Quiz and results updated successfully' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: 'Server error' });
+    if (!quiz) {
+      return res.status(404).json({ msg: 'Quiz not found' });
     }
-}
+
+    // Update quiz details
+    quiz.title = title || quiz.title;
+    quiz.timeLimit = timeLimit || quiz.timeLimit;
+
+    // Update existing questions and add new ones
+    if (questions) {
+      questions.forEach((q) => {
+        if (q._id) {
+          // If question has _id, update existing question
+          const existingQuestion = quiz.questions.find(
+            (existingQ) => existingQ._id.toString() === q._id
+          );
+          console.log(existingQuestion);
+          if (existingQuestion) {
+            existingQuestion.question = q.question;
+            existingQuestion.options = q.options;
+            existingQuestion.correctAnswer = q.correctAnswer;
+          }
+        } else {
+          // If question does not have _id, add new question
+
+          const newQuestion = {
+            question: q.question,
+            options: q.options,
+            correctAnswer: q.correctAnswer,
+          };
+          quiz.questions.push(newQuestion);
+        }
+      });
+    }
+
+    quiz.lastUpdated = Date.now();
+    console.log(quiz);
+    await quiz.save();
+
+    // Re-evaluate results for all attendees
+    const attendees = quiz.takenBy;
+
+    for (const userId of attendees) {
+      const userResults = await QuizResult.findOne({
+        quiz_id,
+        user_id: userId,
+      });
+      console.log('Printing user results');
+      console.log(userResults);
+      if (userResults) {
+        let newScore = 0;
+        const newAnswers = userResults.answers.map((answer) => {
+          const question = quiz.questions.find(
+            (q) => q._id.toString() === answer.question_id.toString()
+          );
+          console.log('Printing question');
+          console.log(question);
+          if (question) {
+            const isCorrect = question.correctAnswer === answer.selectedOption;
+            if (isCorrect) {
+              newScore += 1;
+            }
+            return {
+              ...answer,
+              isCorrect,
+            };
+          } else {
+            // Handle case where question is not found
+            console.log(
+              `Question with ID ${answer.question_id} not found in quiz.`
+            );
+            return {
+              ...answer,
+              isCorrect: false, // Assuming default behavior when question is not found
+            };
+          }
+        });
+
+        userResults.score = newScore;
+        userResults.answers = newAnswers;
+
+        await userResults.save();
+      }
+    }
+
+    res.json({ msg: 'Quiz and results updated successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+};
 
 const fetchQuizToTake = async (req, res) => {
     const { quiz_id } = req.params;
