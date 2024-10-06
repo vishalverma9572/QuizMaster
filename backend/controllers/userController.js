@@ -136,7 +136,7 @@ const updateUsername = async (req, res) => {
 };
 
 const updatePassword = async (req, res) => {
-const zodResult = validations.updatePasswordSchema.safeParse(req.body);
+  const zodResult = validations.updatePasswordSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
@@ -163,7 +163,11 @@ const zodResult = validations.updatePasswordSchema.safeParse(req.body);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
-}
+  }
+};
+
+
+
 
 
 const me = async (req, res) => {
