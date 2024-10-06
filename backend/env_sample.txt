@@ -1,6 +1,6 @@
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/mern-quiz-app
 JWT_SECRET=secret_key
-EMAIL_USER=email_id
-EMAIL_PASSWORD=Your_email_password
+EMAIL_USER=anirudh.why@gmail.com
+EMAIL_PASSWORD=Anirudh123
 FRONTEND_URL=http://localhost:3000
