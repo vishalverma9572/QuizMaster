@@ -1,0 +1,110 @@
+html{
+    scroll-behavior: smooth;
+}
+body{
+    font-family: "Wittgenstein", serif;
+}
+
+p{
+    padding: 10px;
+}
+
+h3{
+    margin-bottom: 10px;
+}
+
+.heading{
+    font-size: 3rem;
+}
+
+hr{
+    height: 3px;
+    background: #000;
+    margin-bottom: 50px;
+}
+
+#userguide-container{
+    margin-left: 50px;
+}
+
+#tableOfContent{
+    display: flex;
+}
+
+#vertical-line{
+    height: 250px;
+    width: 2px;
+    background: #000;
+}
+
+#tableOfContent-items{
+    list-style: none;
+}
+
+.content-item{
+    padding: 6px;
+    cursor: pointer;
+    line-height: 25px;
+}
+
+.content-item:hover{
+    text-decoration: underline;
+}
+
+#introduction{
+    margin: 50px 0 50px 0;
+}
+
+#usrg-testCreation{
+    margin-bottom: 50px;
+}
+
+#usrg-myTests{
+    margin-bottom: 50px;
+}
+
+#usrg-results{
+    margin-bottom: 50px;
+}
+
+#usrg-profile{
+    margin: 50 0 50 0;
+}
+
+#usrg-testCreation > h1{
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+#usrg-myTests > h1{
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+#usrg-results > h1{
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+#usrg-profile > h1{
+    text-decoration: underline;
+    margin-bottom: 20px;
+}
+
+#user-guid-img{
+    height: auto;
+    width: 50vw;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 600px) {
+    img {
+      width: 100vw;
+    }
+    #userguide-container{
+        margin-left: 0px;
+        margin: 0 10px 0 10px;
+    }
+}

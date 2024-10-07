@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './TakeTest.css';
 import { useNavigate } from 'react-router-dom';
+import { Typography, styled } from "@mui/material";
 
 const TakeTest = () => {
   const [quizId, setQuizId] = useState('');
@@ -31,9 +32,20 @@ const TakeTest = () => {
     }
   };
 
+  const StyledTypography = styled(Typography)({
+    margin: "20px",
+    marginBottom: "50px",
+    fontFamily: "Wittgenstein, serif",
+    color: "#235",
+    borderBottom: "2px solid #235",
+    paddingBottom: "25px", // Adjust padding to control space between text and line
+  });
+
   return (
+    <div>
+    <StyledTypography variant="h4">Take a Test</StyledTypography>
     <div className="take-test">
-      <h2>Take a Test</h2>
+      {/* <h2>Take a Test</h2> */}
 
       {/* Flexbox layout with form and instructions side by side */}
       <div className="content-wrapper">
@@ -79,6 +91,7 @@ const TakeTest = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
   );
 };
