@@ -9,6 +9,16 @@ const Home = () => {
   const navigate = useNavigate();
   const isAuthenticated = localStorage.getItem('token') !== null;
 
+  useEffect(() => {
+    // Set the loading state to false after 2 seconds
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    // Cleanup timeout on component unmount
+    return () => clearTimeout(timer);
+  }, []);
+
   // Set the document title
   useEffect(() => {
     document.title = 'Home | QuizMaster';
@@ -38,6 +48,11 @@ const Home = () => {
     navigate('/aboutus');
   };
 
+  const handleUserGuide = () => {
+
+    navigate('/user-guide');
+  };
+
   return (
     <>
       {isLoading ? (
@@ -58,13 +73,19 @@ const Home = () => {
             {/* Right Section */}
             <div className="right-section">
               <div className="button-container">
-                <button className="button" onClick={handleSignUp}>Sign Up</button>
-                <button className="button" onClick={handleSignIn}>Sign In</button>
-                <button className="button" onClick={handleAboutUs}>About Us</button>
-              </div>
+                {/* Conditionally render Sign Up and Sign In buttons if the user is NOT authenticated */}
+            {!isAuthenticated && (
+              <>
+                <button className="buttons" onClick={handleSignUp}>Sign Up</button>
+                    <button className="buttons" onClick={handleSignIn}>Sign In</button>
+                  </>
+            )}
+            <button className="buttons" onClick={handleAboutUs}>About Us</button>
+                <button className="buttons usrg" onClick={handleUserGuide}>User Guide</button>
+          </div>
               {isAuthenticated && (
                 <div className="button-container2">
-                  <button className="button" onClick={handleDashboard}>Go to Dashboard</button>
+                  <button className="buttons" onClick={handleDashboard}>Go to Dashboard</button>
                 </div>
               )}
             </div>
