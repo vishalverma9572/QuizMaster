@@ -75,6 +75,11 @@ const CreateQuiz = () => {
       }
     }
 
+    if (timeLimit <= 0) {
+      setError("Enter appropriate time limit. Shouldn't be 0 or negative");
+      return;
+    }
+
     try {
       const url = process.env.REACT_APP_BACKEND_URL + "/quizzes";
       const response = await fetch(url, {
@@ -135,7 +140,7 @@ const CreateQuiz = () => {
           </div>
           {questions.map((q, qIndex) => (
             <div key={qIndex} className="question-card">
-              <div className="form-group">
+              <div className="form-group ">
                 <label htmlFor={`question-${qIndex}`}>Question</label>
                 <input
                   type="text"
@@ -165,7 +170,7 @@ const CreateQuiz = () => {
                     required
                   />
                   <button
-                    type="button"
+                    type="button" className="Add-option  "
                     onClick={() => removeOption(qIndex, oIndex)}
                   >
                     Remove
@@ -182,16 +187,16 @@ const CreateQuiz = () => {
                   </label>
                 </div>
               ))}
-              <button type="button" onClick={() => addOption(qIndex)}>
+              <button type="button" className="Add-option  " onClick={() => addOption(qIndex)}>
                 Add Option
               </button>
             </div>
           ))}
           {error && <p className="error">{error}</p>}
-          <button type="button" onClick={addQuestion}>
+          <button type="button " className="Add-button Add-button:hover " onClick={addQuestion}>
             Add Question
           </button>
-          <button type="submit">Create Quiz</button>
+          <button type="submit" className="Add-button Add-button:hover ">Create Quiz</button>
         </form>
       </div>
     </div>
