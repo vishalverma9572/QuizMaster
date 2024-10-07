@@ -11,10 +11,9 @@
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
-.split-screen {
+  .split-screen {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -30,6 +29,7 @@
   justify-content: center;
   padding: 20px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .left-section .logo img {
@@ -80,25 +80,25 @@
   width: 100%;
 }
 
-.button {
-  background-color: #1a1b1b;
+.buttons {
+  background-color: #1c2e4a; /* A more subtle, minimalistic dark blue */
   color: #fff;
   border: none;
   padding: 12px 25px;
   border-radius: 25px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease; /* Smooth hover transition */
+  box-shadow: 0 4px 8px rgba(30, 130, 187, 0.2); /* Reduced shadow for a cleaner look */
   width: 100%;
   text-align: center;
   letter-spacing: 0.5px;
 }
 
-.button:hover {
-  background-color: #126dc2;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(34, 34, 34, 0.4);
+.buttons:hover {
+  background-color: #126dc2; /* Keep this hover color for contrast */
+  transform: translateY(-4px); /* Slightly more noticeable hover effect */
+  box-shadow: 0 8px 16px rgba(18, 109, 194, 0.4); /* Smooth hover shadow */
 }
 
 .button-container2 .button {
@@ -233,3 +233,4 @@
     margin-top: 20px;
   }
 }
+
