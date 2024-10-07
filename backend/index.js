@@ -93,27 +93,15 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-<<<<<<< HEAD
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {})
   .catch((err) => console.error("Error connecting to MongoDB:", err));
-=======
 app.use('/api/users', userRouter);
 app.use('/api/quizzes', quizRouter);
->>>>>>> be1fc2376eb4d5726b8d59a7235f07ce0aac8f9d
 
 app.use('/', (req, res) => res.send('Hello World!'));
 
-<<<<<<< HEAD
-app.use("/api/users", require("./routes/users"));
-app.use("/api/quizzes", require("./routes/quizzes"));
-app.use("/", (req, res) => res.send("Hello World!"));
 const PORT = process.env.PORT || 5000;
 //print req res status
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-=======
-const PORT = process.env.PORT || 5000;
-//print req res status
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
->>>>>>> be1fc2376eb4d5726b8d59a7235f07ce0aac8f9d
