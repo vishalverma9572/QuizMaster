@@ -80,14 +80,16 @@ const Home = () => {
                     <button className="buttons" onClick={handleSignIn}>Sign In</button>
                   </>
             )}
+            {isAuthenticated && (
+                
+                  <button className="buttons" onClick={handleDashboard}>Go to Dashboard</button>
+                
+            )}
             <button className="buttons" onClick={handleAboutUs}>About Us</button>
                 <button className="buttons usrg" onClick={handleUserGuide}>User Guide</button>
+              
           </div>
-              {isAuthenticated && (
-                <div className="button-container2">
-                  <button className="buttons" onClick={handleDashboard}>Go to Dashboard</button>
-                </div>
-              )}
+              
             </div>
           </div>
 
