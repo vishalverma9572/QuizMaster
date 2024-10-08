@@ -13,7 +13,7 @@
   box-sizing: border-box;
 }
 
-  .split-screen {
+  .home-container .split-screen {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -22,7 +22,7 @@
   gap: 30px;
 }
 
-.left-section {
+.home-container .left-section {
   width: 70%;
   display: flex;
   flex-direction: column;
@@ -32,7 +32,7 @@
   overflow: hidden;
 }
 
-.left-section .logo img {
+.home-container .left-section .logo img {
   width: 100%;
   max-width: 520px;
   height: auto;
@@ -48,7 +48,7 @@
   100% { transform: scale(1); }
 }
 
-.left-section h1 {
+.home-container .left-section h1 {
   font-size: 2.8rem;
   font-weight: 900;
   margin-bottom: 20px;
@@ -57,7 +57,7 @@
   line-height: 1.2;
 }
 
-.left-section p {
+.home-container .left-section p {
   font-size: 1.1rem;
   max-width: 550px;
   line-height: 1.5;
@@ -65,7 +65,7 @@
   margin-bottom: 30px;
 }
 
-.right-section {
+.home-container .right-section {
   width: 30%;
   display: flex;
   flex-direction: column; 
@@ -73,14 +73,14 @@
   align-items: flex-start;
 }
 
-.button-container {
+.home-container .button-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
   width: 100%;
 }
 
-.buttons {
+.home-container .buttons {
   background-color: #1c2e4a; /* A more subtle, minimalistic dark blue */
   color: #fff;
   border: none;
@@ -95,23 +95,23 @@
   letter-spacing: 0.5px;
 }
 
-.buttons:hover {
+.home-container .buttons:hover {
   background-color: #126dc2; /* Keep this hover color for contrast */
   transform: translateY(-4px); /* Slightly more noticeable hover effect */
   box-shadow: 0 8px 16px rgba(18, 109, 194, 0.4); /* Smooth hover shadow */
 }
 
-.button-container2 .button {
+.home-container .button-container2 .button {
   background-color: #454343;
 }
 
-.button-container2 .button:hover {
+.home-container .button-container2 .button:hover {
   background-color: #f44336;
   transform: translateY(-3px);
 }
 
 
-.cta-banner {
+.home-container .cta-banner {
   margin-top: 30px;
   background-color: rgba(255, 255, 255, 0.1);
   padding: 15px 25px;
@@ -125,53 +125,53 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.cta-banner span {
+.home-container .cta-banner span {
   font-weight: bold;
   color: #ffd700;
 }
 
 
 @media (min-width: 1200px) {
-  .split-screen {
+  .home-container .split-screen {
     max-width: 1400px;
   }
 
-  .left-section h1 {
+  .home-container .left-section h1 {
     font-size: 3rem;
   }
 
-  .left-section p {
+  .home-container .left-section p {
     font-size: 1.2rem;
   }
 
-  .button {
+  .home-container .button {
     font-size: 1.1rem;
     padding: 14px 35px;
   }
 }
 
 @media (max-width: 1024px) {
-  .split-screen {
+  .home-container .split-screen {
     flex-direction: column;
     align-items: center;
   }
 
-  .left-section {
+  .home-container .left-section {
     width: 100%;
     text-align: center;
   }
 
-  .left-section .logo img {
+  .home-container .left-section .logo img {
     max-width: 200px; 
   }
 
-  .right-section {
+  .home-container .right-section {
     width: 100%;
     margin-top: 20px;
     align-items: center;
   }
 
-  .button-container {
+  .home-container .button-container {
     flex-direction: column;
     align-items: center; 
   }
@@ -179,42 +179,42 @@
 
 
 @media (max-width: 768px) {
-  .left-section h1 {
+  .home-container .left-section h1 {
     font-size: 2.2rem;
   }
 
-  .left-section p {
+  .home-container .left-section p {
     font-size: 1rem;
   }
 
-  .button {
+  .home-container .button {
     font-size: 1rem;
     padding: 12px 25px;
   }
 }
 
 @media (max-width: 500px) {
-  .left-section h1 {
+  .home-container .left-section h1 {
     font-size: 1.8rem;
   }
 
-  .left-section p {
+  .home-container .left-section p {
     font-size: 0.9rem;
   }
 
-  .button {
+  .home-container .button {
     font-size: 0.9rem;
     padding: 10px 20px;
   }
 
-  .button-container {
+  .home-container .button-container {
     gap: 10px;
   }
 
-  .left-section .logo img {
+  .home-container .left-section .logo img {
     max-width: 180px;
   }
-  .usrg{
+  .home-container .usrg{
     display: block;
   }
 }
@@ -225,11 +225,11 @@
     flex-direction: column;
   }
 
-  .button{
+  .home-container .button{
     margin-top: 0px !important;
   }
 
-  .button-container2{
+  .home-container .button-container2{
     margin-top: 20px;
   }
 }
