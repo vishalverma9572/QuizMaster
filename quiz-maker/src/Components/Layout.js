@@ -93,6 +93,7 @@ const Layout = ({ children }) => {
         </nav>
         <button className="logout-button" onClick={() => {
           localStorage.removeItem('token');
+          localStorage.removeItem('attemptedRoute');
           window.location.href = '/';
         }}>Logout <span><Icon icon="basil:logout-outline" /></span></button>
       </div>
