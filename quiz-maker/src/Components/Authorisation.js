@@ -88,8 +88,9 @@ const Authorisation = () => {
                 email: "",
                 password: "",
             });
-
-            navigate("/dashboard");
+            const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
+            if(attemptedRoute) navigate(`/${attemptedRoute.path}`);
+            else navigate("/dashboard");
 
         } catch (err) {
             if (url === "/users/register") {
