@@ -28,7 +28,7 @@ function App() {
           <Route path="/take-test" element={<Dashboard/>} />
           <Route path="/profile" element={<Dashboard/>} />
           <Route path="/aboutus" element={<Aboutus/>} />
-          <Route path="/userguide" element={<UserGuide/>} />
+          <Route path="/user-guide" element={<UserGuide/>} />
           <Route path="result/:quizid" element={<ResultPage/>} />
           <Route path='quiz/:quiz_id' element={<QuizDetails/>} />
           <Route path='edit-quiz/:quiz_id' element={<EditQuiz/>} />
