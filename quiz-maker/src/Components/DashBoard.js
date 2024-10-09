@@ -25,6 +25,7 @@ const Dashboard = () => {
     localStorage.getItem("token") === null ||
     localStorage.getItem("token") === undefined
   ) {
+    localStorage.setItem("attemptedRoute", JSON.stringify({path}));
     window.location.href = "/login";
   }
 
