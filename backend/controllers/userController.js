@@ -143,11 +143,21 @@ const updatePassword = async (req, res) => {
     return res.status(400).json({ msg: errors });
   }
 
-  const { password } = zodResult.data;
+  const { oldPassword, password } = zodResult.data;
+
   try {
     const user = await User.findById(req.user.id);
+
+    // Check if the old password matches
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid old password' });
+    }
+
+    // Generate a new salt and hash the new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
+
     await user.save();
     res.json({ msg: 'Password updated' });
   } catch (err) {
@@ -155,6 +165,10 @@ const updatePassword = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
+
+
+
 
 const me = async (req, res) => {
   try {
