@@ -318,6 +318,6 @@ module.exports = {
   updateUsername,
   updatePassword,
   me,
-  requestResetPAssword: requestResetPassword,
+  requestResetPassword,
   resetPassword,
 };

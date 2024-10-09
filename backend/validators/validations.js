@@ -22,7 +22,7 @@ const registrationSchema = z.object({
     )
     .max(255, 'Password should be of maximum 255 characters')
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\W]{6,}$/,
       'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
     ),
 });
@@ -48,6 +48,9 @@ const updateUsernameSchema = z.object({
 });
 
 const updatePasswordSchema = z.object({
+  oldPassword: z.string({
+    required_error: 'Old password is required',
+  }),
   password: z
     .string({
       required_error: 'Password is required',
@@ -58,7 +61,7 @@ const updatePasswordSchema = z.object({
     )
     .max(255, 'Password should be of maximum 255 characters')
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\w\W]{6,}$/,
       'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
     ),
 });
@@ -82,9 +85,11 @@ const questionSchema = z.object({
       })
     )
     .min(2, 'At least two options are required'),
-  correctAnswer: z.string({
-    required_error: 'Correct answer is required',
-  }),
+  correctAnswer: z
+    .string({
+      required_error: 'Correct answer is required',
+    })
+    .min(1, 'Correct answer is required'),
 });
 
 const quizSchema = z.object({
