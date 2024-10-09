@@ -89,7 +89,7 @@ const Authorisation = () => {
                 password: "",
             });
             const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
-            if(attemptedRoute) navigate(`/${attemptedRoute.path}`);
+            if(attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
             else navigate("/dashboard");
 
         } catch (err) {

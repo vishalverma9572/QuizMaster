@@ -7,7 +7,9 @@ const EditQuiz = () => {
     const navigate = useNavigate();
     //check user is logged in or not
     if (!localStorage.getItem('token') || localStorage.getItem('token') === null) {
-        navigate('/login');
+      const pathURL = window.location.pathname.split("/").join('/').substring(1);
+      localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+      window.location.href = "/login";
     }
     document.title = 'Edit Quiz | QuizMaster';
 

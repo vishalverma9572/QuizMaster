@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const path = window.location.pathname.split("/")[1];
+  const pathURL = window.location.pathname.split("/").join('/').substring(1);
 
   useEffect(() => {
     setTimeout(() => {
@@ -25,7 +26,7 @@ const Dashboard = () => {
     localStorage.getItem("token") === null ||
     localStorage.getItem("token") === undefined
   ) {
-    localStorage.setItem("attemptedRoute", JSON.stringify({path}));
+    localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
     window.location.href = "/login";
   }
 

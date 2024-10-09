@@ -30,7 +30,9 @@ const ResultPage = () => {
   useEffect(() => {
     //check authontication
     if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
-      navigate('/login');
+      const pathURL = window.location.pathname.split("/").join('/').substring(1);
+      localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+      return window.location.href = "/login";
     }
 
     const fetchQuizStats = async () => {
