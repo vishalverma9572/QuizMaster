@@ -16,8 +16,15 @@ const registrationSchema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(6, 'Password should be of minimum 6 characters')
-    .max(255, 'Password should be of maximum 255 characters'),
+    .min(
+      6,
+      'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
+    )
+    .max(255, 'Password should be of maximum 255 characters')
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
+    ),
 });
 
 const loginSchema = z.object({
@@ -45,8 +52,15 @@ const updatePasswordSchema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(6, 'Password should be of minimum 6 characters')
-    .max(255, 'Password should be of maximum 255 characters'),
+    .min(
+      6,
+      'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
+    )
+    .max(255, 'Password should be of maximum 255 characters')
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
+      'Password must contain at least 6 characters, including uppercase, lowercase characters and numbers'
+    ),
 });
 
 const requestPasswordResetSchema = z.object({
