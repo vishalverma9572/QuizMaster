@@ -5,10 +5,6 @@ import Layout from './Layout';
 
 const QuizDetails = () => {
     const navigate = useNavigate();
-    //check user is logged in or not
-    if (!localStorage.getItem('token')|| localStorage.getItem('token')===null) {
-        navigate('/login');
-    }
     document.title = 'Details Page | QuizMaster';
 
   const { quiz_id } = useParams();
@@ -17,6 +13,12 @@ const QuizDetails = () => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [showConfirmEdit, setShowConfirmEdit] = useState(false);
 
+  //check user is logged in or not
+  if (localStorage.getItem('token') === null || localStorage.getItem('token') === undefined) {
+    const pathURL = window.location.pathname.split("/").join('/').substring(1);
+    localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+    window.location.href = "/login";
+  }
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
