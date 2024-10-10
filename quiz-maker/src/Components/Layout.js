@@ -98,7 +98,7 @@ const Layout = ({ children }) => {
       </div>
       <div className="main-section">
         <button className="hamburger" onClick={toggleSidebar}>
-          <Icon icon="mdi:menu" />
+          { sidebarOpen ? <Icon icon="material-symbols:close" /> : <Icon icon="mdi:menu" /> }
         </button>
        <div className='layout-children'> {children} </div>
       </div>

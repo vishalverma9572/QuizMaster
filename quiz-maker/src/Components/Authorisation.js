@@ -18,6 +18,14 @@ const Authorisation = () => {
     const usernameInputRef = useRef(null);
     const passwordInputRef = useRef(null);
 
+    // Redirect to dashboard if already authenticated
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/dashboard');
+        }
+    }, [navigate]);
+
     useEffect(() => {
         if (isSignUp) {
             document.title = "Sign Up | QuizMaster";
@@ -157,7 +165,6 @@ const Authorisation = () => {
                             required
                         />
                         <i className={`fa-solid ${passwordVisible ? 'fa-eye' : 'fa-eye-slash'}`} onClick={togglePasswordVisibility}></i>
-                    
                     </div>
                     {error && <p className="error">{error}</p>}
                     <button className="button" type="submit">

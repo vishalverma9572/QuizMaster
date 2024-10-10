@@ -22,7 +22,7 @@ const register = async (req, res) => {
             if (err) throw err;
 
             // Send welcome email
-            // sendWelcomeEmail(email);
+            sendWelcomeEmail(email);
 
             res.json({ token });
         });
@@ -102,9 +102,12 @@ const updateUsername = async (req, res) => {
 }
 
 const updatePassword = async (req, res) => {
-    const { password } = req.body;
     try {
         const user = await User.findById(req.user.id);
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid old password' });
+        }
         const salt = await bcrypt.genSalt(10);
         user.password = await bcrypt.hash(password, salt);
         await user.save();
@@ -121,6 +124,10 @@ const me = async (req, res) => {
         if (!user) {
             return res.status(404).json({ msg: 'User not found' });
         }
+        // if these values exist do not send them to the user
+        user.resetToken = undefined;
+        user.resetTokenExpiry = undefined
+        user.passwordChangedDate = undefined;
         res.json(user);
     } catch (err) {
         console.error(err);
@@ -205,6 +212,9 @@ const resetPassword = async (req, res) => {
         // Clear reset token and expiry
         user.resetToken = undefined;
         user.resetTokenExpiry = undefined;
+
+        // set the passwordChangedAt field
+        user.passwordChangedDate = Date.now() - 1000;
         await user.save();
 
         // Send reset password email
