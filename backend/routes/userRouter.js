@@ -1,7 +1,15 @@
 const express = require('express');
-const { register, login, updateUsername, updatePassword, me, requestResetPAssword, resetPassword } = require('../controllers/userController');
+const {
+  register,
+  login,
+  updateUsername,
+  updatePassword,
+  me,
+  requestResetPassword,
+  resetPassword,
+} = require('../controllers/userController');
 const auth = require('../middleware/auth');
-const router = express.Router()
+const router = express.Router();
 
 // Register
 router.post('/register', register);
@@ -19,7 +27,7 @@ router.put('/update-password', auth, updatePassword);
 router.get('/me', auth, me);
 
 // Request reset password
-router.post('/request-reset-password', requestResetPAssword);
+router.post('/request-reset-password', requestResetPassword);
 
 // Reset password
 router.post('/reset-password/:token', resetPassword);
