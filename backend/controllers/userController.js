@@ -22,7 +22,7 @@ const register = async (req, res) => {
             if (err) throw err;
 
             // Send welcome email
-            // sendWelcomeEmail(email);
+            sendWelcomeEmail(email);
 
             res.json({ token });
         });
