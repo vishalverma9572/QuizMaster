@@ -123,6 +123,11 @@
     color: #103b5a;
 }
 
+.strength-analyser{
+    font-size: 12px;
+    color: #6c6c6c;
+}
+
 @media (max-width: 500px) {
     .auth_container .form-wrapper {
         padding: 20px;
