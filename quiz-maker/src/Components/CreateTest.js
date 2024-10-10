@@ -14,15 +14,15 @@ const CreateQuiz = () => {
     navigate("/login");
   }
   const [title, setTitle] = useState("");
-  const [timeLimit, setTimeLimit] = useState("");
+  const [timeLimit, setTimeLimit] = useState(0);
   const [questions, setQuestions] = useState([
-    { question: "", options: [""], correctAnswer: "" },
+    { question: '', options: [''], correctAnswer: '' },
   ]);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleTitleChange = (e) => setTitle(e.target.value);
 
-  const handleTimeLimitChange = (e) => setTimeLimit(e.target.value);
+  const handleTimeLimitChange = (e) => setTimeLimit(Number(e.target.value));
 
   const handleQuestionChange = (index, e) => {
     const newQuestions = [...questions];
@@ -38,14 +38,15 @@ const CreateQuiz = () => {
 
   const handleCorrectAnswerChange = (questionIndex, optionIndex) => {
     const newQuestions = [...questions];
-    newQuestions[questionIndex].correctAnswer = newQuestions[questionIndex].options[optionIndex];
+    newQuestions[questionIndex].correctAnswer =
+      newQuestions[questionIndex].options[optionIndex];
     setQuestions(newQuestions);
   };
 
   const addQuestion = () => {
     setQuestions([
       ...questions,
-      { question: "", options: [""], correctAnswer: "" },
+      { question: '', options: [''], correctAnswer: '' },
     ]);
   };
 
@@ -56,7 +57,7 @@ const CreateQuiz = () => {
 
   const addOption = (questionIndex) => {
     const newQuestions = [...questions];
-    newQuestions[questionIndex].options.push("");
+    newQuestions[questionIndex].options.push('');
     setQuestions(newQuestions);
   };
 
@@ -67,35 +68,41 @@ const CreateQuiz = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(questions);
     e.preventDefault();
     for (let q of questions) {
       if (!q.correctAnswer) {
-        setError("Please select a correct answer for each question.");
+        setError('Please select a correct answer for each question.');
         return;
       }
     }
 
+    if (timeLimit <= 0) {
+      setError("Enter appropriate time limit. Shouldn't be 0 or negative");
+      return;
+    }
+
     try {
-      const url = process.env.REACT_APP_BACKEND_URL + "/quizzes";
+      const url = process.env.REACT_APP_BACKEND_URL + '/quizzes';
       const response = await fetch(url, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": localStorage.getItem("token"),
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'),
         },
         body: JSON.stringify({ title, questions, timeLimit }),
       });
       const data = await response.json();
       console.log(data);
       if (response.ok) {
-        alert("Quiz created successfully");
+        alert('Quiz created successfully');
         navigate(`/quiz/${data.quiz_id} `);
       } else {
         alert(data.msg);
       }
     } catch (error) {
-      console.error("Error creating quiz:", error);
-      alert("Error creating quiz. Please try again.");
+      console.error('Error creating quiz:', error);
+      alert('Error creating quiz. Please try again.');
     }
   };
 
@@ -135,7 +142,7 @@ const CreateQuiz = () => {
           </div>
           {questions.map((q, qIndex) => (
             <div key={qIndex} className="question-card">
-              <div className="form-group">
+              <div className="form-group ">
                 <label htmlFor={`question-${qIndex}`}>Question</label>
                 <input
                   type="text"
@@ -165,7 +172,7 @@ const CreateQuiz = () => {
                     required
                   />
                   <button
-                    type="button"
+                    type="button" className="Add-option  "
                     onClick={() => removeOption(qIndex, oIndex)}
                   >
                     Remove
@@ -182,16 +189,16 @@ const CreateQuiz = () => {
                   </label>
                 </div>
               ))}
-              <button type="button" onClick={() => addOption(qIndex)}>
+              <button type="button" className="Add-option  " onClick={() => addOption(qIndex)}>
                 Add Option
               </button>
             </div>
           ))}
           {error && <p className="error">{error}</p>}
-          <button type="button" onClick={addQuestion}>
+          <button type="button " className="Add-button Add-button:hover " onClick={addQuestion}>
             Add Question
           </button>
-          <button type="submit">Create Quiz</button>
+          <button type="submit" className="Add-button Add-button:hover ">Create Quiz</button>
         </form>
       </div>
     </div>
