@@ -169,12 +169,14 @@ const Authorisation = () => {
                         <i className={`fa-solid ${passwordVisible ? 'fa-eye' : 'fa-eye-slash'}`} onClick={togglePasswordVisibility}></i>
                     </div>
 
-                    <div>
-                        {isSignUp && <PasswordStrengthBar password={formData.password} />}
-                        <p className="strength-analyser">
-                            Recommended: use uppercase letters, lowercase letters, numbers & special characters
-                        </p>
-                    </div>
+                    {isSignUp && (
+                        <div>
+                            <PasswordStrengthBar password={formData.password} />
+                            <p className="strength-analyser">
+                                Recommended: use uppercase letters, lowercase letters, numbers & special characters
+                            </p>
+                        </div>
+                    )}
 
                     {error && <p className="error">{error}</p>}
                     <button className="button" type="submit">
