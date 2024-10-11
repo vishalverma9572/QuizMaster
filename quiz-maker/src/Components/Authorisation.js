@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import PasswordStrengthBar from 'react-password-strength-bar'
 import axios from "axios";
 import "./Authorisation.css";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
@@ -167,6 +168,16 @@ const Authorisation = () => {
                         />
                         <i className={`fa-solid ${passwordVisible ? 'fa-eye' : 'fa-eye-slash'}`} onClick={togglePasswordVisibility}></i>
                     </div>
+
+                    {isSignUp && (
+                        <div>
+                            <PasswordStrengthBar password={formData.password} />
+                            <p className="strength-analyser">
+                                Recommended: use uppercase letters, lowercase letters, numbers & special characters
+                            </p>
+                        </div>
+                    )}
+
                     {error && <p className="error">{error}</p>}
                     <button className="button" type="submit">
                         {isSignUp ? "Sign Up" : "Sign In"}
