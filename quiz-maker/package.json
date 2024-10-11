@@ -13,12 +13,14 @@
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "dotenv": "^16.4.5",
+    "lucide-react": "^0.451.0",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-password-strength-bar": "^0.4.1",
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
+    "typeit-react": "^2.7.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -46,6 +48,7 @@
     ]
   },
   "devDependencies": {
-    "@iconify-icon/react": "^2.1.0"
+    "@iconify-icon/react": "^2.1.0",
+    "tailwindcss": "^3.4.13"
   }
 }
