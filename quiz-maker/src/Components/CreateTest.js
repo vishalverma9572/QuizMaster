@@ -14,7 +14,7 @@ const CreateQuiz = () => {
     navigate("/login");
   }
   const [title, setTitle] = useState("");
-  const [timeLimit, setTimeLimit] = useState(0);
+  const [timeLimit, setTimeLimit] = useState(null);
   const [questions, setQuestions] = useState([
     { question: '', options: [''], correctAnswer: '' },
   ]);
