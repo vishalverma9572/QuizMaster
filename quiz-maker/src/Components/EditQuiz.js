@@ -7,7 +7,9 @@ const EditQuiz = () => {
     const navigate = useNavigate();
     //check user is logged in or not
     if (!localStorage.getItem('token') || localStorage.getItem('token') === null) {
-        navigate('/login');
+      const pathURL = window.location.pathname.split("/").join('/').substring(1);
+      localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+      window.location.href = "/login";
     }
     document.title = 'Edit Quiz | QuizMaster';
 
@@ -17,33 +19,36 @@ const EditQuiz = () => {
   // Placeholder quiz data, fetch actual data using quiz_id
   const [quizData, setQuizData] = useState({
     title: '',
-    timeLimit: '',
-    questions: [{ _id: '1', question: 'Sample Question', options: ['Option A', 'Option B'], correctAnswer: 'Option A' }],
+    timeLimit: 0,
+    questions: [
+      {
+        _id: '1',
+        question: 'Sample Question',
+        options: ['Option A', 'Option B'],
+        correctAnswer: 'Option A',
+      },
+    ],
   });
 
   useEffect(() => {
-    
     const fetchQuizData = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/${quiz_id}`;
         const response = await fetch(url, {
-            headers: {
-                'x-auth-token': localStorage.getItem('token'),
-            },
+          headers: {
+            'x-auth-token': localStorage.getItem('token'),
+          },
         });
         const data = await response.json();
         if (response.ok) {
-            setQuizData(data);
+          setQuizData(data);
         } else {
-            alert(data.msg);
+          alert(data.msg);
         }
-        } catch (error) {
-            console.error('Error fetching quiz:', error);
-        }
+      } catch (error) {
+        console.error('Error fetching quiz:', error);
+      }
     };
-
-
-    
 
     fetchQuizData();
   }, [quiz_id]);
@@ -53,7 +58,7 @@ const EditQuiz = () => {
   };
 
   const handleTimeLimitChange = (e) => {
-    setQuizData({ ...quizData, timeLimit: e.target.value });
+    setQuizData({ ...quizData, timeLimit: Number(e.target.value) });
   };
 
   const handleQuestionChange = (index, e) => {
