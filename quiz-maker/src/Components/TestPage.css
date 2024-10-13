@@ -167,12 +167,10 @@
 }
 
 /* option design */
-input[type="checkbox"] {
-    appearance: none;
-}
 
 .checkbox-wrapper-12 {
     position: relative;
+    margin-left: 7px;
 }
 
 .checkbox-wrapper-12>svg {

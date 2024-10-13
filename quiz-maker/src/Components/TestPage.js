@@ -219,7 +219,7 @@ const TakeTestPage = () => {
 
         {confirmation && quiz && status !== "Taken" && (
           <div className="countdown-timer">
-            
+
             <h3>Time Left: </h3>
             <div className="time-unit">
               {formatTime(quiz.timeLimit * 60 - elapsedTime)}
@@ -261,28 +261,29 @@ const TakeTestPage = () => {
 
               {question.options.map((option) => (
                 <div key={option} className="option-group">
-                  <input
-                    type="checkbox"
-                    id={`${question._id}-${option}`}
-                    name={`question-${question._id}`}
-                    value={option}
-                    checked={
-                      progress?.answers?.find(
-                        (a) =>
-                          a.question_id ===
-                          question._id
-                      )?.selectedOption === option
-                    }
-                    onChange={() =>
-                      handleOptionChange(
-                        question._id,
-                        option
-                      )
-                    }
-                  />
+                  
                   <div class="checkbox-wrapper-12">
                     <div class="cbx">
-                      <input id="cbx-12" type="checkbox" />
+                      <input
+                        id="cbx-12"
+                        type="checkbox"
+                        name={`question-${question._id}`}
+                        value={option}
+                        checked={
+                          progress?.answers?.find(
+                            (a) =>
+                              a.question_id ===
+                              question._id
+                          )?.selectedOption === option
+                        }
+                        onChange={() =>
+                          handleOptionChange(
+                            question._id,
+                            option
+                          )
+                        }
+
+                      />
                       <label for="cbx-12"></label>
                       <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
                         <path d="M2 8.36364L6.23077 12L13 2"></path>
@@ -322,9 +323,9 @@ const TakeTestPage = () => {
       {status === "Taken" && (
         <div className='taken-info'>
           <p>You have already attempted this Quiz</p>
-          
+
           <button className='taken-info-btn' onClick={BackToDashBoard}>
-            <FaArrowLeft style={{ marginRight: '10px' }}/> 
+            <FaArrowLeft style={{ marginRight: '10px' }} />
             Go To DashBoard
           </button>
         </div>
