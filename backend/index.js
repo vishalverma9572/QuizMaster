@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const Quiz = require("./models/Quiz");
+const auth = require("./middleware/auth");
 
 const QuizResult = require("./models/QuizResult");
 const QuizProgress = require("./models/QuizProgress");
@@ -93,8 +94,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/users", userRouter);
-app.use("/api/quizzes", quizRouter);
+app.use("/api/users", auth, userRouter);
+app.use("/api/quizzes", auth, quizRouter);
 
 app.use("/", (req, res) => res.send("Hello World!"));
 
