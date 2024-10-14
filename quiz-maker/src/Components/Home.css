@@ -80,30 +80,24 @@
   width: 100%;
 }
 
-.home-container .button {
+.home-container .buttons {
   position: relative;
   background:  linear-gradient(135deg, #81a3b6 0%, #59889c 100%) ;
   color: #fff;
   border: none;
-  padding: 15px 35px;
+  padding: 10px 25px;
   border-radius: 5px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 500;
   letter-spacing: 1px;
   cursor: pointer;
   border:1px solid transparent;
   transition: background 0.3s, transform 0.3s;
-  /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); */
   outline: none;
   transition: 0.6s;
   overflow: hidden;
 }
 
-/* .home-container .button:hover {
-  background: #126dc2;
-  transform: scale(1.08);
-  box-shadow: 0 6px 12px rgba(34, 34, 34, 0.4); 
-} */
 .button-container{
   color:#fff;
   border-color: #206592;
@@ -114,10 +108,7 @@
   border-radius: 5px;
 }
 
-/* .home-container .button-container2 .button:hover {
-  background-color: #f44336;
-  transform: scale(1.05);
-} */
+
 
 .home-container .cta-banner {
   margin-top: 30px;
@@ -221,7 +212,7 @@
   }
 }
 
-.button:before,button::after{
+.buttons:before,.buttons::after{
   position: absolute  ;
   content: '';
   left:0;
@@ -232,26 +223,26 @@
   opacity: .4;
   transition:  0.6s;
 }
-.button:before{
+.buttons:before{
    width: 60px;
    background-color: rgba(255, 255, 255, 0.6);
    transform: translateX(-130px) skewX(-45deg);
 }
-.button:after{
+.buttons:after{
   width: 30px;
   background-color: rgba(255, 255, 255, 0.6);
   transform: translateX(-130px) skewX(-45deg);
 }
-button:hover:before,button:hover:after{
+.buttons:hover:before,.buttons:hover:after{
   opacity: 0.6;
   transform: translateX(320px)  skewX(-45deg);
 }
-.button:hover{
+.buttons:hover{
   background:#206592;
   transform: scale(1.08);
   color:#f2f2f2;
 }
-.button-container2 .button:hover{
+.buttons-container2 .buttons:hover{
   transform: scale(1.08);
-  background: #90EE90;/
+  background: #90EE90;
 }
