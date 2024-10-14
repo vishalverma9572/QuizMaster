@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import './TestPage.css';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const TakeTestPage = () => {
   const { quiz_id } = useParams();
@@ -22,7 +24,7 @@ const TakeTestPage = () => {
       localStorage.getItem("token") === null ||
       localStorage.getItem("token") === undefined
     ) {
-      localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+      localStorage.setItem("attemptedRoute", JSON.stringify({ pathURL }));
       window.location.href = "/login";
     }
     const fetchStatus = async () => {
@@ -108,7 +110,7 @@ const TakeTestPage = () => {
         body: JSON.stringify({ answers: progress?.answers || [] }),
       });
 
-      
+
 
       const data = await response.json();
       console.log(data);
@@ -197,45 +199,135 @@ const TakeTestPage = () => {
     return <div className="error">{error}</div>;
   }
 
+  const BackToDashBoard = () => {
+    navigate(`/dashboard`);
+  }
+
+  function formatTime(seconds) {
+    const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const second = String(seconds % 60).padStart(2, '0');
+
+    return `${hours}:${minutes}:${second}`;
+  }
+
   return (
     <div className="take-test">
       <h2>{quiz?.title}</h2>
-      <p>Status: {status}</p>
-      {(status === 'Not taken' || status === 'In progress') && !confirmation && (
-        <div className="instructions">
-          <h3>Quiz Instructions</h3>
-          <ul>
-            <li>Ensure you have a stable internet connection.</li>
-            <li>You cannot pause the quiz once started.</li>
-            <li>Answer all questions to the best of your knowledge.</li>
-            <li>The timer will start as soon as you confirm the instructions.</li>
-          </ul>
-          <button className="button" onClick={handleConfirm}>I Understand, Start Quiz</button>
-        </div>
-      )}
-      {confirmation && quiz && (
-        <div>
-          <p>Time Remaining: {quiz.timeLimit * 60 - elapsedTime} seconds</p>
+      <div className="test-info">
+        <p>Status: {status}</p>
+
+        {confirmation && quiz && status !== "Taken" && (
+          <div className="countdown-timer">
+
+            <h3>Time Left: </h3>
+            <div className="time-unit">
+              {formatTime(quiz.timeLimit * 60 - elapsedTime)}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {(status === "Not taken" || status === "In progress") &&
+        !confirmation && (
+          <div className="instructions">
+            <h3>Quiz Instructions</h3>
+            <ul>
+              <li>
+                Ensure you have a stable internet connection.
+              </li>
+              <li>You cannot pause the quiz once started.</li>
+              <li>
+                Answer all questions to the best of your
+                knowledge.
+              </li>
+              <li>
+                The timer will start as soon as you confirm the
+                instructions.
+              </li>
+            </ul>
+            <button className="button" onClick={handleConfirm}>
+              I Understand, Start Quiz
+            </button>
+          </div>
+        )}
+
+      {confirmation && quiz && status !== "Taken" && (
+        <div className="take-quiz">
           {quiz.questions.map((question, index) => (
             <div key={question._id} className="question-card">
               <h4>Question {index + 1}</h4>
-              <p>{question.question}</p>
-              {question.options.map(option => (
+              <p className="question">{question.question}</p>
+
+              {question.options.map((option) => (
                 <div key={option} className="option-group">
-                  <input
-                    type="radio"
-                    id={`${question._id}-${option}`}
-                    name={`question-${question._id}`}
-                    value={option}
-                    checked={progress?.answers?.find(a => a.question_id === question._id)?.selectedOption === option}
-                    onChange={() => handleOptionChange(question._id, option)}
-                  />
-                  <label htmlFor={`${question._id}-${option}`}>{option}</label>
+                  
+                  <div class="checkbox-wrapper-12">
+                    <div class="cbx">
+                      <input
+                        id="cbx-12"
+                        type="checkbox"
+                        name={`question-${question._id}`}
+                        value={option}
+                        checked={
+                          progress?.answers?.find(
+                            (a) =>
+                              a.question_id ===
+                              question._id
+                          )?.selectedOption === option
+                        }
+                        onChange={() =>
+                          handleOptionChange(
+                            question._id,
+                            option
+                          )
+                        }
+
+                      />
+                      <label for="cbx-12"></label>
+                      <svg width="15" height="14" viewbox="0 0 15 14" fill="none">
+                        <path d="M2 8.36364L6.23077 12L13 2"></path>
+                      </svg>
+                    </div>
+
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+                      <defs>
+                        <filter id="goo-12">
+                          <fegaussianblur in="SourceGraphic" stddeviation="4" result="blur"></fegaussianblur>
+                          <fecolormatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7" result="goo-12"></fecolormatrix>
+                          <feblend in="SourceGraphic" in2="goo-12"></feblend>
+                        </filter>
+                      </defs>
+                    </svg>
+                  </div>
+
+                  <label
+                    htmlFor={`${question._id}-${option}`}
+                    className="option-label"
+                  >
+                    {option}
+                  </label>
                 </div>
               ))}
             </div>
           ))}
-          <button className="button" onClick={handleSubmit}>Submit Quiz</button>
+          <span id="button-bg">
+            <button className="button" onClick={handleSubmit}>
+              Submit Quiz
+            </button>
+          </span>
+        </div>
+      )}
+
+
+      {status === "Taken" && (
+        <div className='taken-info'>
+          <p>You have already attempted this Quiz</p>
+
+          <button className='taken-info-btn' onClick={BackToDashBoard}>
+            <FaArrowLeft style={{ marginRight: '10px' }} />
+            Go To DashBoard
+          </button>
         </div>
       )}
     </div>
