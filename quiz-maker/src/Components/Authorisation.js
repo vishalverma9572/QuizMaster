@@ -14,12 +14,11 @@ const Authorisation = () => {
         email: "",
         password: "",
     });
-    const [passwordVisible, setPasswordVisible] = useState(false); // Password visibility state
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const emailInputRef = useRef(null);
     const usernameInputRef = useRef(null);
     const passwordInputRef = useRef(null);
 
-    // Redirect to dashboard if already authenticated
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -128,9 +127,28 @@ const Authorisation = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+    const handleCancel = () => {
+        navigate(-1); // This will go back to the previous page
+    };
+
     return (
         <div className="auth_container">
             <div className="form-wrapper">
+                <button 
+                    className="cancel-button" 
+                    onClick={handleCancel}
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '2rem',
+                        cursor: 'pointer'
+                    }}
+                >
+                    ×
+                </button>
                 <div className="logo">
                     <img src={logo} alt="logo" />
                 </div>
