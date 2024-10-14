@@ -141,3 +141,24 @@
         font-size: 0.9rem;
     }
 }
+.google-signin-button {
+    background-color: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .google-signin-button i {
+    margin-right: 10px;
+  }
+  p{
+    text-align: center;
+  }
+
+  
