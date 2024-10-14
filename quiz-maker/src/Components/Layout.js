@@ -3,10 +3,12 @@ import { Icon } from '@iconify-icon/react';
 import logo from '../images/quizmaster-high-resolution-logo-white-transparent.png';
 import './Layout.css'; 
 import { Link, useLocation } from 'react-router-dom';
+import LogoutConfirmation from './LogoutConfirmation'
 
 const Layout = ({ children }) => {
   const [activeSection, setActiveSection] = useState('my-tests');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const location = useLocation();
   const titleMap = {
@@ -21,11 +23,11 @@ const Layout = ({ children }) => {
   useEffect(() => {
     const path = location.pathname; // Get the current pathname from location
     document.title = "Dashboard | QuizMaster";
-    
+
     // Check for quiz detail route
     if (path.startsWith('/quiz/')) {
       setActiveSection('my-tests');
-      document.title = "My Tests | QuizMaster"; 
+      document.title = "My Tests | QuizMaster";
     } else if (path === '/my-tests') {
       setActiveSection('my-tests');
       document.title = "My Tests | QuizMaster";
@@ -43,14 +45,14 @@ const Layout = ({ children }) => {
       document.title = "Profile | QuizMaster";
     }else if (path === 'user-guide'){
         setActiveSection('user-guide');
-        document.title = "UserGuide | QuizMaster";
-      }
+      document.title = "UserGuide | QuizMaster";
+    }
   }, [location]);
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
- 
+
   const getIcon = (section) => {
     switch (section) {
       case 'my-tests':
@@ -70,20 +72,28 @@ const Layout = ({ children }) => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("attemptedRoute");
+    window.location.href = "/";
+  }
   return (
     <div className="layout">
+
+      <LogoutConfirmation open={showConfirm} onConfirm={handleLogout} onCancel={() => setShowConfirm(false)}/>
+
       <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <nav>
           <div className="logo">
             <img src={logo} alt="logo" />
           </div>
-       
-           <ul>
+
+          <ul>
             {['my-tests', 'my-results', 'create-test', 'take-test', 'profile','user-guide'].map((section) => (
               <li key={section} className={activeSection === section ? 'active' : ''}>
                 <Link to={`/${section}`} onClick={() => setActiveSection(section)}>
                   <span>
-                    <Icon icon={getIcon(section)} /> 
+                    <Icon icon={getIcon(section)} />
                   </span>
                   {section.charAt(0).toUpperCase() + section.slice(1).replace(/-/g, ' ')}
                 </Link>
@@ -91,11 +101,18 @@ const Layout = ({ children }) => {
             ))}
           </ul>
         </nav>
-        <button className="logout-button" onClick={() => {
-          localStorage.removeItem('token');
-          localStorage.removeItem('attemptedRoute');
-          window.location.href = '/';
-        }}>Logout <span><Icon icon="basil:logout-outline" /></span></button>
+        <button
+          className="logout-button"
+          onClick={() => {
+            setShowConfirm(true);
+            setSidebarOpen(false);
+          }}
+        >
+          Logout{" "}
+          <span>
+            <Icon icon="basil:logout-outline" />
+          </span>
+        </button>
       </div>
       <div className="main-section">
         <button className="hamburger" onClick={toggleSidebar}>
