@@ -1,16 +1,16 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const nodemailer = require('nodemailer');
-const generateUniqueId = require('generate-unique-id');
-const validations = require('../validators/validations');
-require('dotenv').config();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+const nodemailer = require("nodemailer");
+const generateUniqueId = require("generate-unique-id");
+const validations = require("../validators/validations");
+require("dotenv").config();
 
 const register = async (req, res) => {
   const zodResult = validations.registrationSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    const errors = zodResult.error.errors.map((err) => err.message).join(", ");
     return res.status(400).json({ msg: errors });
   }
 
@@ -18,7 +18,7 @@ const register = async (req, res) => {
 
   try {
     let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+    if (user) return res.status(400).json({ msg: "User already exists" });
 
     user = new User({ username, email, password });
 
@@ -30,9 +30,9 @@ const register = async (req, res) => {
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '24h' },
+      { expiresIn: "24h" },
       (err, token) => {
-        if (err) throw err;
+        if (err) redirect("/login");
 
         // Send welcome email
         // sendWelcomeEmail(email);
@@ -42,14 +42,14 @@ const register = async (req, res) => {
     );
   } catch (error) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
 const sendWelcomeEmail = async (email) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER, // Your email
         pass: process.env.EMAIL_PASSWORD, // Your email password
@@ -59,7 +59,7 @@ const sendWelcomeEmail = async (email) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Welcome to QuizMaster!',
+      subject: "Welcome to QuizMaster!",
       html: `
                 <p>Dear User,</p>
                 <p>Thank you for registering with QuizMaster!</p>
@@ -73,16 +73,16 @@ const sendWelcomeEmail = async (email) => {
     await transporter.sendMail(mailOptions);
     console.log(`Welcome email sent to ${email}`);
   } catch (err) {
-    console.error('Error sending welcome email:', err);
+    console.error("Error sending welcome email:", err);
   }
 };
 
 const login = async (req, res) => {
-  console.log('Login called');
+  console.log("Login called");
   const zodResult = validations.loginSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    const errors = zodResult.error.errors.map((err) => err.message).join(", ");
     return res.status(400).json({ msg: errors });
   }
 
@@ -90,24 +90,24 @@ const login = async (req, res) => {
 
   try {
     let user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+    if (!user) return res.status(400).json({ msg: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+    if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
 
     const payload = { user: { id: user.id } };
     jwt.sign(
       payload,
       process.env.JWT_SECRET,
-      { expiresIn: '24h' },
+      { expiresIn: "24h" },
       (err, token) => {
-        if (err) throw err;
+        if (err) redirect("/login");
         res.json({ token });
       }
     );
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
@@ -115,7 +115,7 @@ const updateUsername = async (req, res) => {
   const zodResult = validations.updateUsernameSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    const errors = zodResult.error.errors.map((err) => err.message).join(", ");
     return res.status(400).json({ msg: errors });
   }
 
@@ -123,15 +123,15 @@ const updateUsername = async (req, res) => {
   try {
     const userExists = await User.findOne({ username });
     if (userExists)
-      return res.status(400).json({ msg: 'Username already exists' });
+      return res.status(400).json({ msg: "Username already exists" });
 
     const user = await User.findById(req.user.id);
     user.username = username;
     await user.save();
-    res.json({ msg: 'Username updated' });
+    res.json({ msg: "Username updated" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
@@ -139,7 +139,7 @@ const updatePassword = async (req, res) => {
   const zodResult = validations.updatePasswordSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    const errors = zodResult.error.errors.map((err) => err.message).join(", ");
     return res.status(400).json({ msg: errors });
   }
 
@@ -151,7 +151,7 @@ const updatePassword = async (req, res) => {
     // Check if the old password matches
     const isMatch = await bcrypt.compare(oldPassword, user.password);
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid old password' });
+      return res.status(400).json({ msg: "Invalid old password" });
     }
 
     // Generate a new salt and hash the new password
@@ -159,27 +159,23 @@ const updatePassword = async (req, res) => {
     user.password = await bcrypt.hash(password, salt);
 
     await user.save();
-    res.json({ msg: 'Password updated' });
+    res.json({ msg: "Password updated" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
-
-
-
-
 const me = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password -__v -_id');
+    const user = await User.findById(req.user.id).select("-password -__v -_id");
     if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+      return res.status(404).json({ msg: "User not found" });
     }
     res.json(user);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: "Server error" });
   }
 };
 
@@ -187,7 +183,7 @@ const requestResetPassword = async (req, res) => {
   const zodResult = validations.requestPasswordResetSchema.safeParse(req.body);
 
   if (!zodResult.success) {
-    const errors = zodResult.error.errors.map((err) => err.message).join(', ');
+    const errors = zodResult.error.errors.map((err) => err.message).join(", ");
     return res.status(400).json({ message: errors });
   }
 
@@ -197,7 +193,7 @@ const requestResetPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Generate reset token and expiry
@@ -211,17 +207,17 @@ const requestResetPassword = async (req, res) => {
     // Send request reset password email
     sendRequestResetPasswordEmail(user.email, resetToken);
 
-    res.json({ message: 'Password reset email sent' });
+    res.json({ message: "Password reset email sent" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 const sendRequestResetPasswordEmail = async (email, token) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER, // Your email
         pass: process.env.EMAIL_PASSWORD, // Your email password
@@ -231,7 +227,7 @@ const sendRequestResetPasswordEmail = async (email, token) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Reset Your Password',
+      subject: "Reset Your Password",
       html: `
                 <p>Dear User,</p>
                 <p>You have requested to reset your password.</p>
@@ -246,13 +242,13 @@ const sendRequestResetPasswordEmail = async (email, token) => {
     await transporter.sendMail(mailOptions);
     console.log(`Request reset password email sent to ${email}`);
   } catch (err) {
-    console.error('Error sending request reset password email:', err);
+    console.error("Error sending request reset password email:", err);
   }
 };
 
 const resetPassword = async (req, res) => {
   const { token } = req.params;
-  const {newPassword} = req.body;
+  const { newPassword } = req.body;
   try {
     const user = await User.findOne({
       resetToken: token,
@@ -260,7 +256,7 @@ const resetPassword = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
+      return res.status(400).json({ message: "Invalid or expired token" });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -274,17 +270,17 @@ const resetPassword = async (req, res) => {
     // Send reset password email
     sendResetPasswordEmail(user.email);
 
-    res.json({ message: 'Password has been reset' });
+    res.json({ message: "Password has been reset" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 const sendResetPasswordEmail = async (email) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER, // Your email
         pass: process.env.EMAIL_PASSWORD, // Your email password
@@ -294,7 +290,7 @@ const sendResetPasswordEmail = async (email) => {
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: email,
-      subject: 'Password Reset Confirmation',
+      subject: "Password Reset Confirmation",
       html: `
                 <p>Dear User,</p>
                 <p>Your password has been successfully reset.</p>
@@ -308,7 +304,7 @@ const sendResetPasswordEmail = async (email) => {
     await transporter.sendMail(mailOptions);
     console.log(`Reset password email sent to ${email}`);
   } catch (err) {
-    console.error('Error sending reset password email:', err);
+    console.error("Error sending reset password email:", err);
   }
 };
 
