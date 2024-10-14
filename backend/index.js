@@ -11,7 +11,7 @@ const quizRouter = require("./routes/quizRouter")
 
 require('dotenv').config();
 
-connectDB()
+connectDB();
 //auto submit quiz
 async function autoSubmitQuizzes() {
     try {

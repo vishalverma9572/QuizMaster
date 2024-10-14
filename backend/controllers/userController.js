@@ -252,7 +252,7 @@ const sendRequestResetPasswordEmail = async (email, token) => {
 
 const resetPassword = async (req, res) => {
   const { token } = req.params;
-
+  const {newPassword} = req.body;
   try {
     const user = await User.findOne({
       resetToken: token,
