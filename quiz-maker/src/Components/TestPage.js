@@ -17,6 +17,14 @@ const TakeTestPage = () => {
   const elapsedTimeRef = useRef(elapsedTime);
 
   useEffect(() => {
+    const pathURL = window.location.pathname.split("/").join('/').substring(1);
+    if (
+      localStorage.getItem("token") === null ||
+      localStorage.getItem("token") === undefined
+    ) {
+      localStorage.setItem("attemptedRoute", JSON.stringify({pathURL}));
+      window.location.href = "/login";
+    }
     const fetchStatus = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/status/${quiz_id}`;
