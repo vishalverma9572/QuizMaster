@@ -133,7 +133,8 @@ QuizMaster
 - Customize environment variables as needed for your setup.
 
 
-Firebase Setup Instructions
+### Firebase Setup Instructions
+
 To use Firebase in this project, the moderator must create their own Firebase project and add the configuration details in a .env file.
 
 Step 1: Create a Firebase Project
