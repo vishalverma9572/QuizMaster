@@ -43,7 +43,6 @@
   .layout .sidebar nav ul li {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
     cursor: pointer;
     transition: background 0.3s;
     font-size: 18px;
@@ -68,6 +67,7 @@
     align-items: center;
     text-decoration: none; 
     color: inherit; 
+    padding: 15px 20px;
    
   }
   .layout .logout-button {
