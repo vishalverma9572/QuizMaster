@@ -11,6 +11,7 @@ import resultsImg from '../images/user-guide-images/results-main.png'
 import listImg from '../images/user-guide-images/ranking-one.jpeg'
 import standingImg from '../images/user-guide-images/ranking-two.jpeg'
 import profileImg from '../images/user-guide-images/profileImg.png'
+import { useNavigate } from 'react-router-dom'
 
 const UserGuide = () => {
     const scrollCreate = ()=>{
@@ -28,6 +29,7 @@ const UserGuide = () => {
     const scrollProfile = ()=>{
         document.getElementById('usrg-profile').scrollIntoView({ behavior: 'smooth' });
     }
+    const Navigate=useNavigate();
   return (
     <>
         <div id='header'>
@@ -36,23 +38,23 @@ const UserGuide = () => {
             <div id='userguide-container'>
                 <h2>Table of Contents</h2>
                 <div id='tableOfContent'>
-                    <div id='vertical-line'></div>
+                    <div id='horizontal-line'></div>
                     <ul id='tableOfContent-items'>
-                        <li className='content-item'><button onClick={scrollCreate}>How to create tests?</button></li>
-                        <li className='content-item'><button onClick={scrollTests}>See your tests</button></li>
-                        <li className='content-item'><button onClick={scrollTake}>Where and how to take tests?</button></li>
-                        <li className='content-item'><button onClick={scrollResult}>Results section</button></li>
-                        <li className='content-item'><button onClick={scrollProfile}>Manage your Profile</button></li>
+                        <li className='content-item'><button className='content-item_interior' onClick={scrollCreate}>How to create tests?</button></li>
+                        <li className='content-item'><button className='content-item_interior' onClick={scrollTests}>See your tests</button></li>
+                        <li className='content-item'><button className='content-item_interior' onClick={scrollTake}>Where and how to take tests?</button></li>
+                        <li className='content-item'><button className='content-item_interior' onClick={scrollResult}>Results section</button></li>
+                        <li className='content-item'><button className='content-item_interior' onClick={scrollProfile}>Manage your Profile</button></li>
                     </ul>
                 </div>
                 <div id='introduction'>
-                    <span style={{textDecoration: "underline"}}>QuizMaster</span> is a comprehensive quiz application that allows users to create, take, and manage quizzes. 
+                    <span style={{ textDecoration: "underline", cursor: "pointer", fontWeight: "bold", fontSize: "1.5rem"}} onClick={()=>{ Navigate('/') }}>QuizMaster</span> is a comprehensive quiz application that allows users to create, take, and manage quizzes. 
                     It is an easy to use quiz application with friendly user-interface with functionalities such as to view the scheduled or pending tests
                     and to review the results of the quiz that have been taken.<br/>
                     This is an easy-to-read user guide to help you get started with QuizMaster.
                 </div>
                 <div id='usrg-testCreation'>
-                    <h1>Create Tests</h1>
+                    <h1 className='headings'>Create Tests</h1>
                     <h3>1.&ensp;How to create new test?</h3>
                     <img id="user-guid-img" src={createQuizImg} alt='create-quiz'/>
                     <p>
@@ -78,7 +80,7 @@ const UserGuide = () => {
                     </p>
                 </div>
                 <div id='usrg-myTests'>
-                    <h1>See Tests</h1>
+                    <h1 className='headings'>See Tests</h1>
                     <img id="user-guid-img" src={MyTestImg} alt='all-quizes'/>
                     <p>
                         Upon Clicking on <span style={{fontWeight: "bold"}}>My Tests</span>,&ensp;The user can oversee all the quizes that have been created so far.&ensp;
@@ -87,7 +89,7 @@ const UserGuide = () => {
                     </p>
                 </div>
                 <div id='usrg-myTests'>
-                    <h1>Take Test</h1>
+                    <h1 className='headings'>Take Test</h1>
                     <h3>Step 1.</h3>
                     <img id="user-guid-img" src={TestImg} alt='test-id'/>
                     <h3>Step 2.</h3>
@@ -99,7 +101,7 @@ const UserGuide = () => {
                     </p>
                 </div>
                 <div id='usrg-results'>
-                    <h1>See result of quiz</h1>
+                    <h1 className='headings'>See result of quiz</h1>
                     <img id="user-guid-img" src={resultsImg} alt='result'/>
                     <p>Clicking on the <span style={{fontWeight: "bold"}}>Stats</span> button will show the ranking list and the standing of attendee among other peers</p>
                     <img id="user-guid-img" src={listImg} alt='ranking'/>
@@ -107,7 +109,7 @@ const UserGuide = () => {
                     <p>See the <span style={{fontWeight: "bold"}}>Result Statistics</span> of the quiz along with your standing in the quiz among other attendees as <span style={{fontWeight: "bold"}}>User Scores</span></p>
                 </div>
                 <div id='usrg-profile'>
-                    <h1>Profile Section</h1>
+                    <h1 className='headings'>Profile Section</h1>
                     <img id="user-guid-img" src={profileImg} alt='profile-dashboard'/>
                     <p>Here, user can change the username of the account associated with the email to a different username, and also have the ability to change old password to a new password.</p>
                 </div>
