@@ -1,9 +1,30 @@
+require('dotenv').config();
+
+
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import PasswordStrengthBar from 'react-password-strength-bar'
 import axios from "axios";
 import "./Authorisation.css";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 const Authorisation = () => {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -108,6 +129,31 @@ const Authorisation = () => {
         }
     };
 
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            
+            // Here, send the user's Google credentials to your backend
+            let requesturl = process.env.REACT_APP_BACKEND_URL + "/users/google-login";
+            const response = await axios.post(requesturl, {
+                email: user.email,
+                username: user.displayName,
+                googleId: user.uid
+            });
+
+            localStorage.setItem("token", response.data.token);
+            setError(null);
+            const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
+            if(attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
+            else navigate("/dashboard");
+
+        } catch (error) {
+            console.error("Google Sign-In Failed", error);
+            setError("Google Sign-In failed. Please try again.");
+        }
+    };
+
     const toggleForm = () => {
         setIsSignUp(!isSignUp);
         if (isSignUp) {
@@ -201,6 +247,12 @@ const Authorisation = () => {
                         {isSignUp ? "Sign Up" : "Sign In"}
                     </button>
                 </form>
+
+                <p>OR</p>
+
+                <button className="google-signin-button" onClick={handleGoogleSignIn}>
+                    <i className="fab fa-google"></i> Sign in with Google
+                </button>
 
                 <button className="toggle-button" onClick={toggleForm}>
                     {isSignUp

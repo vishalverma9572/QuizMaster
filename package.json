@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.14.1",
+    "react-password-strength-bar": "^0.4.1",
+    "react-router-dom": "^6.27.0"
+  }
+}
