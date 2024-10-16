@@ -5,7 +5,8 @@ const LogoutConfirmation = ({ open, onConfirm, onCancel }) => {
     <>
       <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
 
-      <div className="fixed inset-0 flex items-center justify-center z-50">
+      {/* Updated the flexbox alignment to shift the block left by 60% */}
+      <div className="fixed inset-0 flex items-center justify-start z-50" style={{ marginLeft: '45%' }}>
         <div className="bg-[#2D3B45] text-white rounded-lg shadow-lg p-6 max-w-sm w-full">
           <h3 className="text-lg font-semibold mb-4">Confirm Logout</h3>
           <p className="text-md mb-6">
