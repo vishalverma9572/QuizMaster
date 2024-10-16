@@ -4,47 +4,41 @@ const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const generateUniqueId = require('generate-unique-id');
 const validations = require('../validators/validations');
+const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 require('dotenv').config();
 
-const register = async (req, res) => {
+const register = catchAsync(async (req, res, next) => {
   const zodResult = validations.registrationSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ msg: errors });
+    return next(new AppError(errors, 400));
   }
 
   const { username, email, password } = zodResult.data;
 
-  try {
-    let user = await User.findOne({ email });
-    if (user) return res.status(400).json({ msg: 'User already exists' });
+  let user = await User.findOne({ email });
+  if (user) return next(new AppError('User already exists', 400));
 
-    user = new User({ username, email, password });
+  user = new User({ username, email, password });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-    await user.save();
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(password, salt);
+  await user.save();
 
-    const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' },
-      (err, token) => {
-        if (err) throw err;
+  const payload = { user: { id: user.id } };
 
-        // Send welcome email
-        // sendWelcomeEmail(email);
-
-        res.json({ token });
-      }
-    );
-  } catch (error) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
+  jwt.sign(
+    payload,
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' },
+    (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    }
+  );
+});
 
 const sendWelcomeEmail = async (email) => {
   try {
@@ -71,160 +65,125 @@ const sendWelcomeEmail = async (email) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`Welcome email sent to ${email}`);
   } catch (err) {
     console.error('Error sending welcome email:', err);
   }
 };
 
-const login = async (req, res) => {
-  console.log('Login called');
+const login = catchAsync(async (req, res, next) => {
   const zodResult = validations.loginSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ msg: errors });
+    return next(new AppError(errors, 400));
   }
 
   const { email, password } = zodResult.data;
 
-  try {
-    let user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: 'Invalid credentials' });
+  let user = await User.findOne({ email });
+  if (!user || (await bcrypt.compare(password, user.password)))
+    return next(new AppError('Invalid credentials', 401));
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
+  const payload = { user: { id: user.id } };
+  jwt.sign(
+    payload,
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' },
+    (err, token) => {
+      if (err) throw err;
+      res.json({ token });
+    }
+  );
+});
 
-    const payload = { user: { id: user.id } };
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' },
-      (err, token) => {
-        if (err) throw err;
-        res.json({ token });
-      }
-    );
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
-
-const updateUsername = async (req, res) => {
+const updateUsername = catchAsync(async (req, res, next) => {
   const zodResult = validations.updateUsernameSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ msg: errors });
+    return next(new AppError(errors, 400));
   }
 
   const { username } = zodResult.data;
-  try {
-    const userExists = await User.findOne({ username });
-    if (userExists)
-      return res.status(400).json({ msg: 'Username already exists' });
 
-    const user = await User.findById(req.user.id);
-    user.username = username;
-    await user.save();
-    res.json({ msg: 'Username updated' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
+  const userExists = await User.findOne({ username });
+  if (userExists) return next(new AppError('Username already taken', 400));
 
-const updatePassword = async (req, res) => {
+  const user = await User.findById(req.user.id);
+  user.username = username;
+  await user.save();
+  res.json({ msg: 'Username updated' });
+});
+
+const updatePassword = catchAsync(async (req, res, next) => {
   const zodResult = validations.updatePasswordSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ msg: errors });
+    return next(new AppError(errors, 400));
   }
 
   const { oldPassword, password } = zodResult.data;
 
-  try {
-    const user = await User.findById(req.user.id);
+  const user = await User.findById(req.user.id);
 
-    // Check if the old password matches
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid old password' });
-    }
-
-    // Generate a new salt and hash the new password
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    await user.save();
-    res.json({ msg: 'Password updated' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+  // Check if the old password matches
+  const isMatch = await bcrypt.compare(oldPassword, user.password);
+  if (!isMatch) {
+    return next(new AppError('Your current password is wrong', 401));
   }
-};
 
+  // Generate a new salt and hash the new password
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(password, salt);
 
+  await user.save();
+  res.json({ msg: 'Password updated' });
+});
 
+const me = catchAsync(async (req, res,  next) => {
+  const user = await User.findById(req.user.id).select('-password -__v -_id');
+  if (!user) 
+    return next(new AppError('User not found', 404));
 
+  res.json(user);
+});
 
-const me = async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select('-password -__v -_id');
-    if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
-    }
-    res.json(user);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
-
-const requestResetPassword = async (req, res) => {
+const requestResetPassword = catchAsync(async (req, res, next) => {
   const zodResult = validations.requestPasswordResetSchema.safeParse(req.body);
 
   if (!zodResult.success) {
     const errors = zodResult.error.errors.map((err) => err.message).join(', ');
-    return res.status(400).json({ message: errors });
+    return next(new AppError(errors, 400));
   }
 
   const { email } = zodResult.data;
 
-  try {
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Generate reset token and expiry
-    const resetToken = generateUniqueId({ length: 20 });
-    const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
-
-    user.resetToken = resetToken;
-    user.resetTokenExpiry = resetTokenExpiry;
-    await user.save();
-
-    // Send request reset password email
-    sendRequestResetPasswordEmail(user.email, resetToken);
-
-    res.json({ message: 'Password reset email sent' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+  if (!user) {
+    return next(new AppError('No user found with that email', 404));
   }
-};
+
+  const resetToken = generateUniqueId({ length: 20 });
+  const resetTokenExpiry = Date.now() + 3600000; // 1 hour from now
+
+  user.resetToken = resetToken;
+  user.resetTokenExpiry = resetTokenExpiry;
+  await user.save();
+
+  sendRequestResetPasswordEmail(user.email, resetToken);
+
+  res.json({ message: 'Password reset email sent' });
+});
 
 const sendRequestResetPasswordEmail = async (email, token) => {
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER, // Your email
-        pass: process.env.EMAIL_PASSWORD, // Your email password
+        user: process.env.EMAIL_USER, 
+        pass: process.env.EMAIL_PASSWORD,
       },
     });
 
@@ -244,42 +203,37 @@ const sendRequestResetPasswordEmail = async (email, token) => {
     };
 
     await transporter.sendMail(mailOptions);
-    console.log(`Request reset password email sent to ${email}`);
   } catch (err) {
     console.error('Error sending request reset password email:', err);
   }
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = catchAsync(async (req, res, next) => {
   const { token } = req.params;
-  const {newPassword} = req.body;
-  try {
-    const user = await User.findOne({
-      resetToken: token,
-      resetTokenExpiry: { $gt: Date.now() },
-    });
+  const { newPassword } = req.body;
 
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid or expired token' });
-    }
+  const user = await User.findOne({
+    resetToken: token,
+    resetTokenExpiry: { $gt: Date.now() },
+  });
 
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(newPassword, salt);
-
-    // Clear reset token and expiry
-    user.resetToken = undefined;
-    user.resetTokenExpiry = undefined;
-    await user.save();
-
-    // Send reset password email
-    sendResetPasswordEmail(user.email);
-
-    res.json({ message: 'Password has been reset' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
   }
-};
+
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(newPassword, salt);
+
+  // Clear reset token and expiry
+  user.resetToken = undefined;
+  user.resetTokenExpiry = undefined;
+  await user.save();
+
+  // Send reset password email
+  sendResetPasswordEmail(user.email);
+
+  res.json({ message: 'Password has been reset' });
+});
 
 const sendResetPasswordEmail = async (email) => {
   try {
