@@ -10,12 +10,15 @@
       content="QuizMaster is your ultimate destination for creating and participating in quizzes. Whether you're looking to challenge yourself or engage others, QuizMaster provides a seamless platform to craft, share, and take quizzes on various topics. Join us to expand your knowledge, compete with friends, and discover new learning opportunities in a fun and interactive way."
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    
     <link rel="stylesheet" href="%PUBLIC_URL%/global.css" />
-    
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <title>QuizMaster</title>
@@ -23,5 +26,49 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <!-- Contact Us Section -->
+    <section id="contact-us" style="padding: 20px; background-color: #f4f4f4;">
+      <h2>Contact Us</h2>
+      <p>If you have any questions, feedback, or suggestions, feel free to reach out to us:</p>
+      <form id="contactForm" style="max-width: 600px; margin: 0 auto;">
+        <div style="margin-bottom: 10px;">
+          <label for="name" style="display: block; margin-bottom: 5px;">Name:</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"
+            required
+          />
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label for="email" style="display: block; margin-bottom: 5px;">Email:</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"
+            required
+          />
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label for="message" style="display: block; margin-bottom: 5px;">Message:</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"
+            required
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+        >
+          Submit
+        </button>
+      </form>
+    </section>
   </body>
 </html>
