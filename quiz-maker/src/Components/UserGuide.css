@@ -7,7 +7,7 @@ body {
     background: linear-gradient(135deg, #9b4e81, #fce4fc, #3357FF);
     background-size: 300% 300%;
     animation: gradientAnimation 15s ease infinite;
-    color: #333; /* Set a base text color for better readability */
+    color: #140101; /* Set a base text color for better readability */
 }
 
 /* Gradient background animation */
@@ -31,7 +31,7 @@ h1, h3 {
 h1 {
     font-size: 3rem;
     margin: 20px 0;
-    color: #031c1a; /* Color for main heading */
+    color: #7acfcb; /* Color for main heading */
 }
 
 h3 {
@@ -45,7 +45,7 @@ h3 {
     padding: 20px; /* Inner padding */
     background-color: rgba(254, 252, 252, 0.9); /* Light background for contrast */
     border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 4px 20px rgba(14, 103, 235, 0.1); /* Subtle shadow for depth */
     animation: slideIn 0.5s ease; /* Slide-in effect */
 }
 
