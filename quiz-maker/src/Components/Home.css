@@ -1,20 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;600;800;900&display=swap');
 
+body {
+  margin: 0;
+  font-family: "Nunito", sans-serif;
+  background: #e9ecef; /* Light background color */
+}
+
+/* Home container */
 .home-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(135deg, #768d99 0%, #144357 100%);
-  font-family: "Nunito", sans-serif;
+  background: linear-gradient(135deg, #00aaff 0%, #0055ff 100%); /* Blue gradient */
   color: #fff;
   padding: 20px;
   box-sizing: border-box;
   overflow: scroll;
 }
 
-  .home-container .split-screen {
+/* Split screen layout */
+.home-container .split-screen {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,6 +30,7 @@
   gap: 30px;
 }
 
+/* Left section */
 .home-container .left-section {
   width: 70%;
   display: flex;
@@ -38,7 +46,7 @@
   max-width: 520px;
   height: auto;
   margin-bottom: 20px;
-  margin-left:25px;
+  margin-left: 25px;
   filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.3)) invert(100%);
   animation: pulse 2s infinite ease-in-out;
 }
@@ -62,10 +70,11 @@
   font-size: 1.1rem;
   max-width: 550px;
   line-height: 1.5;
-  color: #e0e0e0;
+  color: #f1f1f1; /* Slightly lighter text */
   margin-bottom: 30px;
 }
 
+/* Right section */
 .home-container .right-section {
   width: 30%;
   display: flex;
@@ -74,6 +83,7 @@
   align-items: flex-start;
 }
 
+/* Button container */
 .home-container .button-container {
   display: flex;
   flex-direction: column;
@@ -81,37 +91,29 @@
   width: 100%;
 }
 
+/* Buttons */
 .home-container .buttons {
-  background-color: #1c2e4a; /* A more subtle, minimalistic dark blue */
+  background-color: #007bff; /* Bright blue */
   color: #fff;
   border: none;
   padding: 12px 25px;
   border-radius: 25px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease; /* Smooth hover transition */
-  box-shadow: 0 4px 8px rgba(30, 130, 187, 0.2); /* Reduced shadow for a cleaner look */
+  transition: background-color 0.4s ease, transform 0.3s ease, box-shadow 0.4s ease;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); /* Light shadow */
   width: 100%;
   text-align: center;
   letter-spacing: 0.5px;
 }
 
 .home-container .buttons:hover {
-  background-color: #126dc2; /* Keep this hover color for contrast */
-  transform: translateY(-4px); /* Slightly more noticeable hover effect */
-  box-shadow: 0 8px 16px rgba(18, 109, 194, 0.4); /* Smooth hover shadow */
+  background-color: #0056b3; /* Darker blue for hover */
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 86, 179, 0.4); /* Stronger shadow */
 }
 
-.home-container .button-container2 .button {
-  background-color: #454343;
-}
-
-.home-container .button-container2 .button:hover {
-  background-color: #f44336;
-  transform: translateY(-3px);
-}
-
-
+/* CTA Banner */
 .home-container .cta-banner {
   margin-top: -50px;
   background-color: rgba(255, 255, 255, 0.1);
@@ -128,10 +130,10 @@
 
 .home-container .cta-banner span {
   font-weight: bold;
-  color: #ffd700;
+  color: #ffd700; /* Gold color for emphasis */
 }
 
-
+/* Responsive adjustments */
 @media (min-width: 1200px) {
   .home-container .split-screen {
     max-width: 1400px;
@@ -176,11 +178,11 @@
     flex-direction: column;
     align-items: center; 
   }
-  .home-container .cta-banner{
+  
+  .home-container .cta-banner {
     margin-top: 30px;
   }
 }
-
 
 @media (max-width: 768px) {
   .home-container .left-section h1 {
@@ -218,23 +220,15 @@
   .home-container .left-section .logo img {
     max-width: 180px;
   }
-  .home-container .usrg{
-    display: block;
-  }
 }
 
-@media (max-width: 340px){
+@media (max-width: 340px) {
   .home-container .button-container {
     display: flex;
     flex-direction: column;
   }
 
-  .home-container .button{
+  .home-container .button {
     margin-top: 0px !important;
   }
-
-  .home-container .button-container2{
-    margin-top: 20px;
-  }
 }
-

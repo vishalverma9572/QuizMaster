@@ -1,107 +1,138 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-.about-us-container {
-  /* padding: 20px; */
-  /* background: #2d3b45;  */
-  color: #fff; 
-  font-family: "Nunito", sans-serif; 
-
+body {
+  margin: 0;
+  background: #f4f4f9; /* Light background color */
 }
 
+.about-us-container {
+  color: #333; /* Dark text for better readability */
+  font-family: "Nunito", sans-serif;
+  padding: 20px; /* Added padding */
+}
+
+/* Heading styles */
 .about-us-container h4 {
   font-size: 2.5rem;
   margin-bottom: 20px;
-  border-bottom: 2px solid #fff;
-  text-align: center; 
+  border-bottom: 2px solid #007bff; /* Blue accent */
+  text-align: center;
 }
 
+/* Description styling */
 .about-us-container .about-us-description {
   font-size: 1.2rem;
   margin-bottom: 30px;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  
+  line-height: 1.5;
+  color: #555; /* Dark gray for description text */
 }
 
-.about-us-container .faq{
+/* FAQ section */
+.about-us-container .faq {
   padding: 10px 12%;
   text-align: center;
   font-size: 18px;
- }
- .about-us-container .faq h2{
+}
+
+.about-us-container .faq h2 {
   font-weight: 600;
   font-size: 40px;
+  color: #007bff; /* Blue for the FAQ heading */
 }
-.about-us-container .accordion{
-   /* margin: 60px auto; */
-   width: 100%;
-   max-width: 750px;
+
+/* Accordion styling */
+.about-us-container .accordion {
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto; /* Center the accordion */
 }
-.about-us-container .accordion li{
+
+.about-us-container .accordion li {
   list-style: none;
   width: 100%;
   padding: 5px;
 }
-.about-us-container .accordion li label{
+
+.about-us-container .accordion li label {
   display: flex;
   align-items: center;
-  padding: 20px; 
+  padding: 20px;
   font-size: 18px;
   font-weight: 500;
-  background: rgb(20, 210, 210);
-  color: black;
+  background: #007bff; /* Blue background for labels */
+  color: #fff; /* White text */
   margin-bottom: 2px;
   cursor: pointer;
   position: relative;
-
+  border-radius: 5px; /* Rounded corners */
 }
-.about-us-container label::after{
+
+.about-us-container label::after {
   content: '+';
   font-size: 28px;
   position: absolute;
   right: 20px;
   transition: transform 0.5s;
 }
-.about-us-container input[type="checkbox"]{
-  display: none;
+
+.about-us-container input[type="checkbox"] {
+  display: none; /* Hide checkboxes */
 }
+
 .about-us-container .accordion .content {
-  background: #303033;
+  background: #e9ecef; /* Light gray for content */
   text-align: left;
   padding: 0 20px;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.5s, padding 0.5s;
-
 }
 
-
-.about-us-container .accordion input[type="checkbox"]:checked + label + .content{
+.about-us-container .accordion input[type="checkbox"]:checked + label + .content {
   max-height: 600px;
-  padding: 30px 20px;
-
-}
-.about-us-container .accordion input[type="checkbox"]:checked + label::after{
-  transform: rotate(135deg);
+  padding: 30px 20px; /* Increased padding when expanded */
 }
 
-.about-us-container .faq .email-signup{
+.about-us-container .accordion input[type="checkbox"]:checked + label::after {
+  transform: rotate(135deg); /* Rotate icon on expand */
+}
+
+/* Email signup section */
+.about-us-container .faq .email-signup {
   max-width: 600px;
   margin: 20px auto 60px;
 }
 
-.about-us-container .faq small{
+.about-us-container .faq small {
   font-size: 13px;
+  color: #777; /* Subtle gray for small text */
 }
 
-
-
-.forScroll::-webkit-scrollbar-thumb{
-  background-color: rgb(15, 162, 162);
+/* Scrollbar customization */
+.forScroll::-webkit-scrollbar-thumb {
+  background-color: rgb(15, 162, 162); /* Custom scrollbar thumb color */
   border-radius: 0px;
 }
-p::-webkit-scrollbar{
-  width: 15px;
+
+p::-webkit-scrollbar {
+  width: 15px; /* Width of the scrollbar */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .about-us-container .about-us-description,
+  .about-us-container .faq {
+    font-size: 1rem; /* Smaller font on mobile */
+  }
+
+  .about-us-container h4 {
+    font-size: 2rem; /* Smaller heading on mobile */
+  }
+
+  .about-us-container .faq h2 {
+    font-size: 30px; /* Smaller FAQ heading on mobile */
+  }
 }
