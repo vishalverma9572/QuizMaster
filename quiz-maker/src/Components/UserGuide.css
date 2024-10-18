@@ -1,8 +1,21 @@
 html{
     scroll-behavior: smooth;
 }
-body{
-    font-family: "Wittgenstein", serif;
+    body {
+        background: linear-gradient(135deg, #e8d9e7, #fdf7fd, #3357FF);
+        background-size: 300% 300%; /* For animated gradients */
+        animation: gradientAnimation 15s ease infinite; /* Optional animation */
+    }
+    
+
+    
+    /* Optional animation keyframes */
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    
+    
 }
 
 p{
@@ -19,7 +32,7 @@ h3{
 
 hr{
     height: 3px;
-    background: #000;
+    background: #091101;
     margin-bottom: 50px;
 }
 
@@ -34,7 +47,7 @@ hr{
 #vertical-line{
     height: 250px;
     width: 2px;
-    background: #000;
+    background: #2cf0e3;
 }
 
 #tableOfContent-items{
