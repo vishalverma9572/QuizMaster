@@ -2,7 +2,12 @@
 <!-- Provide a clear and concise title for the pull request that summarizes the changes. -->
 
 ## Description
-<!-- Describe your changes in detail. What problem does this PR address? How does it solve the issue? Be specific and include any relevant context. -->
+<!-- Detailed explanation of the changes. Include:
+  - The problem being addressed.
+  - How your changes resolve the issue.
+  - Any additional context or reasoning for your approach.
+-->
+
 
 ## Related Issues
 <!-- List any issues related to this PR. Use keywords like 'Closes', 'Fixes', or 'Resolves' followed by the issue number. For example:
@@ -11,20 +16,29 @@ Fixes #456
 -->
 
 ## Type of Change
-<!-- Please delete options that are not relevant. -->
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Other (please specify):
+<!-- Please select the relevant option and delete others that do not apply: -->
+<!-- Please put an x in each of the boxes, like this: [x]. -->
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
+- [ ] 🔨 Breaking change (fix or feature that would cause existing functionality to change)
+- [ ] 📚 Documentation update
+- [ ] 🔧 Refactoring (code improvements without functional changes)
+- [ ] 🧪 Tests (adding or updating tests)
+- [ ] 🚀 Performance improvements
 
 ## Checklist
-<!-- Please ensure the following tasks are completed before submitting the PR. -->
-- [ ] I have tested my changes locally and ensured that they work as expected.
-- [ ] I have added or updated relevant documentation (if applicable).
-- [ ] I have checked for any linting or formatting errors.
-- [ ] I have added tests that prove my fix is effective or that my feature works (if applicable).
-- [ ] I have added screenshots (if applicable).
+<!-- Please confirm that your contribution adheres to our standards by checking off these items: -->
+<!-- Please follow this checklist and put an x in each of the boxes, like this: [x]. It will ensure that our team takes your pull request seriously. -->
+- [ ] My code follows the style guidelines of this project
+- [ ] I have updated the documentation where necessary
+- [ ] I have tested my changes and ensured that the code is working as expected
+- [ ] I have added/updated tests to cover my changes
+- [ ] All new and existing tests pass locally with my changes
+- [ ] I have reviewed my code and addressed any potential issues
 
 ## Screenshots (if applicable)
-<!-- If your changes involve UI updates or visual changes, please include screenshots to help reviewers understand the impact of your work. -->
+<!-- If your changes affect the UI, please provide relevant screenshots demonstrating the changes. -->
+
+## Additional Information
+<!-- Any other information that may help the reviewers understand this PR better. -->
+
