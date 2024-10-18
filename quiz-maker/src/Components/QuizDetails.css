@@ -74,30 +74,36 @@
     border-radius: 10px;
     position: fixed;
     top: 50%;
-    left: 50%;
+    left: 60%;
     transform: translate(-50%, -50%);
     z-index: 1000;
     width: 80%;
     max-width: 400px;
     text-align: center;
-  }
-  
-  .quiz-details .confirm-popup button {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Added box shadow for a more attractive look */
+}
+
+.quiz-details .confirm-popup button {
     background-color: #1a2a33;
     color: #fff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 25px; /* Increased padding for better button feel */
+    border-radius: 8px; /* Slightly more rounded corners */
     cursor: pointer;
     margin-right: 10px;
+    margin-bottom: 10px;
     width: 100%;
     max-width: 200px;
     text-align: center;
-  }
-  
-  .quiz-details .confirm-popup button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Added shadow to buttons */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.quiz-details .confirm-popup button:hover {
     background-color: #13212c;
-  }
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Slightly larger shadow on hover for a "lifted" look */
+}
+
   .quiz-details .gobackbtn {
     position: absolute;
     top: 20px;
