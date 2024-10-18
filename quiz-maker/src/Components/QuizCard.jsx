@@ -77,7 +77,7 @@ const QuizCard = ({ title,quiz_id, lastUpdated, numberOfQuestions, timeLimit, nu
   }
 
   return (
-    <StyledCard>
+    <StyledCard className='bg-gradient-to-b from-teal-500 to-cyan-600'>
       <StyledCardContent>
         <Title>{title.length > 50 ? title.slice(0, 50) + '...' : title}</Title>
         <Detail>Last Updated: {formatDate(new Date(lastUpdated))}</Detail>

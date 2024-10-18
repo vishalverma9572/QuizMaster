@@ -12,6 +12,8 @@ import ForgotPassword from "./Components/ForGotPassword";
 import ResetPassword from "./Components/ResetPassword";
 import Aboutus from "./Components/Aboutus";
 import UserGuide from "./Components/UserGuide";
+import Navbar from "./Components/Navbar";
+import MyDashboard from "./Components/MyDashboard";
 
 function App() {
   return (
