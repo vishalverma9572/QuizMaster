@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 
 
 export default function MyTests() {
-  
-  const navigate=useNavigate();
   //check user is logged in or not
   if (!localStorage.getItem('token')) {
     navigate('/login');
@@ -24,6 +22,7 @@ export default function MyTests() {
     borderBottom: '2px solid #235',
     paddingBottom: '25px', // Adjust padding to control space between text and line
   });
+  const navigate=useNavigate();
 
   useEffect(() => {
       const fetchQuizzes = async () => {
