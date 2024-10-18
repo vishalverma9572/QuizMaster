@@ -96,7 +96,7 @@ const AboutUs = () => {
                                 window.width <= 820 ? "w-[99%]" : "w-[40%]"
                             } w-[40%] flex h-[92vh] gap-[30px] flex-col items-center justify-center b order-2 border-green-600 text-black`}
                         >
-                            <TypeIt className="text-cyan-500 text-5xl font-extrabold font-sans">
+                            <TypeIt className="text-[#0d1b2a] text-5xl font-extrabold font-sans">
                                 About Us
                             </TypeIt>
                             <div
@@ -161,7 +161,7 @@ const AboutUs = () => {
                         <ul className="accordion ">
                             {filteredFaqs.length > 0 ? (
                                 filteredFaqs.map((faq, index) => (
-                                    <li key={index}>
+                                    <li key={index} >
                                         <input
                                             type="checkbox"
                                             name="accordion"
