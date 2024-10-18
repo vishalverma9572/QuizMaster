@@ -64,9 +64,9 @@ p {
 }
 
 #vertical-line {
-    height: 250px;
+   
     width: 2px;
-    background: #001513;
+    background: #000c0a;
     margin: 0 20px; /* Space between the line and list */
 }
 
@@ -86,7 +86,7 @@ p {
 .content-item:hover {
     text-decoration: none; /* Remove underline on hover */
     transform: scale(1.05); /* Slightly enlarge on hover */
-    background-color: rgba(44, 240, 227, 0.2); /* Light background on hover */
+    background-color: rgba(0, 8, 8, 0.2); /* Light background on hover */
     color: #001210; /* Change color on hover */
 }
 
