@@ -1,123 +1,174 @@
-html{
+html {
     scroll-behavior: smooth;
 }
-    body {
-        background: linear-gradient(135deg, #e8d9e7, #fdf7fd, #3357FF);
-        background-size: 300% 300%; /* For animated gradients */
-        animation: gradientAnimation 15s ease infinite; /* Optional animation */
+
+body {
+    font-family: 'Arial', sans-serif; /* Set a clean font */
+    background: linear-gradient(135deg, #9b4e81, #fce4fc, #3357FF);
+    background-size: 300% 300%;
+    animation: gradientAnimation 15s ease infinite;
+    color: #333; /* Set a base text color for better readability */
+}
+
+/* Gradient background animation */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
     }
-    
-
-    
-    /* Optional animation keyframes */
-    @keyframes gradientAnimation {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    
-    
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
-p{
-    padding: 10px;
+h1, h3 {
+    text-align: center; /* Center headings */
+    animation: fadeIn 1s ease-in-out; /* Add fade-in effect */
 }
 
-h3{
+h1 {
+    font-size: 3rem;
+    margin: 20px 0;
+    color: #031c1a; /* Color for main heading */
+}
+
+h3 {
+    font-size: 1.5rem; /* Slightly smaller font size for subheading */
     margin-bottom: 10px;
 }
 
-.heading{
-    font-size: 3rem;
+#userguide-container {
+    max-width: 800px; /* Limit the width for better layout */
+    margin: 40px auto; /* Center the container */
+    padding: 20px; /* Inner padding */
+    background-color: rgba(254, 252, 252, 0.9); /* Light background for contrast */
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    animation: slideIn 0.5s ease; /* Slide-in effect */
 }
 
-hr{
-    height: 3px;
-    background: #091101;
-    margin-bottom: 50px;
+p {
+    padding: 10px;
+    line-height: 1.6; /* Increased line height for readability */
+    animation: fadeIn 1s ease-in-out; /* Fade-in for paragraphs */
 }
 
-#userguide-container{
-    margin-left: 50px;
-}
-
-#tableOfContent{
+#tableOfContent {
     display: flex;
+    justify-content: center; /* Center the content */
+    align-items: flex-start; /* Align items to the top */
+    animation: fadeIn 1.5s ease-in-out; /* Fade-in effect for the table of contents */
+    margin: 20px 0; /* Adjusted margin */
 }
 
-#vertical-line{
+#vertical-line {
     height: 250px;
     width: 2px;
-    background: #2cf0e3;
+    background: #001513;
+    margin: 0 20px; /* Space between the line and list */
 }
 
-#tableOfContent-items{
+#tableOfContent-items {
     list-style: none;
+    padding: 0; /* Remove default padding */
 }
 
-.content-item{
-    padding: 6px;
+.content-item {
+    padding: 10px 15px; /* Increased padding for better button-like feel */
     cursor: pointer;
     line-height: 25px;
+    transition: transform 0.3s, color 0.3s, background-color 0.3s; /* Transition effects */
+    border-radius: 5px; /* Rounded corners for list items */
 }
 
-.content-item:hover{
-    text-decoration: underline;
+.content-item:hover {
+    text-decoration: none; /* Remove underline on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    background-color: rgba(44, 240, 227, 0.2); /* Light background on hover */
+    color: #001210; /* Change color on hover */
 }
 
-#introduction{
-    margin: 50px 0 50px 0;
+#introduction {
+    margin: 40px 0; /* Adjusted margin */
 }
 
-#usrg-testCreation{
-    margin-bottom: 50px;
-}
-
-#usrg-myTests{
-    margin-bottom: 50px;
-}
-
-#usrg-results{
-    margin-bottom: 50px;
-}
-
-#usrg-profile{
-    margin: 50 0 50 0;
-}
-
-#usrg-testCreation > h1{
-    text-decoration: underline;
-    margin-bottom: 20px;
-}
-
-#usrg-myTests > h1{
-    text-decoration: underline;
-    margin-bottom: 20px;
-}
-
-#usrg-results > h1{
-    text-decoration: underline;
-    margin-bottom: 20px;
-}
-
-#usrg-profile > h1{
-    text-decoration: underline;
-    margin-bottom: 20px;
-}
-
-#user-guid-img{
-    height: auto;
-    width: 50vw;
+#user-guid-img {
+    width: 60vw; /* Increased width for image */
+    max-width: 400px; /* Limit max width */
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto; /* Center image */
+    animation: fadeInZoom 1s ease-in-out; /* Zoom-in effect for the image */
+}
+
+/* Button styles */
+#button-container {
+    display: flex;
+    justify-content: center; /* Center buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    margin: 20px 0;
+}
+
+.action-button {
+    background-color: #021514;
+    border: none;
+    color: rgb(30, 3, 3);
+    padding: 10px 20px; /* Padding for buttons */
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem; /* Button font size */
+    margin: 10px; /* Space between buttons */
+    transition: background-color 0.3s, transform 0.3s; /* Transition effects */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Button shadow for depth */
+}
+
+.action-button:hover {
+    background-color: #000404; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+/* Fade-in effect */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Zoom-in effect */
+@keyframes fadeInZoom {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Slide-in effect */
+@keyframes slideIn {
+    0% {
+        transform: translateY(-20px); /* Slide from above */
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 @media (max-width: 600px) {
-    img {
-      width: 100vw;
+    #userguide-container {
+        margin: 0 10px; /* Responsive margin */
     }
-    #userguide-container{
-        margin-left: 0px;
-        margin: 0 10px 0 10px;
+
+    .action-button {
+        width: 90%; /* Make buttons wider on small screens */
     }
 }
