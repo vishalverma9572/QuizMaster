@@ -74,7 +74,7 @@ const QuizDetails = () => {
   return (
     <Layout >
 
-    <div className="quiz-details">
+    <div className="quiz-details bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
       
       <div className="buttons">
         <button onClick={() => setShowConfirmEdit(true)}>Edit Quiz</button>
