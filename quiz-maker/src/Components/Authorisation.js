@@ -104,7 +104,6 @@ const Authorisation = () => {
             }
             if (url === "/users/login") {
                 setError("Invalid credentials");
-                localStorage.removeItem('token');
             }
         }
     };
