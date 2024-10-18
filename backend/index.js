@@ -1,18 +1,3 @@
-const express = require('express');
-const cors = require('cors');
-const Quiz = require('./models/Quiz');
-
-const QuizResult = require('./models/QuizResult');
-const QuizProgress = require('./models/QuizProgress');
-const { connectDB } = require('./db/connectDb');
-
-const userRouter = require("./routes/userRouter")
-const quizRouter = require("./routes/quizRouter")
-
-require('dotenv').config();
-
-connectDB();
-//auto submit quiz
 async function autoSubmitQuizzes() {
     try {
         const quizProgressList = await QuizProgress.find({ completed: false });
@@ -20,7 +5,10 @@ async function autoSubmitQuizzes() {
         for (const quizProgress of quizProgressList) {
             const quiz = await Quiz.findOne({ quiz_id: quizProgress.quiz_id });
 
-            if (!quiz) continue;
+            if (!quiz) {
+                console.log(`Quiz not found for quiz_id: ${quizProgress.quiz_id}`);
+                continue;
+            }
 
             const elapsedTime = (Date.now() - quizProgress.lastUpdated.getTime()) / 1000; // Time in seconds
             const totalElapsedTime = quizProgress.elapsedTime + elapsedTime;
@@ -77,23 +65,3 @@ async function autoSubmitQuizzes() {
     }
     console.log('autoSubmitQuizzes ran');
 }
-
-
-
-// Periodically check every minute
-setInterval(autoSubmitQuizzes, 60 * 1000);
-
-const app = express();
-
-// Middleware
-app.use(express.json());
-app.use(cors());
-
-app.use('/api/users', userRouter);
-app.use('/api/quizzes', quizRouter);
-
-app.use('/', (req, res) => res.send('Hello World!'));
-
-const PORT = process.env.PORT || 5000;
-//print req res status
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
