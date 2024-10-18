@@ -1,145 +1,172 @@
+/* Container styling */
 .create-quiz {
-  background-color: #2d3b45;
-  color: #fff;
-  padding: 20px;
+  background-color: #ffffff;
+  color: #fafafa;
+  padding: 30px; /* Added extra padding for breathing space */
   border-radius: 10px;
   width: 100%;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 30px auto; /* Centered the form with a margin from the top */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Added subtle shadow for depth */
 }
 
+/* Title Styling */
 .create-quiz h2 {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   font-family: "Wittgenstein", serif;
   padding-bottom: 10px;
+  font-size: 2rem;
+  text-align: center; /* Centered title */
+  border-bottom: 2px solid #fff;
 }
 
+/* Form Group Styling */
 .create-quiz .form-group {
-  margin-bottom: 15px;
-
+  margin-bottom: 20px; /* More space between fields */
+  display: flex;
+  flex-direction: column;
 }
-
 
 .create-quiz .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px; /* Increased margin for breathing room */
   font-weight: bold;
   padding-right: 10px;
   padding-top: 5px;
-  
 }
 
-
-.create-quiz .form-group input[type="text"],
+/* Input Fields */
 .create-quiz .form-group input[type="number"] {
-  width: 100%;
-  padding: 10px;
-  border: none;
+  background-color: #f9f9f9; /* Lighter background for better contrast */
+  color: #333; /* Darker text color for readability */
+  border: 1px solid #ccc; /* Light gray border */
+  padding: 10px 15px; /* Increased padding for comfort */
   border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease; /* Transition for smooth effects */
 }
 
+
+/* Option Group */
 .create-quiz .option-group {
   display: flex;
   align-items: center;
+  gap: 10px; /* Better spacing between option buttons and input */
+  margin-bottom: 10px;
 }
 
 .create-quiz .option-group button {
-  background-color: #1a2a33;
+  background-color: #ffffff;
   color: #fff;
   border: none;
-  padding: 5px 10px;
+  padding: 5px 15px; /* Increased padding for a more clickable button */
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 10px;
+  transition: background-color 0.3s ease;
 }
 
 .create-quiz .option-group button:hover {
-  background-color: #13212c;
+  background-color: #ffffff;
 }
 
 .create-quiz .option-group input[type="radio"] {
   margin-left: 10px;
+  transform: scale(1.2); /* Enlarged radio button for easier clicking */
 }
 
+/* Question Card */
 .create-quiz .question-card {
   background-color: #fff;
-  color: #2d3b45;
+  /* color: #2d3b45; */
   padding: 20px;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px; /* Spaced out question cards */
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); */
   position: relative;
 }
 
+/* Remove Button */
 .create-quiz .remove-button {
   background-color: #ff4c4c;
   color: #fff;
   border: none;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 10px;
   position: absolute;
   right: 10px;
   top: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .create-quiz .remove-button:hover {
   background-color: #ff1a1a;
- 
-  color: white;
-  border-color: #000;
-  transform: scale(1.05);
+  transform: scale(1.1);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* Add Button */
 .Add-button {
-  padding: 10px 20px;
+  padding: 12px 20px; /* More padding for larger buttons */
   font-size: 16px;
   color: #fff;
   margin-right: 15px;
   border-radius: 8px;
   cursor: pointer;
+  background-color: #4caf50; /* Green color for Add buttons */
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
 .Add-button:hover {
-  background-color: #212c34;
-  color: white;
-  border-color: #000;
+  background-color: #388e3c;
   transform: scale(1.05);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* Add Option Button */
 .Add-option {
-  padding: 8px;
+  padding: 10px 15px;
   font-size: 16px;
   color: #fff;
   margin-right: 10px;
   border-radius: 8px;
   cursor: pointer;
+  background-color: #1a2a33;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.create-quiz .button {
-  background-color: #1a2a33;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
-}
 
-.create-quiz .button:hover {
+.Add-option:hover {
   background-color: #13212c;
 }
 
+/* Submit Button */
+.create-quiz .button {
+  /* background-color: #1a2a33; */
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px; /* Added space before submit button */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.create-quiz .button:hover {
+  /* background-color: #13212c; */
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Error Styling */
 .create-quiz .error {
   color: #ff4c4c;
   font-weight: bold;
   margin-top: 10px;
 }
 
-/* Removes the up down arrow from input type=number */
-/* For Chrome, Safari, and Edge */
+/* Number Input Customization */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

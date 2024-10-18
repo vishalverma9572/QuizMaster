@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import "./CreateTest.css";
 import { useNavigate } from "react-router-dom";
 import { Typography, styled } from "@mui/material";
-
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 const CreateQuiz = () => {
   const navigate = useNavigate();
 
   //check user is logged in or not
-  if (
-    !localStorage.getItem("token") ||
-    localStorage.getItem("token") === null
-  ) {
-    navigate("/login");
-  }
+  // if (
+  //   !localStorage.getItem("token") ||
+  //   localStorage.getItem("token") === null
+  // ) {
+  //   navigate("/login");
+  // }
   const [title, setTitle] = useState("");
   const [timeLimit, setTimeLimit] = useState("");
   const [questions, setQuestions] = useState([
@@ -38,7 +38,8 @@ const CreateQuiz = () => {
 
   const handleCorrectAnswerChange = (questionIndex, optionIndex) => {
     const newQuestions = [...questions];
-    newQuestions[questionIndex].correctAnswer = newQuestions[questionIndex].options[optionIndex];
+    newQuestions[questionIndex].correctAnswer =
+      newQuestions[questionIndex].options[optionIndex];
     setQuestions(newQuestions);
   };
 
@@ -158,45 +159,95 @@ const CreateQuiz = () => {
                 </button>
               </div>
               {q.options.map((option, oIndex) => (
-                <div key={oIndex} className="form-group option-group">
-                  <label htmlFor={`option-${qIndex}-${oIndex}`}>
+                <div
+                  key={oIndex}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginBottom: "15px",
+                  }}
+                >
+                  <label
+                    htmlFor={`option-${qIndex}-${oIndex}`}
+                    style={{ marginBottom: "5px", fontWeight: "bold" }}
+                  >
                     Option {oIndex + 1}
                   </label>
-                  <input
-                    type="text"
-                    id={`option-${qIndex}-${oIndex}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
-                    required
-                  />
-                  <button
-                    type="button" className="Add-option  "
-                    onClick={() => removeOption(qIndex, oIndex)}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      gap: "10px",
+                      marginBottom: "10px",
+                    }}
                   >
-                    Remove
-                  </button>
-                  <input
-                    type="radio"
-                    id={`correctAnswer-${qIndex}-${oIndex}`}
-                    name={`correctAnswer-${qIndex}`}
-                    checked={q.correctAnswer === option}
-                    onChange={() => handleCorrectAnswerChange(qIndex, oIndex)}
-                  />
-                  <label htmlFor={`correctAnswer-${qIndex}-${oIndex}`}>
-                    Correct
-                  </label>
+                    <input
+                      type="text"
+                      id={`option-${qIndex}-${oIndex}`}
+                      value={option}
+                      onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
+                      required
+                      style={{
+                        padding: "8px",
+                        borderRadius: "5px",
+                        border: "1px solid #ccc",
+                        flexGrow: 1, // Makes the input expand to take available space
+                        marginRight: "10px",
+                      }}
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => removeOption(qIndex, oIndex)}
+                      style={{
+                        backgroundColor: "#ff4c4c",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <DeleteRoundedIcon />
+                    </button>
+
+                    <input
+                      type="radio"
+                      id={`correctAnswer-${qIndex}-${oIndex}`}
+                      name={`correctAnswer-${qIndex}`}
+                      checked={q.correctAnswer === option}
+                      onChange={() => handleCorrectAnswerChange(qIndex, oIndex)}
+                      style={{
+                        marginLeft: "10px",
+                      }}
+                    />
+                  </div>
                 </div>
               ))}
-              <button type="button" className="Add-option  " onClick={() => addOption(qIndex)}>
+              <button
+                type="button"
+                className="Add-option  "
+                onClick={() => addOption(qIndex)}
+              >
                 Add Option
               </button>
             </div>
           ))}
           {error && <p className="error">{error}</p>}
-          <button type="button " className="Add-button Add-button:hover " onClick={addQuestion}>
+          <button
+            type="button "
+            className="Add-button Add-button:hover "
+            onClick={addQuestion}
+          >
             Add Question
           </button>
-          <button type="submit" className="Add-button Add-button:hover ">Create Quiz</button>
+          <button type="submit" className="Add-button Add-button:hover ">
+            Create Quiz
+          </button>
         </form>
       </div>
     </div>
