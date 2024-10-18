@@ -1,25 +1,23 @@
 const express = require('express');
 const cors = require('cors');
 const Quiz = require('./models/Quiz');
-
 const QuizResult = require('./models/QuizResult');
 const QuizProgress = require('./models/QuizProgress');
 const { connectDB } = require('./db/connectDb');
-
-const userRouter = require("./routes/userRouter")
-const quizRouter = require("./routes/quizRouter")
-
+const userRouter = require("./routes/userRouter");
+const quizRouter = require("./routes/quizRouter");
 require('dotenv').config();
 
+// Connect to the database
 connectDB();
-//auto submit quiz
+
+// Function to auto-submit quizzes
 async function autoSubmitQuizzes() {
     try {
         const quizProgressList = await QuizProgress.find({ completed: false });
 
         for (const quizProgress of quizProgressList) {
             const quiz = await Quiz.findOne({ quiz_id: quizProgress.quiz_id });
-
             if (!quiz) continue;
 
             const elapsedTime = (Date.now() - quizProgress.lastUpdated.getTime()) / 1000; // Time in seconds
@@ -35,10 +33,7 @@ async function autoSubmitQuizzes() {
                     const question = quiz.questions.id(answer.question_id);
                     const isCorrect = question.correctAnswer === answer.selectedOption;
                     if (isCorrect) score += 1;
-                    return {
-                        ...answer,
-                        isCorrect
-                    };
+                    return { ...answer, isCorrect };
                 });
 
                 // Check if quiz is already taken by this user
@@ -78,8 +73,6 @@ async function autoSubmitQuizzes() {
     console.log('autoSubmitQuizzes ran');
 }
 
-
-
 // Periodically check every minute
 setInterval(autoSubmitQuizzes, 60 * 1000);
 
@@ -89,11 +82,29 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Routes
 app.use('/api/users', userRouter);
 app.use('/api/quizzes', quizRouter);
 
-app.use('/', (req, res) => res.send('Hello World!'));
+// Standardized response function
+const sendResponse = (res, statusCode, data) => {
+    res.status(statusCode).json({
+        success: statusCode < 400,
+        data: data || null,
+        error: statusCode >= 400 ? data : null,
+    });
+};
+
+// Basic endpoint for testing
+app.get('/', (req, res) => sendResponse(res, 200, 'Hello World!'));
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack); // Log the error stack for debugging
+    sendResponse(res, 500, 'Something went wrong!');
+});
 
 const PORT = process.env.PORT || 5000;
-//print req res status
+
+// Start the server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
