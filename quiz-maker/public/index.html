@@ -19,9 +19,109 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
     <title>QuizMaster</title>
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .quiz-section {
+        margin: 20px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .quiz-section h2 {
+        color: #333;
+      }
+      .quiz-timer {
+        font-size: 18px;
+        color: #f56a79;
+      }
+      .question {
+        margin-bottom: 15px;
+      }
+      .question label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+      }
+      .question input {
+        margin-right: 10px;
+      }
+      .submit-btn {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .submit-btn:hover {
+        background-color: #45a049;
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    
     <div id="root"></div>
+
+    <!-- Quiz Section -->
+    <section class="quiz-section">
+      <h2>Welcome to the Quiz!</h2>
+      <p class="quiz-intro">Test your knowledge with this short quiz. Answer the questions below and submit when you're done.</p>
+      
+      <div class="quiz-timer">
+        Time left: <span id="timer">60</span> seconds
+      </div>
+
+      <!-- Question 1 -->
+      <div class="question">
+        <label for="q1">1. What is the capital of France?</label>
+        <input type="radio" id="q1a" name="q1" value="Paris" /> Paris
+        <input type="radio" id="q1b" name="q1" value="London" /> London
+        <input type="radio" id="q1c" name="q1" value="Berlin" /> Berlin
+      </div>
+
+      <!-- Question 2 -->
+      <div class="question">
+        <label for="q2">2. What is 5 + 7?</label>
+        <input type="radio" id="q2a" name="q2" value="10" /> 10
+        <input type="radio" id="q2b" name="q2" value="12" /> 12
+        <input type="radio" id="q2c" name="q2" value="15" /> 15
+      </div>
+
+      <!-- Submit Button -->
+      <button class="submit-btn" id="submitQuiz">Submit Quiz</button>
+
+      <!-- Result Message -->
+      <div id="resultMessage" style="display:none;">
+        <h3>Quiz Submitted! Thank you for participating.</h3>
+      </div>
+    </section>
+
+    <script>
+      // Timer functionality
+      let timeLeft = 60;
+      const timerElement = document.getElementById('timer');
+      const timerInterval = setInterval(() => {
+        timeLeft--;
+        timerElement.innerText = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert('Time is up! Please submit your answers.');
+        }
+      }, 1000);
+
+      // Submit button functionality
+      document.getElementById('submitQuiz').addEventListener('click', () => {
+        clearInterval(timerInterval); // Stop the timer when quiz is submitted
+        document.getElementById('resultMessage').style.display = 'block'; // Show submission message
+      });
+    </script>
+
   </body>
 </html>
