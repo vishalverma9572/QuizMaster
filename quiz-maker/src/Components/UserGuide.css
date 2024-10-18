@@ -1,8 +1,25 @@
 html{
     scroll-behavior: smooth;
 }
-body{
+body {
     font-family: "Wittgenstein", serif;
+    background: linear-gradient(135deg, #768d99 0%, #144357 100%);
+    background-size: 100% 100vh; 
+    background-attachment: fixed; 
+    color: #fff;
+    min-height: 100vh;
+    margin: 0;
+    color: #011318;
+    overflow-x: hidden;
+    padding-right: 2vw;
+    font-size: 1.09rem;
+}
+.headings{
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+#introduction{
+    font-size: 1.09rem;
 }
 
 p{
@@ -15,7 +32,11 @@ h3{
 
 .heading{
     font-size: 3rem;
+    padding-left: 3vw;
+    
+    
 }
+
 
 hr{
     height: 3px;
@@ -27,15 +48,45 @@ hr{
     margin-left: 50px;
 }
 
-#tableOfContent{
-    display: flex;
+
+
+#userguide-container h2{
+    text-align: center;
+    font-size: xxx-large
 }
 
-#vertical-line{
-    height: 250px;
-    width: 2px;
-    background: #000;
+#tableOfContent-items{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 9vw;
+    width: 100vw;
+    
+    
 }
+
+#horizontal-line{
+    height: 1.3px;
+    width:35vw;
+    background: #000;
+    margin-left: auto;
+    margin-right: auto;
+    /* padding-left: 0px;
+    padding-right: 0px; */
+    margin-bottom: 3.5vh;
+    margin-top: -1vh;
+}
+
+.content-item {
+    transition: transform 250ms ease-in-out;
+}
+.content-item:hover{
+    transform: scale(1.05);
+}
+.content-item_interior{
+    color: #ECF0F1;
+}
+
 
 #tableOfContent-items{
     list-style: none;
