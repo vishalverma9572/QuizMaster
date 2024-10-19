@@ -137,7 +137,6 @@ const CreateQuiz = () => {
         <h1 className="text-white text-5xl font-serif p-4">Create Test</h1>
         <hr className="bg-gray-400 h-[1px]" />
       </div>
-      {/* <div className="create-quiz"> */}
       <form onSubmit={handleSubmit} className="create-quiz">
         <div className="form-group">
           <label htmlFor="title">Quiz Title</label>
