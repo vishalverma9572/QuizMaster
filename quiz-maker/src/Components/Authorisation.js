@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import PasswordStrengthBar from 'react-password-strength-bar'
 import axios from "axios";
 import "./Authorisation.css";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
@@ -13,12 +14,11 @@ const Authorisation = () => {
         email: "",
         password: "",
     });
-    const [passwordVisible, setPasswordVisible] = useState(false); // Password visibility state
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const emailInputRef = useRef(null);
     const usernameInputRef = useRef(null);
     const passwordInputRef = useRef(null);
 
-    // Redirect to dashboard if already authenticated
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -88,8 +88,9 @@ const Authorisation = () => {
                 email: "",
                 password: "",
             });
-
-            navigate("/dashboard");
+            const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
+            if(attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
+            else navigate("/dashboard");
 
         } catch (err) {
             if (url === "/users/register") {
@@ -126,9 +127,28 @@ const Authorisation = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+    const handleCancel = () => {
+        navigate(-1); // This will go back to the previous page
+    };
+
     return (
         <div className="auth_container">
             <div className="form-wrapper">
+                <button 
+                    className="cancel-button" 
+                    onClick={handleCancel}
+                    style={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '10px',
+                        background: 'none',
+                        border: 'none',
+                        fontSize: '2rem',
+                        cursor: 'pointer'
+                    }}
+                >
+                    ×
+                </button>
                 <div className="logo">
                     <img src={logo} alt="logo" />
                 </div>
@@ -166,6 +186,16 @@ const Authorisation = () => {
                         />
                         <i className={`fa-solid ${passwordVisible ? 'fa-eye' : 'fa-eye-slash'}`} onClick={togglePasswordVisibility}></i>
                     </div>
+
+                    {isSignUp && (
+                        <div>
+                            <PasswordStrengthBar password={formData.password} />
+                            <p className="strength-analyser">
+                                Recommended: use uppercase letters, lowercase letters, numbers & special characters
+                            </p>
+                        </div>
+                    )}
+
                     {error && <p className="error">{error}</p>}
                     <button className="button" type="submit">
                         {isSignUp ? "Sign Up" : "Sign In"}
