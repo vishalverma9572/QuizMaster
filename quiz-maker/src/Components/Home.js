@@ -7,9 +7,10 @@ import useWindowSize from "./UseWindowSize";
 import Loader from "./Loader";
 import TypeIt from "typeit-react";
 import Navbar from "./Navbar";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
-  const window = useWindowSize();
+    const window = useWindowSize();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const isAuthenticated = localStorage.getItem("token") !== null;

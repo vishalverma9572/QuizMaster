@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import logo from "../images/quizmaster-high-resolution-logo-white-transparent.png";
 import "./Layout.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoutConfirmation from "./LogoutConfirmation";
 import Navbar from "./Navbar";
+import { jwtDecode } from "jwt-decode";
 
 const Layout = ({ children }) => {
     const [activeSection, setActiveSection] = useState("my-tests");
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
+    const navigate = useNavigate();
     const location = useLocation();
     const titleMap = {
         "my-tests": "My Tests | QuizMaster",
@@ -22,6 +24,20 @@ const Layout = ({ children }) => {
     };
 
     useEffect(() => {
+        const token = localStorage.getItem("token");
+        try {
+            const decoded = jwtDecode(token);
+            if (!decoded) {
+                localStorage.removeItem("token");
+                localStorage.removeItem("attemptedRoute");
+                navigate("/");
+            }
+        } catch (error) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("attemptedRoute");
+            navigate("/");
+        }
+
         const path = location.pathname; // Get the current pathname from location
         document.title = "Dashboard | QuizMaster";
 
