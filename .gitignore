@@ -3,3 +3,4 @@
 .env
 /quiz-maker/node_modules
 /quiz-maker/.env
+/End-to-End-Testing/node_modules
