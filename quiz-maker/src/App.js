@@ -12,6 +12,8 @@ import ForgotPassword from "./Components/ForGotPassword";
 import ResetPassword from "./Components/ResetPassword";
 import Aboutus from "./Components/Aboutus";
 import UserGuide from "./Components/UserGuide";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
 
         </Routes>
       </Router>
+      <ToastContainer hideProgressBar />
+
     </>
   );
 }

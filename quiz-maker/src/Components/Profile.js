@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Profile.css";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
 
@@ -118,7 +119,12 @@ const Profile = () => {
                             "Failed to update username. Please try again."
                     );
                 } else {
-                    alert("Username updated successfully");
+                    toast.success("Username updated successfully", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                        style: { backgroundColor: "white", color: "#2d3b45" },
+                      });
                     //refresh the page
                     window.location.reload();
                 }
@@ -163,7 +169,12 @@ const Profile = () => {
                         );
                     }
                 } else {
-                    alert("Password updated successfully");
+                    toast.success("Password updated successfully", {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                        style: { backgroundColor: "white", color: "#2d3b45" },
+                      });
                     // Refresh the page or update state to reflect the password change
                     window.location.reload();
                 }
