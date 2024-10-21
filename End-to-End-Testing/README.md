@@ -8,5 +8,5 @@
 3. Start frontend server with `npm start`
 4. Navigate to the  `End-to-End-Testing` directory.
 5. Run `npm install`
-6. Start Cypress with `npm run cypress:open`
+6. Start Cypress with `npm run test:e2e`
 7. Before running the tests, watch attached Video on GitHub.
