@@ -12,7 +12,10 @@ p{
 h3{
     margin-bottom: 10px;
 }
-
+h2{
+    text-align: center;
+    font-size: 2.5rem;
+}
 .heading{
     font-size: 3rem;
 }
@@ -23,12 +26,22 @@ hr{
     margin-bottom: 50px;
 }
 
-#userguide-container{
-    margin-left: 50px;
+#hl{
+    width: 35%;
+    margin: auto;
+
+    
 }
 
 #tableOfContent{
     display: flex;
+    justify-content: space-around;
+}
+
+#tableOfContent-items{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 #vertical-line{
@@ -41,14 +54,18 @@ hr{
     list-style: none;
 }
 
+.cyan-underline {
+    text-decoration: underline;
+    text-decoration-color: cyan;
+}
+
 .content-item{
     padding: 6px;
     cursor: pointer;
     line-height: 25px;
 }
-
-.content-item:hover{
-    text-decoration: underline;
+button:hover{
+    scale: (1.1);
 }
 
 #introduction{
@@ -97,6 +114,26 @@ hr{
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+.content-item button {
+    transition: transform 0.3s ease-in-out; /* Smooth transition for scaling */
+}
+
+.content-item button:hover {
+    transform: scale(1.1); /* Scale the button by 1.1 on hover */
+}
+button {
+    border: 2px solid cyan;
+    background-color: transparent; /* Optional: Make the background transparent */
+    color: white; /* Ensure the text remains visible */
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: cyan; /* Optional: Add a hover effect */
+    color: white;
 }
 
 @media (max-width: 600px) {

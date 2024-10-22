@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom"; // Import Link from react-router-dom
 import "./UserGuide.css";
 import createQuizImg from "../images/user-guide-images/CreateQuizImg.png";
 import quizDetImg from "../images/user-guide-images/QuizDet.png";
@@ -43,13 +44,15 @@ const UserGuide = () => {
         <>
             <div className="flex justify-center items-center">
                 <Navbar />
-                <div id="header" className="mt-[11vh] w-[97.5vw] h-[88vh] overflow-scroll bg-[#0d1b2a] rounded-xl bor der-2 border-red-700 p-5 text-white">
+                <div id="header" className="mt-[11vh] w-[97.5vw] h-[88vh] overflow-scroll bg-[#0d1b2a] rounded-xl border-2 border-cyan-500 p-5 text-white">
                     <h1 className="heading">User Guide</h1>
                     <hr />
                     <div id="userguide-container">
                         <h2>Table of Contents</h2>
+                        <div id="hl"><hr/></div>
+                        
                         <div id="tableOfContent">
-                            <div id="vertical-line"></div>
+                            
                             <ul id="tableOfContent-items">
                                 <li className="content-item">
                                     <button onClick={scrollCreate}>
@@ -72,28 +75,28 @@ const UserGuide = () => {
                                     </button>
                                 </li>
                                 <li className="content-item">
-                                    <button onClick={scrollProfile}>
+                                <span className="cyan-underline"><button onClick={scrollProfile}>
                                         Manage your Profile
-                                    </button>
+                                    </button></span>
                                 </li>
                             </ul>
                         </div>
                         <div id="introduction">
-                            <span style={{ textDecoration: "underline" }}>
+                             <span className="cyan-underline"><Link to="/" style={{ textDecoration: "none", color: "white" }}>
                                 QuizMaster
-                            </span>{" "}
+                            </Link>{" "}</span>
                             is a comprehensive quiz application that allows
                             users to create, take, and manage quizzes. It is an
-                            easy to use quiz application with friendly
-                            user-interface with functionalities such as to view
-                            the scheduled or pending tests and to review the
-                            results of the quiz that have been taken.
+                            easy-to-use quiz application with a friendly
+                            user-interface with functionalities such as viewing
+                            scheduled or pending tests and reviewing the results
+                            of the quizzes that have been taken.
                             <br />
                             This is an easy-to-read user guide to help you get
                             started with QuizMaster.
                         </div>
                         <div id="usrg-testCreation">
-                            <h1>Create Tests</h1>
+                        <span className="cyan-underline"><h1 >Create Tests</h1></span>
                             <h3>1.&ensp;How to create new test?</h3>
                             <img
                                 id="user-guid-img"
@@ -102,8 +105,8 @@ const UserGuide = () => {
                             />
                             <p>
                                 On the create test page, while creating a new
-                                test,&ensp;user can see the above dialog box
-                                where the user can create quiz by entering the
+                                test,&ensp;the user can see the above dialog box
+                                where the user can create a quiz by entering the
                                 necessary details of the quiz,&ensp;such as{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Quiz Title
@@ -114,51 +117,50 @@ const UserGuide = () => {
                                 </span>
                                 .
                                 <br />
-                                The quiz maker can add various number of
-                                questions for each quiz and for each question
-                                the user can enter various options.&ensp;If a
-                                question entered is wrong, user is free to
-                                remove that question.
+                                The quiz maker can add various questions for
+                                each quiz, and for each question the user can
+                                enter various options.&ensp;If a question is
+                                incorrect, the user is free to remove it.
                                 <br />
-                                For each question the user also has to specify
-                                which among the following options is the correct
+                                For each question, the user also has to specify
+                                which of the provided options is the correct
                                 one.
                             </p>
-                            <h3>2.&ensp;Quiz Overview</h3>
+                            <span className="cyan-underline"><h3>2.&ensp;Quiz Overview</h3></span>
                             <img
                                 id="user-guid-img"
                                 src={quizDetImg}
                                 alt="quiz-detail"
                             />
                             <p>
-                                After creating the quiz, quiz maker would see
-                                the overview page,&ensp;This shows the overview
-                                of the quiz the user has created.&ensp; The user
-                                can edit the quiz by clicking the{" "}
+                                After creating the quiz, the quiz maker would
+                                see the overview page. This shows an overview of
+                                the quiz the user has created. The user can edit
+                                the quiz by clicking the{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Edit Quiz
-                                </span>
-                                .&ensp; The user can also delete the quiz by
+                                </span>{" "}
+                                button. The user can also delete the quiz by
                                 clicking the{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Delete Quiz
-                                </span>
-                                .
+                                </span>{" "}
+                                button.
                             </p>
-                            <h3>3.&ensp;Edit Quiz</h3>
+                            <span className="cyan-underline"><h3>3.&ensp;Edit Quiz</h3></span>
                             <img
                                 id="user-guid-img"
                                 src={editQuizImg}
                                 alt="edit-quiz"
                             />
                             <p>
-                                After clicking on the edit quiz, the user would
+                                After clicking on "Edit Quiz", the user would
                                 see this edit quiz page to update the quiz.
-                                &ensp;Here, the user can change the{" "}
+                                Here, the user can change the{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Quiz Title
                                 </span>
-                                ,&ensp;{" "}
+                                ,&ensp;
                                 <span style={{ fontWeight: "bold" }}>
                                     Time limit
                                 </span>
@@ -174,7 +176,7 @@ const UserGuide = () => {
                             </p>
                         </div>
                         <div id="usrg-myTests">
-                            <h1>See Tests</h1>
+                        <span className="cyan-underline"><h1>See Tests</h1></span>
                             <img
                                 id="user-guid-img"
                                 src={MyTestImg}
@@ -185,23 +187,23 @@ const UserGuide = () => {
                                 <span style={{ fontWeight: "bold" }}>
                                     My Tests
                                 </span>
-                                ,&ensp;The user can oversee all the quizes that
+                                ,&ensp;The user can oversee all the quizzes that
                                 have been created so far.&ensp;
                                 <span style={{ fontWeight: "bold" }}>
                                     Details
                                 </span>{" "}
-                                button on each quiz enables user to edit and
-                                update the quiz whereas the{" "}
+                                button on each quiz enables the user to edit and
+                                update the quiz, whereas the{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Share
                                 </span>{" "}
-                                button copies the quiz id to the clipboard and
-                                enables the user to share the quiz id through
+                                button copies the quiz ID to the clipboard and
+                                enables the user to share the quiz ID through
                                 various sharing platforms.
                             </p>
                         </div>
                         <div id="usrg-myTests">
-                            <h1>Take Test</h1>
+                        <span className="cyan-underline"><h1>Take Test</h1></span>
                             <h3>Step 1.</h3>
                             <img
                                 id="user-guid-img"
@@ -221,10 +223,10 @@ const UserGuide = () => {
                                 style={{ width: "55vw" }}
                             />
                             <p>
-                                After starting the quiz, Complete the quiz and
-                                attempt all the questions of the quiz by ticking
-                                the option and after all the questions are
-                                attempted, click on the{" "}
+                                After starting the quiz, complete the quiz by
+                                attempting all the questions and ticking the
+                                correct options. Once all the questions are
+                                answered, click on the{" "}
                                 <span style={{ fontWeight: "bold" }}>
                                     Submit Quiz
                                 </span>{" "}
@@ -232,7 +234,8 @@ const UserGuide = () => {
                             </p>
                         </div>
                         <div id="usrg-results">
-                            <h1>See result of quiz</h1>
+                          <span className="cyan-underline"><h1>See result of quiz</h1></span>
+                           
                             <img
                                 id="user-guid-img"
                                 src={resultsImg}
@@ -244,7 +247,7 @@ const UserGuide = () => {
                                     Stats
                                 </span>{" "}
                                 button will show the ranking list and the
-                                standing of attendee among other peers
+                                standing of the attendee among other peers.
                             </p>
                             <img
                                 id="user-guid-img"
@@ -262,24 +265,20 @@ const UserGuide = () => {
                                     Result Statistics
                                 </span>{" "}
                                 of the quiz along with your standing in the quiz
-                                among other attendees as{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    User Scores
-                                </span>
+                                and the peers who have attempted the quiz.
                             </p>
                         </div>
                         <div id="usrg-profile">
-                            <h1>Profile Section</h1>
+                        <span className="cyan-underline"><h1>Manage Profile</h1></span>
                             <img
                                 id="user-guid-img"
                                 src={profileImg}
-                                alt="profile-dashboard"
+                                alt="profile-img"
                             />
                             <p>
-                                Here, user can change the username of the
-                                account associated with the email to a different
-                                username, and also have the ability to change
-                                old password to a new password.
+                                In the profile section, the user can change the
+                                profile photo or update the existing quiz
+                                settings.
                             </p>
                         </div>
                     </div>
