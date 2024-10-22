@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './QuizDetails.css';
 import Layout from './Layout';
+import { toast } from 'react-toastify';
 
 const QuizDetails = () => {
     const navigate = useNavigate();
@@ -32,7 +33,12 @@ const QuizDetails = () => {
         if (response.ok) {
           setQuiz(data);
         } else {
-          alert(data.msg);
+          toast.error(data.msg, {
+            position: "top-center",
+            autoClose: 3000,
+            theme: "colored",
+            style: { backgroundColor: "white", color: "#F04438" },
+          });
         }
       } catch (error) {
         console.error('Error fetching quiz details:', error);
@@ -53,10 +59,20 @@ const QuizDetails = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        alert(data.msg);
+        toast.success(data.msg, {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+          style: { backgroundColor: "white", color: "#2d3b45" },
+        });
         navigate('/dashboard');
       } else {
-        alert(data.msg);
+        toast.error(data.msg, {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+          style: { backgroundColor: "white", color: "#F04438" },
+        });
       }
     } catch (error) {
       console.error('Error deleting quiz:', error);
@@ -73,7 +89,6 @@ const QuizDetails = () => {
 
   return (
     <Layout >
-
     <div className="quiz-details bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
       
       <div className="buttons">

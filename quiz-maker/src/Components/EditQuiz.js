@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./EditQuiz.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "./Layout";
+import { toast } from "react-toastify";
 
 const EditQuiz = () => {
     const navigate = useNavigate();
@@ -48,7 +49,12 @@ const EditQuiz = () => {
                 if (response.ok) {
                     setQuizData(data);
                 } else {
-                    alert(data.msg);
+                    toast.error(data.msg, {
+                        position: "top-center",
+                        autoClose: 3000,
+                        theme: "colored",
+                        style: { backgroundColor: "white", color: "#F04438" },
+                    });
                 }
             } catch (error) {
                 console.error("Error fetching quiz:", error);
@@ -121,7 +127,12 @@ const EditQuiz = () => {
         e.preventDefault();
         for (let q of quizData.questions) {
             if (!q.correctAnswer) {
-                alert("Please select a correct answer for each question.");
+                toast.error("Please select a correct answer for each question.", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                    style: { backgroundColor: "white", color: "#F04438" },
+                });
                 return;
             }
         }
@@ -139,14 +150,29 @@ const EditQuiz = () => {
             const data = await response.json();
             console.log(data);
             if (response.ok) {
-                alert("Quiz updated successfully");
+                toast.success("Quiz updated successfully", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                    style: { backgroundColor: "white", color: "#2d3b45" },
+                  });
                 navigate(`/quiz/${quiz_id}`);
             } else {
-                alert(data.msg);
+                toast.error(data.msg, {
+                    position: "top-center",
+                    autoClose: 3000,
+                    theme: "colored",
+                    style: { backgroundColor: "white", color: "#F04438" },
+                });
             }
         } catch (error) {
             console.error("Error updating quiz:", error);
-            alert("Error updating quiz. Please try again.");
+            toast.error("Error updating quiz. Please try again.", {
+                position: "top-center",
+                autoClose: 3000,
+                theme: "colored",
+                style: { backgroundColor: "white", color: "#F04438" },
+            });
         }
     };
 
