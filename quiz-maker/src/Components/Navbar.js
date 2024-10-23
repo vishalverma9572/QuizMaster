@@ -24,7 +24,6 @@ const Navbar = () => {
 
     const token = localStorage.getItem("token");
 
-    // bg-gradient-to-r from-teal-500 to-cyan-600
     return (
         <nav className="w-[98vw] left-[1vw] h-[8vh] bg-[#0d1b2a] shadow-lg font-sans fixed top-[10px] rounded-xl z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,7 +45,7 @@ const Navbar = () => {
                             <Link
                                 key={item.name}
                                 to={item.to}
-                                className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-teal-600 transition duration-150 ease-in-out flex items-center"
+                                className="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-cyan-600 transition duration-150 ease-in-out flex items-center"
                             >
                                 <item.icon className="h-4 w-4 mr-2" />
                                 {item.name}
@@ -56,7 +55,7 @@ const Navbar = () => {
                         {(token == null || !token) && (
                             <Link
                                 to="/login"
-                                className="px-3 py-2 rounded-md text-sm font-medium bg-white text-teal-600 hover:bg-gray-100 transition duration-150 ease-in-out flex items-center"
+                                className="px-3 py-2 rounded-md text-sm font-medium bg-white text-cyan-600 hover:bg-gray-100 transition duration-150 ease-in-out flex items-center"
                             >
                                 <LogIn className="h-4 w-4 mr-2" />
                                 Sign In
@@ -65,7 +64,7 @@ const Navbar = () => {
                         {(token == null || !token) && (
                             <Link
                                 to="/register"
-                                className="px-3 py-2 rounded-md text-sm font-medium bg-teal-700 text-white hover:bg-teal-800 transition duration-150 ease-in-out flex items-center"
+                                className="px-3 py-2 rounded-md text-sm font-medium bg-cyan-700 text-white hover:bg-cyan-800 transition duration-150 ease-in-out flex items-center"
                             >
                                 <UserPlus className="h-4 w-4 mr-2" />
                                 Sign Up
@@ -74,7 +73,7 @@ const Navbar = () => {
                         {token && token != null && (
                             <Link
                                 to="/dashboard"
-                                className="px-3 py-2 rounded-md text-sm font-medium bg-[#62b6cb] text-white hover:bg-teal-800 transition duration-150 ease-in-out flex items-center"
+                                className="px-3 py-2 rounded-md text-sm font-medium bg-[#62b6cb] text-white hover:bg-cyan-800 transition duration-150 ease-in-out flex items-center"
                             >
                                 <LayoutDashboard className="h-4 w-4 mr-2" />
                                 Dashboard
@@ -84,7 +83,7 @@ const Navbar = () => {
                     <div className="flex items-center sm:hidden">
                         <button
                             onClick={toggleMenu}
-                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition duration-150 ease-in-out"
+                            className="inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white transition duration-150 ease-in-out"
                         >
                             {isOpen ? (
                                 <X className="h-6 w-6" />
@@ -97,18 +96,21 @@ const Navbar = () => {
             </div>
 
             {isOpen && (
-                <div className="sm:hidden bg-teal-600">
+                <div className="sm:hidden bg-cyan-600">
                     <div className="px-2 pt-2 pb-3 space-y-1">
                         {menuItems.map((item) => (
                             <Link
                                 key={item.name}
+
                                 to={item.to}
                                 className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-teal-700 transition duration-150 ease-in-out flex items-center"
+
                             >
                                 <item.icon className="h-5 w-5 mr-2" />
                                 {item.name}
                             </Link>
                         ))}
+
                         {(token == null || !token) && (
                             <Link
                                 to="/login"
@@ -136,6 +138,7 @@ const Navbar = () => {
                                 Dashboard
                             </Link>
                         )}
+
                     </div>
                 </div>
             )}
