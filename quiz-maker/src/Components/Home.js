@@ -84,9 +84,9 @@ const Home = () => {
                         <div
                             className={`${
                                 window.width <= 820 ? "w-[99%]" : "w-[40%]"
-                            } w-[40%] flex gap-[30px] flex-col items-center justify-center bor der-2 border-green-600`}
+                            } w-[40%] mt-8 flex flex-col items-center gap-8`}
                         >
-                            <div className="bo rder border-red-600 font-extrabold gap-[10px] text-5xl flex flex-col font-sans text-cyan-500 ">
+                            <div className="pt-2 font-extrabold gap-[10px] text-5xl flex flex-col font-sans text-cyan-500 ">
                                 Welcome to{" "}
                                 <TypeIt className="text-gray-800">
                                     QuizMaster
