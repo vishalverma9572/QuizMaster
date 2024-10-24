@@ -8,7 +8,16 @@ module.exports = {
       fontFamily: {
         nunito: ["Nunito", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
-      }
+      },
+      keyframes: {
+        loading: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+      },
+      animation: {
+        loading: 'loading 3s infinite',
+      },
     },
   },
   plugins: [],
