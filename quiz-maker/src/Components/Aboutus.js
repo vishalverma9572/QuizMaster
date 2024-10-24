@@ -1,28 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
 import img from "../images/team.svg";
-import PageLoader from "./PageLoader";
 import { Typography, styled } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
-import "./Aboutus.css";
 import Loader from "./Loader";
 import Navbar from "./Navbar";
 import useWindowSize from "./UseWindowSize.js";
 import TypeIt from "typeit-react";
 
-const StyledTypography = styled(Typography)(() => ({
-    marginBottom: "30px",
-    fontFamily: "Wittgenstein, serif",
-    color: "#235",
-    borderBottom: "2px solid #235",
-    paddingBottom: "25px",
-}));
-
 const AboutUs = () => {
-    const [loading, setLoading] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState(""); // For search feature
-    const navigate = useNavigate();
+    const [openFAQIndex, setOpenFAQIndex] = useState(null); // State to track which FAQ is open
     const window = useWindowSize();
     console.log(window.width);
 
@@ -67,79 +55,44 @@ const AboutUs = () => {
             faq.answer.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
+    // Function to handle opening and closing of FAQs
+    const toggleFAQ = (index) => {
+        setOpenFAQIndex(openFAQIndex === index ? null : index); // Toggle FAQ open state
+    };
+
     return (
         <>
             {isLoading ? (
                 <Loader />
             ) : (
-                <div className="flex flex-col about-us-container">
+                <div className="flex flex-col items-center px-5 py-10 text-white bg-[#2d3b45] font-nunito">
                     <Navbar />
-                    <div
-                        className={`${
-                            window.width <= 820 &&
-                            "flex-col items-center gap-[50px]"
-                        } mt-[8vh] flex bord er-2 border-red-600`}
-                    >
-                        <div
-                            className={`${
-                                window.width <= 820 ? "w-[99%]" : "w-[58%]"
-                            } bo rder-2 h-[92vh] border-red-600`}
-                        >
-                            <img
-                                className=" w-[100%] h-[100%]"
-                                src={img}
-                                alt="team"
-                            />
+
+                    {/* Main Section */}
+                    <div className={`mt-10 flex ${window.width <= 820 ? 'flex-col items-center gap-12' : 'justify-between w-full'}`}>
+
+                        {/* Left Image */}
+                        <div className={`${window.width <= 820 ? 'w-[99%]' : 'w-[58%]'} h-[92vh]`}>
+                            <img src={img} alt="team" className="w-full h-full" />
                         </div>
-                        <div
-                            className={`${
-                                window.width <= 820 ? "w-[99%]" : "w-[40%]"
-                            } w-[40%] flex h-[92vh] gap-[30px] flex-col items-center justify-center b order-2 border-green-600 text-black`}
-                        >
-                            <TypeIt className="text-[#0d1b2a] text-5xl font-extrabold font-sans">
+
+                        {/* Right Content */}
+                        <div className={`${window.width <= 820 ? 'w-[99%]' : 'w-[40%]'} flex flex-col items-center justify-center text-center`}>
+                            <TypeIt className="text-5xl font-extrabold text-[#0d1b2a] mb-10">
                                 About Us
                             </TypeIt>
-                            <div
-                                className={`forScroll p-[10px] bg-cyan-100 rounded-lg text-center w-[90%] h-[50%] overflow-scroll font-semibold font-sans text-gray-700 text-xl`}
-                            >
-                                Welcome to QuizMaster, your go-to platform for
-                                everything related to quizzes! At QuizMaster, we
-                                believe in the power of learning through fun and
-                                interactive experiences. Our application allows
-                                users to create, manage, and take quizzes on a
-                                wide range of topics. Whether you're a student
-                                looking to test your knowledge, a teacher aiming
-                                to create engaging learning tools, or simply a
-                                quiz enthusiast, QuizMaster has something for
-                                you. We focus on user experience and
-                                performance, offering features like real-time
-                                progress tracking, detailed statistics, and
-                                seamless quiz management. Our goal is to provide
-                                a comprehensive, easy-to-use platform for quiz
-                                lovers and educators alike.
+                            <div className="forScroll p-4 bg-cyan-100 rounded-lg w-[90%] h-[50%] overflow-scroll text-gray-700 text-xl font-semibold">
+                                Welcome to QuizMaster, your go-to platform for everything related to quizzes! At QuizMaster, we believe in the power of learning through fun and interactive experiences. Our application allows users to create, manage, and take quizzes on a wide range of topics. Whether you're a student looking to test your knowledge, a teacher aiming to create engaging learning tools, or simply a quiz enthusiast, QuizMaster has something for you. We focus on user experience and performance, offering features like real-time progress tracking, detailed statistics, and seamless quiz management. Our goal is to provide a comprehensive, easy-to-use platform for quiz lovers and educators alike.
                             </div>
-                            <a
-                                className="w-[100px] h-[40px] flex items-center justify-center bg-blue-700 rounded-md text-white text-center font-medium"
-                                href="#faq"
-                            >
+                            <a href="#faq" className="mt-5 w-[100px] h-[40px] flex items-center justify-center bg-blue-700 rounded-md text-white">
                                 FAQs
                             </a>
                         </div>
-
-                        {/* Search Input */}
                     </div>
 
-                    <div
-                        className="faq-search-container"
-                        style={{
-                            textAlign: "center",
-                            marginBottom: "20px",
-                        }}
-                    >
-                        <h2
-                            id="faq"
-                            className={`text-black text-4xl font-bold font-sans mb-[80px] mt-[50px]`}
-                        >
+                    {/* FAQ Search Section */}
+                    <div className="faq-search-container text-center my-8">
+                        <h2 id="faq" className="text-4xl font-bold mb-10">
                             Frequently Asked Questions
                         </h2>
                         <input
@@ -147,31 +100,32 @@ const AboutUs = () => {
                             placeholder="Search FAQs..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{
-                                padding: "10px",
-                                color: "black",
-                                width: "51%",
-                                borderRadius: "5px",
-                                border: "1px solid #ccc",
-                            }}
+                            className="px-4 py-2 w-[51%] rounded-md border border-gray-300 text-black"
                         />
                     </div>
 
-                    <div className="faq flex justify-center">
-                        <ul className="accordion ">
+                    {/* FAQ Accordion */}
+                    <div className="faq flex justify-center w-full">
+                        <ul className="accordion w-full max-w-3xl">
                             {filteredFaqs.length > 0 ? (
                                 filteredFaqs.map((faq, index) => (
-                                    <li key={index} >
-                                        <input
-                                            type="checkbox"
-                                            name="accordion"
-                                            id={`faq-${index}`}
-                                        />
-                                        <label htmlFor={`faq-${index}`}>
+                                    <li key={index} className="list-none w-full p-1">
+                                        <label
+                                            htmlFor={`faq-${index}`}
+                                            className="flex items-center p-5 text-lg font-medium bg-[#0d1b2a] text-[#ebebeb] cursor-pointer relative mb-1 transition duration-500 ease-in-out"
+                                            onClick={() => toggleFAQ(index)} // Toggle on click
+                                        >
                                             {faq.question}
+                                            <span
+                                                className={`absolute right-5 text-3xl transition-transform duration-500 ease-in-out ${openFAQIndex === index ? 'rotate-45' : ''}`}
+                                            >
+                                                +
+                                            </span>
                                         </label>
-                                        <div className="content">
-                                            <p>{faq.answer}</p>
+                                        <div
+                                            className={`content bg-[#303033] text-left p-0 overflow-hidden transition-[max-height] duration-500 ease-in-out ${openFAQIndex === index ? 'max-h-[200px]' : 'max-h-0'}`}
+                                        >
+                                            <p className="px-5 py-6">{faq.answer}</p>
                                         </div>
                                     </li>
                                 ))

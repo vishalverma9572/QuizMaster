@@ -5,25 +5,25 @@ import axios from "axios";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
 
 const Authorisation = () => {
-    const [isSignUp, setIsSignUp] = useState(false);
-    const navigate = useNavigate();
-    const [error, setError] = useState(null);
-    const [formData, setFormData] = useState({
-        username: "",
-        email: "",
-        password: "",
-    });
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const emailInputRef = useRef(null);
-    const usernameInputRef = useRef(null);
-    const passwordInputRef = useRef(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const emailInputRef = useRef(null);
+  const usernameInputRef = useRef(null);
+  const passwordInputRef = useRef(null);
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            navigate('/dashboard');
-        }
-    }, [navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     if (isSignUp) {
@@ -76,67 +76,82 @@ const Authorisation = () => {
       return;
     }
 
-        const url = isSignUp ? "/users/register" : "/users/login";
-        try {
-            let requesturl = process.env.REACT_APP_BACKEND_URL + url;
-            const response = await axios.post(requesturl, formData);
-            localStorage.setItem("token", response.data.token);
-            setError(null);
-            setFormData({
-                username: "",
-                email: "",
-                password: "",
-            });
-            const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
-            if(attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
-            else navigate("/dashboard");
+    const url = isSignUp ? "/users/register" : "/users/login";
+    try {
+      let requesturl = process.env.REACT_APP_BACKEND_URL + url;
+      const response = await axios.post(requesturl, formData);
+      localStorage.setItem("token", response.data.token);
+      setError(null);
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+      });
+      const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
+      if (attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
+      else navigate("/dashboard");
 
-        } catch (err) {
-            if (url === "/users/register") {
-                if (err.response.data.msg === "User already exists") {
-                    setError("Email already exists");
-                    emailInputRef.current.focus();
-                } else {
-                    setError("Username already exists try another one");
-                    usernameInputRef.current.focus();
-                }
-            }
-            if (url === "/users/login") {
-                setError("Invalid credentials");
-            }
-        }
-    };
-
-    const toggleForm = () => {
-        setIsSignUp(!isSignUp);
-        if (isSignUp) {
-            navigate("/login");
+    } catch (err) {
+      if (url === "/users/register") {
+        if (err.response.data.msg === "User already exists") {
+          setError("Email already exists");
+          emailInputRef.current.focus();
         } else {
-            navigate("/register");
+          setError("Username already exists try another one");
+          usernameInputRef.current.focus();
         }
-        setFormData({
-            username: "",
-            email: "",
-            password: "",
-        });
-        setError(null);
-    };
+      }
+      if (url === "/users/login") {
+        setError("Invalid credentials");
+      }
+    }
+  };
 
-    const togglePasswordVisibility = () => {
-        setPasswordVisible(!passwordVisible);
-    };
+  const toggleForm = () => {
+    setIsSignUp(!isSignUp);
+    if (isSignUp) {
+      navigate("/login");
+    } else {
+      navigate("/register");
+    }
+    setFormData({
+      username: "",
+      email: "",
+      password: "",
+    });
+    setError(null);
+  };
 
-    const handleCancel = () => {
-        navigate(-1); // This will go back to the previous page
-    };
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handleCancel = () => {
+    navigate(-1); // This will go back to the previous page
+  };
 
   return (
     <div className="flex justify-center items-center gap-20 h-screen bg-[#2d3b45] transition-all duration-300 ease-in-out">
-      <div className="bg-white p-10 rounded-lg shadow-lg border-2 border-gray-300 w-full max-w-lg mb-12 mt-12">
+      <div className="bg-white px-10 py-3 rounded-lg shadow-lg border-2 border-gray-300 w-full max-w-lg mb-12 mt-12">
+        <button
+          className="cancel-button"
+          onClick={handleCancel}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            background: 'none',
+            border: 'none',
+            fontSize: '2rem',
+            cursor: 'pointer'
+          }}
+        >
+          ×
+        </button>
         <div className="flex justify-center pb-5 border-b border-[#2d3b45]">
-          <img src={logo} alt="logo" className="w-48" />
+          <img src={logo} alt="logo" className="w-36" />
         </div>
-        <h2 className="text-2xl font-bold text-center text-[#2d3b45] mb-8 font-nunito">{isSignUp ? "Sign Up" : "Sign In"}</h2>
+        <h2 className="text-2xl font-bold text-center text-[#2d3b45] mb-3 font-nunito">{isSignUp ? "Sign Up" : "Sign In"}</h2>
         <form className="flex flex-col" onSubmit={handleSubmit}>
           {isSignUp && (
             <input
@@ -170,6 +185,16 @@ const Authorisation = () => {
             required
             className="mb-4 p-3 border border-gray-300 rounded-md"
           />
+
+          {isSignUp && (
+            <div>
+              <PasswordStrengthBar password={formData.password} />
+              <p className="text-[10px] text-[#6c6c6c]">
+                Recommended: use uppercase letters, lowercase letters, numbers & special characters
+              </p>
+            </div>
+          )}
+
           {error && <p className="text-red-600 text-center mb-4">{error}</p>}
           <button className="bg-[#2d3b45] text-white p-3 rounded-md hover:bg-[#324755] transition-colors duration-300" type="submit">
             {isSignUp ? "Sign Up" : "Sign In"}
