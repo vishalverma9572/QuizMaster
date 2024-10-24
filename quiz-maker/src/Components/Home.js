@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Home.css";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png"; // Import your logo image here
 import img from "../images/schoolgirls.svg";
 import useWindowSize from "./UseWindowSize";
@@ -10,107 +9,93 @@ import Navbar from "./Navbar";
 
 const Home = () => {
   const window = useWindowSize();
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
-    const isAuthenticated = localStorage.getItem("token") !== null;
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const isAuthenticated = localStorage.getItem("token") !== null;
 
-    useEffect(() => {
-        // Set the loading state to false after 2 seconds
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 500);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
 
-        // Cleanup timeout on component unmount
-        return () => clearTimeout(timer);
-    }, []);
+    return () => clearTimeout(timer);
+  }, []);
 
-    // Set the document title
-    useEffect(() => {
-        document.title = "Home | QuizMaster";
-    }, []);
+  useEffect(() => {
+    document.title = "Home | QuizMaster";
+  }, []);
 
-    // when the component is loaded, set isLoading to false after 2 seconds
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2000);
-        return () => clearTimeout(timer);
-    }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
-    const handleSignUp = () => {
-        navigate("/register");
-    };
+  const handleSignUp = () => {
+    navigate("/register");
+  };
 
-    const handleSignIn = () => {
-        navigate("/login");
-    };
+  const handleSignIn = () => {
+    navigate("/login");
+  };
 
-    const handleDashboard = () => {
-        navigate("/dashboard");
-    };
+  const handleDashboard = () => {
+    navigate("/dashboard");
+  };
 
-    const handleAboutUs = () => {
-        navigate("/aboutus");
-    };
+  const handleAboutUs = () => {
+    navigate("/aboutus");
+  };
 
-    const handleUserGuide = () => {
-        navigate("/user-guide");
-    };
+  const handleUserGuide = () => {
+    navigate("/user-guide");
+  };
 
-    return (
-        <>
-            {isLoading ? (
-                <Loader />
-            ) : (
-                <div>
-                    <Navbar />
-                    <div
-                        className={`${
-                            window.width <= 820 &&
-                            "flex-col items-center gap-[50px]"
-                        } flex w-screen h-[92vh] relative top-[8vh]`}
-                    >
-                        <div
-                            className={`${
-                                window.width <= 820 ? "w-[99%]" : "w-[58%]"
-                            }  borde r-2 border-red-600`}
-                        >
-                            <img
-                                className=" w-[100%] h-[100%]"
-                                src={img}
-                                alt="img"
-                            />
-                        </div>
-                        <div
-                            className={`${
-                                window.width <= 820 ? "w-[99%]" : "w-[40%]"
-                            } w-[40%] mt-8 flex flex-col items-center gap-8`}
-                        >
-                            <div className="pt-2 font-extrabold gap-[10px] text-5xl flex flex-col font-sans text-cyan-500 ">
-                                Welcome to{" "}
-                                <TypeIt className="text-gray-800">
-                                    QuizMaster
-                                </TypeIt>
-                            </div>
-                            <div className="bor der-2 border-red-600 text-center w-[70%] font-semibold font-sans text-gray-300 text-2xl">
-                                Your ultimate destination to create quizzes and
-                                take quizzes. Join us to challenge your
-                                knowledge and improve your skills in a fun and
-                                engaging way.
-                            </div>
-                            <div className="mb-[100px]">
-                                <img
-                                    className="w-[200px]"
-                                    src={logo}
-                                    alt="logo"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+  return (
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div>
+          <Navbar />
+          <div
+            className={`${
+              window.width <= 820
+                ? "flex flex-col items-center gap-12"
+                : "flex w-screen h-[92vh] relative top-[8vh]"
+            }`}
+          >
+            <div
+              className={`${
+                window.width <= 820 ? "w-[99%] mt-20" : "w-[58%]"
+              } border-2 border-transparent`}
+            >
+              <img className="w-full h-full" src={img} alt="schoolgirls" />
+            </div>
+            <div
+              className={`${
+                window.width <= 820 ? "w-[99%]" : "w-[40%] mt-12"
+              } flex flex-col items-center gap-8`}
+            >
+              <div className="pt-2 text-5xl font-extrabold flex flex-col font-sans text-cyan-500">
+                Welcome to{" "}
+                <TypeIt className="text-gray-800">QuizMaster</TypeIt>
+              </div>
+              <div className="text-center w-[70%] font-semibold text-gray-300 text-2xl">
+                Your ultimate destination to create quizzes and take quizzes.
+                Join us to challenge your knowledge and improve your skills in a
+                fun and engaging way.
+              </div>
+              <div className="mb-[100px]">
+                <img className="w-[200px]" src={logo} alt="QuizMaster Logo" />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Home;

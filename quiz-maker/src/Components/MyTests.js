@@ -46,9 +46,9 @@ export default function MyTests() {
     return (
         <>
             {Loading && <PageLoader />}
-            {!Loading && (
+            {!Loading && Array.isArray(quizzes) && (
                 <div
-                    className="bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll"
+                    className="bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll font-roboto"
                 >
                     <div className="sticky top-0 z-40 bg-[#0d1b2a]">
                         <h1 className="text-white text-5xl font-serif p-4">
