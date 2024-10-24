@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "jwt-decode": "^4.0.0",
     "typeit-react": "^2.7.3"
   }
 }

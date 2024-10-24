@@ -1,11 +1,20 @@
-import React, { useState } from "react";
-import { Menu, X, LogIn, UserPlus, Info, BookOpen, Rocket, LayoutDashboard } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+    Menu,
+    X,
+    LogIn,
+    UserPlus,
+    Info,
+    BookOpen,
+    Rocket,
+    LayoutDashboard,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../images/quizmaster-icon_transparent.png";
+import { jwtDecode } from "jwt-decode";
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
-
     const toggleMenu = () => setIsOpen(!isOpen);
 
     const menuItems = [
@@ -14,7 +23,7 @@ const Navbar = () => {
     ];
 
     const token = localStorage.getItem("token");
-    // bg-gradient-to-r from-cyan-500 to-cyan-600
+
     return (
         <nav className="w-[98vw] left-[1vw] h-[8vh] bg-[#0d1b2a] shadow-lg font-sans fixed top-[10px] rounded-xl z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -92,27 +101,44 @@ const Navbar = () => {
                         {menuItems.map((item) => (
                             <Link
                                 key={item.name}
-                                href={item.href}
-                                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-cyan-700 transition duration-150 ease-in-out flex items-center"
+
+                                to={item.to}
+                                className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-teal-700 transition duration-150 ease-in-out flex items-center"
+
                             >
                                 <item.icon className="h-5 w-5 mr-2" />
                                 {item.name}
                             </Link>
                         ))}
-                        <Link
-                            href="/signin"
-                            className="block px-3 py-2 rounded-md text-base font-medium bg-white text-cyan-600 hover:bg-gray-100 transition duration-150 ease-in-out flex items-center"
-                        >
-                            <LogIn className="h-5 w-5 mr-2" />
-                            Sign In
-                        </Link>
-                        <Link
-                            href="/signup"
-                            className="block px-3 py-2 rounded-md text-base font-medium bg-cyan-700 text-white hover:bg-cyan-800 transition duration-150 ease-in-out flex items-center mt-2"
-                        >
-                            <UserPlus className="h-5 w-5 mr-2" />
-                            Sign Up
-                        </Link>
+
+                        {(token == null || !token) && (
+                            <Link
+                                to="/login"
+                                className="block px-3 py-2 rounded-md text-base font-medium bg-white text-teal-600 hover:bg-gray-100 transition duration-150 ease-in-out flex items-center"
+                            >
+                                <LogIn className="h-5 w-5 mr-2" />
+                                Sign In
+                            </Link>
+                        )}
+                        {(token == null || !token) && (
+                            <Link
+                                to="/register"
+                                className="block px-3 py-2 rounded-md text-base font-medium bg-teal-700 text-white hover:bg-teal-800 transition duration-150 ease-in-out flex items-center mt-2"
+                            >
+                                <UserPlus className="h-5 w-5 mr-2" />
+                                Sign Up
+                            </Link>
+                        )}
+                        {(token && token!=null) && (
+                            <Link
+                                to="/dashboard"
+                                className="block px-3 py-2 rounded-md text-base font-medium bg-teal-700 text-white hover:bg-teal-800 transition duration-150 ease-in-out flex items-center mt-2"
+                            >
+                                <LayoutDashboard className="h-5 w-5 mr-2" />
+                                Dashboard
+                            </Link>
+                        )}
+
                     </div>
                 </div>
             )}

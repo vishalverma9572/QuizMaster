@@ -19,6 +19,7 @@
     width: 300px;
     border: 1px solid #235;
     border-radius: 5px;
+    margin: 15px;
   }
   
   .card-content {
