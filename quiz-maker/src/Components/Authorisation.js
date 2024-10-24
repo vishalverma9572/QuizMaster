@@ -173,6 +173,7 @@ const Authorisation = () => {
                         onChange={handleChange}
                         ref={emailInputRef}
                         required
+                        id="email"
                     />
                     <div className="password-container">
                         <input
@@ -183,6 +184,7 @@ const Authorisation = () => {
                             onChange={handleChange}
                             ref={passwordInputRef}
                             required
+                            id="password"
                         />
                         <i className={`fa-solid ${passwordVisible ? 'fa-eye' : 'fa-eye-slash'}`} onClick={togglePasswordVisibility}></i>
                     </div>
