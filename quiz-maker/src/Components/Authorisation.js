@@ -1,20 +1,29 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import PasswordStrengthBar from 'react-password-strength-bar'
 import axios from "axios";
 import logo from "../images/quizmaster-high-resolution-logo-black-transparent.png";
 
 const Authorisation = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const emailInputRef = useRef(null);
-  const usernameInputRef = useRef(null);
-  const passwordInputRef = useRef(null);
+    const [isSignUp, setIsSignUp] = useState(false);
+    const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+    });
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const emailInputRef = useRef(null);
+    const usernameInputRef = useRef(null);
+    const passwordInputRef = useRef(null);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/dashboard');
+        }
+    }, [navigate]);
 
   useEffect(() => {
     if (isSignUp) {
@@ -67,49 +76,59 @@ const Authorisation = () => {
       return;
     }
 
-    const url = isSignUp ? "/users/register" : "/users/login";
-    try {
-      let requesturl = process.env.REACT_APP_BACKEND_URL + url;
-      const response = await axios.post(requesturl, formData);
-      localStorage.setItem("token", response.data.token);
-      setError(null);
-      setFormData({
-        username: "",
-        email: "",
-        password: "",
-      });
+        const url = isSignUp ? "/users/register" : "/users/login";
+        try {
+            let requesturl = process.env.REACT_APP_BACKEND_URL + url;
+            const response = await axios.post(requesturl, formData);
+            localStorage.setItem("token", response.data.token);
+            setError(null);
+            setFormData({
+                username: "",
+                email: "",
+                password: "",
+            });
+            const attemptedRoute = JSON.parse(localStorage.getItem('attemptedRoute'));
+            if(attemptedRoute) navigate(`/${attemptedRoute.pathURL}`);
+            else navigate("/dashboard");
 
-      navigate("/dashboard");
-    } catch (err) {
-      if (url === "/users/register") {
-        if (err.response.data.msg === "User already exists") {
-          setError("Email already exists");
-          emailInputRef.current.focus();
-        } else {
-          setError("Username already exists try another one");
-          usernameInputRef.current.focus();
+        } catch (err) {
+            if (url === "/users/register") {
+                if (err.response.data.msg === "User already exists") {
+                    setError("Email already exists");
+                    emailInputRef.current.focus();
+                } else {
+                    setError("Username already exists try another one");
+                    usernameInputRef.current.focus();
+                }
+            }
+            if (url === "/users/login") {
+                setError("Invalid credentials");
+            }
         }
-      }
-      if (url === "/users/login") {
-        setError("Invalid credentials");
-      }
-    }
-  };
+    };
 
-  const toggleForm = () => {
-    setIsSignUp(!isSignUp);
-    if (isSignUp) {
-      navigate("/login");
-    } else {
-      navigate("/register");
-    }
-    setFormData({
-      username: "",
-      email: "",
-      password: "",
-    });
-    setError(null);
-  };
+    const toggleForm = () => {
+        setIsSignUp(!isSignUp);
+        if (isSignUp) {
+            navigate("/login");
+        } else {
+            navigate("/register");
+        }
+        setFormData({
+            username: "",
+            email: "",
+            password: "",
+        });
+        setError(null);
+    };
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
+    const handleCancel = () => {
+        navigate(-1); // This will go back to the previous page
+    };
 
   return (
     <div className="flex justify-center items-center gap-20 h-screen bg-[#2d3b45] transition-all duration-300 ease-in-out">

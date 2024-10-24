@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./CreateTest.css";
 import { useNavigate } from "react-router-dom";
 import { Typography, styled } from "@mui/material";
+import { toast } from "react-toastify";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const CreateQuiz = () => {
     navigate("/login");
   }
   const [title, setTitle] = useState("");
-  const [timeLimit, setTimeLimit] = useState("");
+  const [timeLimit, setTimeLimit] = useState(null);
   const [questions, setQuestions] = useState([
     { question: "", options: [""], correctAnswer: "" },
   ]);
@@ -22,7 +23,7 @@ const CreateQuiz = () => {
 
   const handleTitleChange = (e) => setTitle(e.target.value);
 
-  const handleTimeLimitChange = (e) => setTimeLimit(e.target.value);
+  const handleTimeLimitChange = (e) => setTimeLimit(Number(e.target.value));
 
   const handleQuestionChange = (index, e) => {
     const newQuestions = [...questions];
@@ -38,7 +39,8 @@ const CreateQuiz = () => {
 
   const handleCorrectAnswerChange = (questionIndex, optionIndex) => {
     const newQuestions = [...questions];
-    newQuestions[questionIndex].correctAnswer = newQuestions[questionIndex].options[optionIndex];
+    newQuestions[questionIndex].correctAnswer =
+      newQuestions[questionIndex].options[optionIndex];
     setQuestions(newQuestions);
   };
 
@@ -67,6 +69,7 @@ const CreateQuiz = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(questions);
     e.preventDefault();
     for (let q of questions) {
       if (!q.correctAnswer) {
@@ -93,14 +96,29 @@ const CreateQuiz = () => {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
-        alert("Quiz created successfully");
+        toast.success("Quiz created successfully", {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+          style: { backgroundColor: "white", color: "#2d3b45" },
+        });
         navigate(`/quiz/${data.quiz_id} `);
       } else {
-        alert(data.msg);
+        toast.error(data.msg, {
+          position: "top-center",
+          autoClose: 3000,
+          theme: "colored",
+          style: { backgroundColor: "white", color: "#F04438" },
+        });
       }
     } catch (error) {
       console.error("Error creating quiz:", error);
-      alert("Error creating quiz. Please try again.");
+      toast.error("Error creating quiz. Please try again.", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+        style: { backgroundColor: "white", color: "#F04438" },
+    });
     }
   };
 
@@ -114,91 +132,104 @@ const CreateQuiz = () => {
   });
 
   return (
-    <div>
-      <StyledTypography variant="h4">Create Test</StyledTypography>
-      <div className="create-quiz">
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="title">Quiz Title</label>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={handleTitleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="timeLimit">Time Limit (minutes)</label>
-            <input
-              type="number"
-              id="timeLimit"
-              value={timeLimit}
-              onChange={handleTimeLimitChange}
-              required
-            />
-          </div>
-          {questions.map((q, qIndex) => (
-            <div key={qIndex} className="question-card">
-              <div className="form-group">
-                <label htmlFor={`question-${qIndex}`}>Question</label>
+    <div className="bord er-2 border-red-700 bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
+      <div className="sticky top-0 z-40 bg-[#0d1b2a]">
+        <h1 className="text-white text-5xl font-serif p-4">Create Test</h1>
+        <hr className="bg-gray-400 h-[1px]" />
+      </div>
+      <form onSubmit={handleSubmit} className="create-quiz">
+        <div className="form-group">
+          <label htmlFor="title">Quiz Title</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="timeLimit">Time Limit (minutes)</label>
+          <input
+            type="number"
+            id="timeLimit"
+            value={timeLimit}
+            onChange={handleTimeLimitChange}
+            required
+          />
+        </div>
+        {questions.map((q, qIndex) => (
+          <div key={qIndex} className="question-card">
+            <div className="form-group ">
+              <label htmlFor={`question-${qIndex}`}>Question</label>
+              <input
+                type="text"
+                id={`question-${qIndex}`}
+                value={q.question}
+                onChange={(e) => handleQuestionChange(qIndex, e)}
+                required
+              />
+              <button
+                type="button"
+                className="remove-button"
+                onClick={() => removeQuestion(qIndex)}
+              >
+                Remove Question
+              </button>
+            </div>
+            {q.options.map((option, oIndex) => (
+              <div key={oIndex} className="form-group option-group">
+                <label htmlFor={`option-${qIndex}-${oIndex}`}>
+                  Option {oIndex + 1}
+                </label>
                 <input
                   type="text"
-                  id={`question-${qIndex}`}
-                  value={q.question}
-                  onChange={(e) => handleQuestionChange(qIndex, e)}
+                  id={`option-${qIndex}-${oIndex}`}
+                  value={option}
+                  onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
                   required
                 />
                 <button
                   type="button"
-                  className="remove-button"
-                  onClick={() => removeQuestion(qIndex)}
+                  className="Add-option  "
+                  onClick={() => removeOption(qIndex, oIndex)}
                 >
-                  Remove Question
+                  Remove
                 </button>
+                <input
+                  type="radio"
+                  id={`correctAnswer-${qIndex}-${oIndex}`}
+                  name={`correctAnswer-${qIndex}`}
+                  checked={q.correctAnswer === option}
+                  onChange={() => handleCorrectAnswerChange(qIndex, oIndex)}
+                />
+                <label htmlFor={`correctAnswer-${qIndex}-${oIndex}`}>
+                  Correct
+                </label>
               </div>
-              {q.options.map((option, oIndex) => (
-                <div key={oIndex} className="form-group option-group">
-                  <label htmlFor={`option-${qIndex}-${oIndex}`}>
-                    Option {oIndex + 1}
-                  </label>
-                  <input
-                    type="text"
-                    id={`option-${qIndex}-${oIndex}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeOption(qIndex, oIndex)}
-                  >
-                    Remove
-                  </button>
-                  <input
-                    type="radio"
-                    id={`correctAnswer-${qIndex}-${oIndex}`}
-                    name={`correctAnswer-${qIndex}`}
-                    checked={q.correctAnswer === option}
-                    onChange={() => handleCorrectAnswerChange(qIndex, oIndex)}
-                  />
-                  <label htmlFor={`correctAnswer-${qIndex}-${oIndex}`}>
-                    Correct
-                  </label>
-                </div>
-              ))}
-              <button type="button" onClick={() => addOption(qIndex)}>
-                Add Option
-              </button>
-            </div>
-          ))}
-          {error && <p className="error">{error}</p>}
-          <button type="button" onClick={addQuestion}>
-            Add Question
-          </button>
-          <button type="submit">Create Quiz</button>
-        </form>
-      </div>
+            ))}
+            <button
+              type="button"
+              className="Add-option  "
+              onClick={() => addOption(qIndex)}
+            >
+              Add Option
+            </button>
+          </div>
+        ))}
+        {error && <p className="error">{error}</p>}
+        <button
+          type="button "
+          className="Add-button Add-button:hover "
+          onClick={addQuestion}
+        >
+          Add Question
+        </button>
+        <button type="submit" className="Add-button Add-button:hover ">
+          Create Quiz
+        </button>
+      </form>
+      {/* </div> */}
     </div>
   );
 };

@@ -1,20 +1,20 @@
 /* layout.css */
 .layout {
     display: flex;
-    height: 100vh;
+    /* height: 100vh; */
   }
   
   .layout .sidebar {
     width: 250px;
-    background: #2d3b45;
+    /* background: #2d3b45; */
     color: #fff;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
+    top: 20px;
+    left: 1vw;
+    /* height: 100%; */
     transform: translateX(0);
     transition: transform 0.3s ease-in-out;
   }
@@ -43,7 +43,6 @@
   .layout .sidebar nav ul li {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
     cursor: pointer;
     transition: background 0.3s;
     font-size: 18px;
@@ -55,12 +54,12 @@
   }
   
   .layout .sidebar nav ul li:hover {
-    background: #1a2a33;
+    background: cyan;
     color: #fff;
   }
   
   .layout .sidebar nav ul li.active {
-    background: #fff;
+    /* background:; */
     color: #2d3b45;
   }
   .layout .sidebar nav ul li a {
@@ -68,6 +67,7 @@
     align-items: center;
     text-decoration: none; 
     color: inherit; 
+    padding: 15px 20px;
    
   }
   .layout .logout-button {

@@ -19,19 +19,19 @@
 }
 
 /* Flexbox for layout */
-.content-wrapper {
+.take-test .content-wrapper {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
 @media (min-width: 768px) {
-  .content-wrapper {
+  .take-test .content-wrapper {
       flex-direction: row;
   }
 }
 
-.form-section, .instructions-section {
+.take-test .form-section, .take-test .instructions-section {
   background-color: #1a2a33e9;
   padding: 30px;
   border-radius: 15px;
@@ -40,13 +40,13 @@
   color: #fff;
 }
 
-.form-group label {
+.take-test .form-group label {
   display: block;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-.form-group input[type="text"] {
+.take-test .form-group input[type="text"] {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -55,12 +55,12 @@
   /* color: #333; */
 }
 
-.form-group input[type="text"]:focus {
+.take-test .form-group input[type="text"]:focus {
   border-color: #00aaff;
   outline: none;
 }
 
-.button {
+.take-test .button {
   background-color: #00aaff;
   color: white;
   padding: 12px 20px;
@@ -72,17 +72,17 @@
   margin-top: 15px;
 }
 
-.button:hover {
+.take-test .button:hover {
   background-color: #008fcc;
 }
 
-.error {
+.take-test .error {
   color: #ff4c4c;
   font-weight: bold;
   margin-top: 15px;
 }
 
-.quiz-details-section {
+.take-test .quiz-details-section {
   margin-top: 40px;
   background-color: #1a2a33e9;
   color: #fff;
@@ -95,7 +95,7 @@
  } */
 
 /* Quiz details card layout */
-.quiz-card {
+.take-test .quiz-card {
   background-color: #1a2a33e9;
   color: #fff;
   padding: 20px;
@@ -104,19 +104,19 @@
 }
 
 /* Instructions layout */
-.instructions h3 {
+.take-test .instructions h3 {
   margin-bottom: 10px;
   font-size: 18px;
   color: #00aaff;
 }
 
-.instructions p {
+.take-test .instructions p {
   margin-bottom: 10px;
   color: #fff;
   margin-bottom: 2rem;
 }
 
-code {
+.take-test code {
   background-color: #f0f0f0;
   padding: 5px 10px;
   border-radius: 5px;
