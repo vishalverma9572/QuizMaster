@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Profile.css";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -7,18 +6,11 @@ const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
 
 const Profile = () => {
     const navigate = useNavigate();
-    //check user is logged in or not
-
-    if (
-        !localStorage.getItem("token") ||
-        localStorage.getItem("token") === null
-    ) {
+    if (!localStorage.getItem("token") || localStorage.getItem("token") === null) {
         navigate("/login");
     }
-    const [user, setUser] = useState({
-        username: "",
-        email: "",
-    });
+
+    const [user, setUser] = useState({ username: "", email: "" });
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -65,9 +57,7 @@ const Profile = () => {
         const value = e.target.value;
         setPassword(value);
         if (!passwordRegex.test(value)) {
-            setPasswordError(
-                "Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number."
-            );
+            setPasswordError("Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, and one number.");
         } else {
             setPasswordError("");
         }
@@ -101,35 +91,22 @@ const Profile = () => {
         } else {
             setUsernameError("");
             try {
-                const url =
-                    process.env.REACT_APP_BACKEND_URL +
-                    "/users/update-username";
+                const url = process.env.REACT_APP_BACKEND_URL + "/users/update-username";
                 const response = await fetch(url, {
                     method: "PUT",
                     headers: {
                         "Content-Type": "application/json",
                         "x-auth-token": localStorage.getItem("token"),
                     },
-                    body: JSON.stringify({ username: newUsername }), // Send newUsername in the request body
+                    body: JSON.stringify({ username: newUsername }),
                 });
                 const data = await response.json();
                 if (!response.ok) {
-                    setUsernameError(
-                        data.msg ||
-                            "Failed to update username. Please try again."
-                    );
+                    setUsernameError(data.msg || "Failed to update username. Please try again.");
                 } else {
-                    toast.success("Username updated successfully", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        theme: "colored",
-                        style: { backgroundColor: "white", color: "#2d3b45" },
-                      });
-                    //refresh the page
+                    toast.success("Username updated successfully", { position: "top-center", autoClose: 3000, theme: "colored" });
                     window.location.reload();
                 }
-
-                // Update state with new username
             } catch (error) {
                 console.error("Error updating username:", error);
                 setUsernameError("Error updating username. Please try again.");
@@ -139,13 +116,7 @@ const Profile = () => {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-
-        // Check if there are no errors and password is not empty
-        if (
-            passwordError === "" &&
-            confirmPasswordError === "" &&
-            password !== ""
-        ) {
+        if (passwordError === "" && confirmPasswordError === "" && password !== "") {
             try {
                 const url = `${process.env.REACT_APP_BACKEND_URL}/users/update-password`;
                 const response = await fetch(url, {
@@ -154,28 +125,17 @@ const Profile = () => {
                         "Content-Type": "application/json",
                         "x-auth-token": localStorage.getItem("token"),
                     },
-                    body: JSON.stringify({ password, oldPassword }), // Send password in the request body
+                    body: JSON.stringify({ password, oldPassword }),
                 });
-
                 const data = await response.json();
-
                 if (!response.ok) {
                     if (data.msg === "Invalid old password") {
                         setOldPasswordError(data.msg);
                     } else {
-                        setPasswordError(
-                            data.msg ||
-                                "Failed to update password. Please try again."
-                        );
+                        setPasswordError(data.msg || "Failed to update password. Please try again.");
                     }
                 } else {
-                    toast.success("Password updated successfully", {
-                        position: "top-center",
-                        autoClose: 3000,
-                        theme: "colored",
-                        style: { backgroundColor: "white", color: "#2d3b45" },
-                      });
-                    // Refresh the page or update state to reflect the password change
+                    toast.success("Password updated successfully", { position: "top-center", autoClose: 3000, theme: "colored" });
                     window.location.reload();
                 }
             } catch (error) {
@@ -186,92 +146,52 @@ const Profile = () => {
     };
 
     return (
-        <div className="profile bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
-            <div className="sticky top-0 z-40 bg-[#0d1b2a] h-[80px]">
-                <h1 className="text-white text-5xl font-serif p-4">Profile</h1>
+        <div className="bg-[#0d1b2a] rounded-xl ml-1 h-[88vh] w-[80vw] fixed overflow-scroll flex flex-col pl-5 text-white mx-auto">
+            <div className="sticky top-0 z-40 bg-[#0d1b2a] h-20">
+                <h1 className="text-5xl font-serif p-4">Profile</h1>
                 <hr className="bg-gray-400 h-[1px]" />
             </div>
-            <div className="profile-info mt-[30px] ml-[30px]">
-                <div className="profile-detail">
-                    <span className="profile-label">Username:</span>
-                    <span className="profile-value">{username}</span>
+            <div className="profile-info mt-7 ml-7 flex flex-col bg-white text-[#2d3b45] p-5 rounded-lg w-full max-w-sm mb-16 border border-[#235] shadow-md">
+                <div className="flex justify-between mb-2">
+                    <span className="font-bold">Username:</span>
+                    <span className="text-gray-500">{username}</span>
                 </div>
-                <div className="profile-detail">
-                    <span className="profile-label">Email:</span>
-                    <span className="profile-value">{email}</span>
+                <div className="flex justify-between mb-2">
+                    <span className="font-bold">Email:</span>
+                    <span className="text-gray-500">{email}</span>
                 </div>
             </div>
-            <div className="profile-forms">
-                <div className="profile-card">
-                    <form
-                        className="profile-form"
-                        onSubmit={handleUsernameSubmit}
-                    >
-                        <h3>Update Username</h3>
-                        <div className="form-group">
-                            <label htmlFor="newUsername">New Username:</label>
-                            <input
-                                type="text"
-                                id="newUsername"
-                                value={newUsername}
-                                onChange={handleUsernameChange}
-                                required
-                            />
-                            {usernameError && (
-                                <p className="error">{usernameError}</p>
-                            )}
+            <div className="flex justify-around gap-5 w-full flex-wrap">
+                <div className="profile-card bg-[#1a2a33e9] p-5 rounded-lg w-full max-w-lg shadow-md">
+                    <form onSubmit={handleUsernameSubmit}>
+                        <h3 className="mb-4">Update Username</h3>
+                        <div className="form-group mb-4">
+                            <label htmlFor="newUsername" className="block mb-2 text-[#b0c4de]">New Username:</label>
+                            <input type="text" id="newUsername" value={newUsername} onChange={handleUsernameChange} required className="w-full p-3 rounded bg-[#13212c] text-white focus:outline-none focus:shadow-[0_0_5px_#1a2a33]" />
+                            {usernameError && <p className="text-red-500 text-sm">{usernameError}</p>}
                         </div>
-                        <button type="submit">Update Username</button>
+                        <button type="submit" className="px-4 py-2 rounded bg-[#212c34] text-white transition duration-300 hover:bg-[#13212c]">Update Username</button>
                     </form>
                 </div>
-                <div className="profile-card">
-                    <form
-                        className="profile-form"
-                        onSubmit={handlePasswordSubmit}
-                    >
-                        <h3>Update Password</h3>
-                        <div className="form-group">
-                            <label htmlFor="oldPassword">Old Password:</label>
-                            <input
-                                type="oldPassword"
-                                id="oldPassword"
-                                value={oldPassword}
-                                onChange={handleOldPasswordChange}
-                                required
-                            />
-                            {oldPasswordError && (
-                                <p className="error">{oldPasswordError}</p>
-                            )}
+                <div className="profile-card bg-[#1a2a33e9] p-5 rounded-lg w-full max-w-lg shadow-md">
+                    <form onSubmit={handlePasswordSubmit}>
+                        <h3 className="mb-4">Update Password</h3>
+                        <div className="form-group mb-4">
+                            <label htmlFor="oldPassword" className="block mb-2 text-[#b0c4de]">Old Password:</label>
+                            <input type="password" id="oldPassword" value={oldPassword} onChange={handleOldPasswordChange} required className="w-full p-3 rounded bg-[#13212c] text-white focus:outline-none focus:shadow-[0_0_5px_#1a2a33]" />
+                            {oldPasswordError && <p className="text-red-500 text-sm">{oldPasswordError}</p>}
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="password">New Password:</label>
-                            <input
-                                type="password"
-                                id="password"
-                                value={password}
-                                onChange={handlePasswordChange}
-                                required
-                            />
-                            {passwordError && (
-                                <p className="error">{passwordError}</p>
-                            )}
+                        <div className="form-group mb-4">
+                            <label htmlFor="password" className="block mb-2 text-[#b0c4de]">New Password:</label>
+                            <input type="password" id="password" value={password} onChange={handlePasswordChange} required className="w-full p-3 rounded bg-[#13212c] text-white focus:outline-none focus:shadow-[0_0_5px_#1a2a33]" />
+                            {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="confirmPassword">
-                                Confirm Password:
-                            </label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
-                                required
-                            />
-                            {confirmPasswordError && (
-                                <p className="error">{confirmPasswordError}</p>
-                            )}
+                        <div className="form-group mb-4">
+                            <label htmlFor="confirmPassword" className="block mb-2 text-[#b0c4de]">Confirm Password:</label>
+                            <input type="password" id="confirmPassword" value={confirmPassword} onChange={handleConfirmPasswordChange} required className="w-full p-3 rounded bg-[#13212c] text-white focus:outline-none focus:shadow-[0_0_5px_#1a2a33]" />
+                            {confirmPasswordError && <p className="text-red-500 text-sm">{confirmPasswordError}</p>}
                         </div>
-                        <button type="submit">Update Password</button>
+                        <button type="submit" className="px-4 py-2 rounded bg-[#212c34] text-white transition duration-300 hover:bg-[#13212c]">Update Password</button>
                     </form>
                 </div>
             </div>

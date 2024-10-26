@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify-icon/react";
 import logo from "../images/quizmaster-high-resolution-logo-white-transparent.png";
-import "./Layout.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import LogoutConfirmation from "./LogoutConfirmation";
 import Navbar from "./Navbar";
@@ -38,10 +37,9 @@ const Layout = ({ children }) => {
             navigate("/");
         }
 
-        const path = location.pathname; // Get the current pathname from location
+        const path = location.pathname;
         document.title = "Dashboard | QuizMaster";
 
-        // Check for quiz detail route
         if (path.startsWith("/quiz/")) {
             setActiveSection("my-tests");
             document.title = "My Tests | QuizMaster";
@@ -65,6 +63,7 @@ const Layout = ({ children }) => {
             document.title = "UserGuide | QuizMaster";
         }
     }, [location]);
+
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
@@ -93,10 +92,11 @@ const Layout = ({ children }) => {
         localStorage.removeItem("attemptedRoute");
         window.location.href = "/";
     };
+
     return (
         <div>
             <Navbar />
-            <div className="layout mt-[8vh] h-[92vh]">
+            <div className="flex mt-[8vh] h-[92vh]">
                 <LogoutConfirmation
                     open={showConfirm}
                     onConfirm={handleLogout}
@@ -104,12 +104,12 @@ const Layout = ({ children }) => {
                 />
 
                 <div
-                    className={`sidebar ${
-                        sidebarOpen ? "open" : ""
-                    } mt-[8vh] h-[88vh] rounded-xl bg-[#0d1b2a] font-sans`}
+                    className={`fixed top-5 left-[1vw] mt-[8vh] h-[88vh] rounded-xl bg-[#0d1b2a] font-sans text-white transition-transform ease-in-out duration-300 ${
+                        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    } ${sidebarOpen ? "block" : "hidden"} sm:block w-64`}
                 >
                     <nav>
-                        <ul>
+                        <ul className="space-y-1">
                             {[
                                 "my-tests",
                                 "my-results",
@@ -119,50 +119,63 @@ const Layout = ({ children }) => {
                             ].map((section) => (
                                 <li
                                     key={section}
-                                    className={`${
+                                    className={`flex items-center cursor-pointer rounded-xl border m-2 p-4 transition duration-300 hover:text-white ${
                                         activeSection === section
-                                            ? "active bg-[#62b6cb] hover:text-white"
+                                            ? "bg-[#62b6cb]"
                                             : ""
-                                    } bord er border-red-700 m-2 rounded-xl`}
+                                    }`}
                                 >
                                     <Link
                                         to={`/${section}`}
+                                        className="flex items-center w-full text-lg text-inherit"
                                         onClick={() =>
                                             setActiveSection(section)
                                         }
                                     >
-                                        <span className="h-[35px]">
+                                        <span className="text-2xl mr-2">
                                             <Icon icon={getIcon(section)} />
                                         </span>
-                                        {section.charAt(0).toUpperCase() +
-                                            section.slice(1).replace(/-/g, " ")}
+                                        {section
+                                            .charAt(0)
+                                            .toUpperCase() +
+                                            section
+                                                .slice(1)
+                                                .replace(/-/g, " ")}
                                     </Link>
                                 </li>
                             ))}
                         </ul>
                     </nav>
                     <button
-                        className="logout-button rounded-xl"
+                        className="w-full p-4 text-lg rounded-xl bg-[#212c34] transition-colors duration-300 hover:bg-[#13212c] flex justify-center items-center"
                         onClick={() => {
                             setShowConfirm(true);
                             setSidebarOpen(false);
                         }}
                     >
-                        Logout{" "}
-                        <span>
+                        Logout
+                        <span className="text-xl pl-2 pt-1">
                             <Icon icon="basil:logout-outline" />
                         </span>
                     </button>
                 </div>
-                <div className="main-section">
-                    <button className="hamburger" onClick={toggleSidebar}>
+
+                <div
+                    className={`flex-1 ml-64 p-5 overflow-y-auto transition-margin duration-300 ${
+                        sidebarOpen ? "ml-64" : "ml-0"
+                    }`}
+                >
+                    <button
+                        className="absolute top-5 right-5 text-2xl sm:hidden"
+                        onClick={toggleSidebar}
+                    >
                         {sidebarOpen ? (
                             <Icon icon="material-symbols:close" />
                         ) : (
                             <Icon icon="mdi:menu" />
                         )}
                     </button>
-                    <div className="layout-children"> {children} </div>
+                    <div className="layout-children">{children}</div>
                 </div>
             </div>
         </div>

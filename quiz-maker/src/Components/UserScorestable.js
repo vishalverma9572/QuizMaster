@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import './UserScorestable.css';
 
 const UserScoresTable = ({ users }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -11,7 +10,6 @@ const UserScoresTable = ({ users }) => {
     setCurrentPage(1); // Reset pagination to first page when searching
   };
 
-  // Filter users based on search term
   const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -22,12 +20,10 @@ const UserScoresTable = ({ users }) => {
     setCurrentPage(page);
   };
 
-  // Logic to calculate which users to display for current page
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
 
-  // Logic to generate pagination buttons
   const getPageNumbers = () => {
     let pageNumbers = [];
 
@@ -48,16 +44,17 @@ const UserScoresTable = ({ users }) => {
     return pageNumbers;
   };
 
-  // Render pagination buttons
   const renderPagination = () => {
     const pageNumbers = getPageNumbers();
 
     return (
-      <div className="pagination">
+      <div className="mt-4 text-center">
         {pageNumbers.map((number, index) => (
           <button
             key={index}
-            className={number === currentPage ? 'active' : ''}
+            className={`mx-1 px-3 py-2 text-white ${
+              number === currentPage ? 'bg-blue-600' : 'bg-blue-900'
+            } rounded hover:bg-blue-700 transition`}
             onClick={() => {
               if (typeof number === 'number') {
                 handleClick(number);
@@ -72,30 +69,31 @@ const UserScoresTable = ({ users }) => {
   };
 
   return (
-    <div className="user-scores-table">
-      <h2>User Scores</h2>
-      <div className="search-container">
+    <div className="border border-gray-300 rounded-lg bg-gray-50 p-5 mt-5">
+      <h2 className="mb-4 font-serif text-lg font-semibold text-blue-900 border-b-2 border-blue-900">User Scores</h2>
+      <div className="mb-4 flex justify-end">
         <input
           type="text"
           placeholder="Search by username"
           value={searchTerm}
           onChange={handleSearchChange}
+          className="w-full max-w-xs p-2 text-base border border-blue-900 rounded focus:outline-none focus:ring-2 focus:ring-blue-700"
         />
       </div>
-      <table>
+      <table className="w-full border-collapse">
         <thead>
           <tr>
-            <th>Rank</th>
-            <th>Username</th>
-            <th>Score</th>
+            <th className="border px-2 py-3 bg-blue-900 text-white text-center">Rank</th>
+            <th className="border px-2 py-3 bg-blue-900 text-white text-center">Username</th>
+            <th className="border px-2 py-3 bg-blue-900 text-white text-center">Score</th>
           </tr>
         </thead>
         <tbody>
           {currentUsers.map((user, index) => (
-            <tr key={user.username}>
-              <td>{indexOfFirstUser + index + 1}</td>
-              <td>{user.username}</td>
-              <td>{user.score}</td>
+            <tr key={user.username} className={index % 2 === 0 ? 'bg-gray-100' : ''}>
+              <td className="border px-2 py-2">{indexOfFirstUser + index + 1}</td>
+              <td className="border px-2 py-2">{user.username}</td>
+              <td className="border px-2 py-2">{user.score}</td>
             </tr>
           ))}
         </tbody>

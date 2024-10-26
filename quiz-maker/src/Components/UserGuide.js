@@ -1,6 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import "./UserGuide.css";
+import { Link } from "react-router-dom";
 import createQuizImg from "../images/user-guide-images/CreateQuizImg.png";
 import quizDetImg from "../images/user-guide-images/QuizDet.png";
 import editQuizImg from "../images/user-guide-images/EditQuiz.png";
@@ -16,269 +15,115 @@ import Navbar from "./Navbar";
 
 const UserGuide = () => {
     const scrollCreate = () => {
-        document
-            .getElementById("usrg-testCreation")
-            .scrollIntoView({ behavior: "smooth" });
+        document.getElementById("usrg-testCreation").scrollIntoView({ behavior: "smooth" });
     };
     const scrollTests = () => {
-        document
-            .getElementById("usrg-myTests")
-            .scrollIntoView({ behavior: "smooth" });
+        document.getElementById("usrg-myTests").scrollIntoView({ behavior: "smooth" });
     };
     const scrollTake = () => {
-        document
-            .getElementById("usrg-myTests")
-            .scrollIntoView({ behavior: "smooth" });
+        document.getElementById("usrg-myTests").scrollIntoView({ behavior: "smooth" });
     };
     const scrollResult = () => {
-        document
-            .getElementById("usrg-results")
-            .scrollIntoView({ behavior: "smooth" });
+        document.getElementById("usrg-results").scrollIntoView({ behavior: "smooth" });
     };
     const scrollProfile = () => {
-        document
-            .getElementById("usrg-profile")
-            .scrollIntoView({ behavior: "smooth" });
+        document.getElementById("usrg-profile").scrollIntoView({ behavior: "smooth" });
     };
+    
     return (
         <>
             <div className="flex justify-center items-center">
                 <Navbar />
                 <div id="header" className="mt-[11vh] w-[97.5vw] h-[88vh] overflow-scroll bg-[#0d1b2a] rounded-xl border-2 border-cyan-500 p-5 text-white">
-                    <h1 className="heading">User Guide</h1>
-                    <hr />
-                    <div id="userguide-container">
-                        <h2>Table of Contents</h2>
-                        <div id="hl"><hr/></div>
-                        
-                        <div id="tableOfContent">
-                            
-                            <ul id="tableOfContent-items">
-                                <li className="content-item">
-                                    <button onClick={scrollCreate}>
+                    <h1 className="text-3xl">User Guide</h1>
+                    <hr className="h-[3px] bg-black my-12" />
+                    
+                    <div id="userguide-container" className="mx-10">
+                        <h2 className="text-center text-[2.5rem]">Table of Contents</h2>
+                        <hr className="w-[35%] mx-auto mb-12" />
+
+                        <div id="tableOfContent" className="flex justify-around">
+                            <ul id="tableOfContent-items" className="flex flex-wrap justify-between list-none">
+                                <li className="p-2 cursor-pointer leading-[25px]">
+                                    <button onClick={scrollCreate} className="transition-transform transform hover:scale-[1.1] border-2 border-[#00ffff] bg-transparent text-white py-2 px-4 rounded-lg hover:bg-[#00ffff] hover:text-black">
                                         How to create tests?
                                     </button>
                                 </li>
-                                <li className="content-item">
-                                    <button onClick={scrollTests}>
+                                <li className="p-2 cursor-pointer leading-[25px]">
+                                    <button onClick={scrollTests} className="transition-transform transform hover:scale-[1.1] border-2 border-[#00ffff] bg-transparent text-white py-2 px-4 rounded-lg hover:bg-[#00ffff] hover:text-black">
                                         See your tests
                                     </button>
                                 </li>
-                                <li className="content-item">
-                                    <button onClick={scrollTake}>
+                                <li className="p-2 cursor-pointer leading-[25px]">
+                                    <button onClick={scrollTake} className="transition-transform transform hover:scale-[1.1] border-2 border-[#00ffff] bg-transparent text-white py-2 px-4 rounded-lg hover:bg-[#00ffff] hover:text-black">
                                         Where and how to take tests?
                                     </button>
                                 </li>
-                                <li className="content-item">
-                                    <button onClick={scrollResult}>
+                                <li className="p-2 cursor-pointer leading-[25px]">
+                                    <button onClick={scrollResult} className="transition-transform transform hover:scale-[1.1] border-2 border-[#00ffff] bg-transparent text-white py-2 px-4 rounded-lg hover:bg-[#00ffff] hover:text-black">
                                         Results section
                                     </button>
                                 </li>
-                                <li className="content-item">
-                                <span className="cyan-underline"><button onClick={scrollProfile}>
+                                <li className="p-2 cursor-pointer leading-[25px]">
+                                    <button onClick={scrollProfile} className="transition-transform transform hover:scale-[1.1] border-2 border-[#00ffff] bg-transparent text-white py-2 px-4 rounded-lg hover:bg-[#00ffff] hover:text-black">
                                         Manage your Profile
-                                    </button></span>
+                                    </button>
                                 </li>
                             </ul>
                         </div>
-                        <div id="introduction">
-                             <span className="cyan-underline"><Link to="/" style={{ textDecoration: "none", color: "white" }}>
+
+                        <div id="introduction" className="my-12">
+                            <Link to="/" className="underline text-cyan">
                                 QuizMaster
-                            </Link>{" "}</span>
-                            is a comprehensive quiz application that allows
-                            users to create, take, and manage quizzes. It is an
-                            easy-to-use quiz application with a friendly
-                            user-interface with functionalities such as viewing
-                            scheduled or pending tests and reviewing the results
-                            of the quizzes that have been taken.
-                            <br />
-                            This is an easy-to-read user guide to help you get
-                            started with QuizMaster.
+                            </Link>{" "}
+                            is a comprehensive quiz application that allows users to create, take, and manage quizzes. It is an easy-to-use quiz application with a friendly user-interface...
                         </div>
-                        <div id="usrg-testCreation">
-                        <span className="cyan-underline"><h1 >Create Tests</h1></span>
-                            <h3>1.&ensp;How to create new test?</h3>
-                            <img
-                                id="user-guid-img"
-                                src={createQuizImg}
-                                alt="create-quiz"
-                            />
-                            <p>
-                                On the create test page, while creating a new
-                                test,&ensp;the user can see the above dialog box
-                                where the user can create a quiz by entering the
-                                necessary details of the quiz,&ensp;such as{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Quiz Title
-                                </span>
-                                ,&ensp;
-                                <span style={{ fontWeight: "bold" }}>
-                                    Time Limit
-                                </span>
-                                .
-                                <br />
-                                The quiz maker can add various questions for
-                                each quiz, and for each question the user can
-                                enter various options.&ensp;If a question is
-                                incorrect, the user is free to remove it.
-                                <br />
-                                For each question, the user also has to specify
-                                which of the provided options is the correct
-                                one.
+
+                        <div id="usrg-testCreation" className="mb-12">
+                            <h1 className="text-2xl underline mb-5">Create Tests</h1>
+                            <h3 className="text-xl mb-2">1.&ensp;How to create new test?</h3>
+                            <img id="user-guid-img" src={createQuizImg} alt="create-quiz" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                On the create test page, while creating a new test, the user can see the above dialog box...
                             </p>
-                            <span className="cyan-underline"><h3>2.&ensp;Quiz Overview</h3></span>
-                            <img
-                                id="user-guid-img"
-                                src={quizDetImg}
-                                alt="quiz-detail"
-                            />
-                            <p>
-                                After creating the quiz, the quiz maker would
-                                see the overview page. This shows an overview of
-                                the quiz the user has created. The user can edit
-                                the quiz by clicking the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Edit Quiz
-                                </span>{" "}
-                                button. The user can also delete the quiz by
-                                clicking the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Delete Quiz
-                                </span>{" "}
-                                button.
+                            <h3 className="text-xl underline mb-2">2.&ensp;Quiz Overview</h3>
+                            <img id="user-guid-img" src={quizDetImg} alt="quiz-detail" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                After creating the quiz, the quiz maker would see the overview page...
                             </p>
-                            <span className="cyan-underline"><h3>3.&ensp;Edit Quiz</h3></span>
-                            <img
-                                id="user-guid-img"
-                                src={editQuizImg}
-                                alt="edit-quiz"
-                            />
-                            <p>
-                                After clicking on "Edit Quiz", the user would
-                                see this edit quiz page to update the quiz.
-                                Here, the user can change the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Quiz Title
-                                </span>
-                                ,&ensp;
-                                <span style={{ fontWeight: "bold" }}>
-                                    Time limit
-                                </span>
-                                ,&ensp;
-                                <span style={{ fontWeight: "bold" }}>
-                                    number of questions
-                                </span>
-                                ,&ensp;
-                                <span style={{ fontWeight: "bold" }}>
-                                    options of each question
-                                </span>
-                                .
+                            <h3 className="text-xl underline mb-2">3.&ensp;Edit Quiz</h3>
+                            <img id="user-guid-img" src={editQuizImg} alt="edit-quiz" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                After clicking on "Edit Quiz", the user would see this edit quiz page...
                             </p>
                         </div>
-                        <div id="usrg-myTests">
-                        <span className="cyan-underline"><h1>See Tests</h1></span>
-                            <img
-                                id="user-guid-img"
-                                src={MyTestImg}
-                                alt="all-quizes"
-                            />
-                            <p>
-                                Upon Clicking on{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    My Tests
-                                </span>
-                                ,&ensp;The user can oversee all the quizzes that
-                                have been created so far.&ensp;
-                                <span style={{ fontWeight: "bold" }}>
-                                    Details
-                                </span>{" "}
-                                button on each quiz enables the user to edit and
-                                update the quiz, whereas the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Share
-                                </span>{" "}
-                                button copies the quiz ID to the clipboard and
-                                enables the user to share the quiz ID through
-                                various sharing platforms.
+
+                        <div id="usrg-myTests" className="mb-12">
+                            <h1 className="text-2xl underline mb-5">See Tests</h1>
+                            <img id="user-guid-img" src={MyTestImg} alt="all-quizes" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                Upon Clicking on <span className="font-bold">My Tests</span>, the user can oversee all the quizzes...
                             </p>
                         </div>
-                        <div id="usrg-myTests">
-                        <span className="cyan-underline"><h1>Take Test</h1></span>
-                            <h3>Step 1.</h3>
-                            <img
-                                id="user-guid-img"
-                                src={TestImg}
-                                alt="test-id"
-                            />
-                            <h3>Step 2.</h3>
-                            <img
-                                id="user-guid-img"
-                                src={startTest}
-                                alt="start-test"
-                            />
-                            <img
-                                id="user-guid-img"
-                                src={startImg}
-                                alt="attempt-quiz"
-                                style={{ width: "55vw" }}
-                            />
-                            <p>
-                                After starting the quiz, complete the quiz by
-                                attempting all the questions and ticking the
-                                correct options. Once all the questions are
-                                answered, click on the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Submit Quiz
-                                </span>{" "}
-                                button to submit the quiz.
+
+                        <div id="usrg-results" className="mb-12">
+                            <h1 className="text-2xl underline mb-5">See result of quiz</h1>
+                            <img id="user-guid-img" src={resultsImg} alt="result" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                Clicking on the <span className="font-bold">Stats</span> button will show the ranking list...
+                            </p>
+                            <img id="user-guid-img" src={listImg} alt="ranking" className="w-[50vw] mx-auto" />
+                            <img id="user-guid-img" src={standingImg} alt="standing" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                See the <span className="font-bold">Result Statistics</span>...
                             </p>
                         </div>
-                        <div id="usrg-results">
-                          <span className="cyan-underline"><h1>See result of quiz</h1></span>
-                           
-                            <img
-                                id="user-guid-img"
-                                src={resultsImg}
-                                alt="result"
-                            />
-                            <p>
-                                Clicking on the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Stats
-                                </span>{" "}
-                                button will show the ranking list and the
-                                standing of the attendee among other peers.
-                            </p>
-                            <img
-                                id="user-guid-img"
-                                src={listImg}
-                                alt="ranking"
-                            />
-                            <img
-                                id="user-guid-img"
-                                src={standingImg}
-                                alt="standing"
-                            />
-                            <p>
-                                See the{" "}
-                                <span style={{ fontWeight: "bold" }}>
-                                    Result Statistics
-                                </span>{" "}
-                                of the quiz along with your standing in the quiz
-                                and the peers who have attempted the quiz.
-                            </p>
-                        </div>
-                        <div id="usrg-profile">
-                        <span className="cyan-underline"><h1>Manage Profile</h1></span>
-                            <img
-                                id="user-guid-img"
-                                src={profileImg}
-                                alt="profile-img"
-                            />
-                            <p>
-                                In the profile section, the user can change the
-                                profile photo or update the existing quiz
-                                settings.
+
+                        <div id="usrg-profile" className="my-12">
+                            <h1 className="text-2xl underline mb-5">Manage Profile</h1>
+                            <img id="user-guid-img" src={profileImg} alt="profile-img" className="w-[50vw] mx-auto" />
+                            <p className="py-2">
+                                In the profile section, the user can change the profile photo...
                             </p>
                         </div>
                     </div>

@@ -133,41 +133,32 @@ const ResultPage = () => {
         fetchMyScore();
     }, [quizid]);
 
-    return (
-        <>
-            {isstatsLoading && isScoresLoading && isMyScoreLoading && (
-                <PageLoader />
-            )}
-            {!isstatsLoading && !isScoresLoading && !isMyScoreLoading && (
-                <div className="result-page">
-                    <div className="stats-section">
-                        <StyledTypography variant="h4">
-                            Result Page
-                        </StyledTypography>
-                        <button
-                            className="gobackbtn"
-                            onClick={() =>
-                                (window.location.href = "/dashboard")
-                            }
-                        >
-                            {" "}
-                            &#8592; Back to Dashboard
-                        </button>
-                        <div>
-                            <ResultStats data={quizStats} myScore={myScore} />
-                        </div>
-                    </div>
-
-                    <div className="user-scores-section">
-                        <div className="user-scores-list">
-                            {/* Display users in sections of 10 */}
-                            <UserScoresTable users={userScores} />
-                        </div>
-                    </div>
-                </div>
-            )}
-        </>
-    );
+  return (
+    <>
+      {isstatsLoading && isScoresLoading && isMyScoreLoading && <PageLoader />}
+      {!isstatsLoading && !isScoresLoading && !isMyScoreLoading && (
+        <div className="bg-gray-800 p-5 flex flex-col items-center">
+          <div className="bg-white rounded-lg p-5 mb-5 w-full max-w-4xl shadow-md">
+            <StyledTypography variant="h4">Result Page</StyledTypography>
+            <button
+              className="bg-gray-700 text-white border-none py-2 px-4 rounded hover:bg-gray-600 mb-5"
+              onClick={() => (window.location.href = '/dashboard')}
+            >
+              &#8592; Back to Dashboard
+            </button>
+            <div>
+              <ResultStats data={quizStats} myScore={myScore} />
+            </div>
+          </div>
+          <div className="bg-white rounded-lg p-5 w-full max-w-4xl shadow-md">
+            <div className="mt-5">
+              <UserScoresTable users={userScores} />
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default ResultPage;

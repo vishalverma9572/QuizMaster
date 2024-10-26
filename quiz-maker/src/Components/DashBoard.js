@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./DashBoard.css";
 import MyTests from "./MyTests";
 import MyResults from "./MyResults";
 import CreateTest from "./CreateTest";
