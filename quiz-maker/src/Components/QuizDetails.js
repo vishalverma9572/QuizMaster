@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
+
+import { jwtDecode } from 'jwt-decode';
+
 import { toast } from 'react-toastify';
+
 
 const QuizDetails = () => {
   const navigate = useNavigate();
@@ -20,6 +24,20 @@ const QuizDetails = () => {
   }
 
   useEffect(() => {
+
+
+    const token = localStorage.getItem("token");
+        try {
+            const decoded = jwtDecode(token);
+            if (!decoded) {
+                localStorage.removeItem("token");
+                navigate("/");
+            }
+        } catch (error) {
+            localStorage.removeItem("token");
+            navigate("/");
+        }
+
     const fetchQuiz = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/${quiz_id}`;

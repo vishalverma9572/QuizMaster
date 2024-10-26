@@ -13,7 +13,7 @@ const UserScoresTable = ({ users }) => {
   const filteredUsers = users.filter(user =>
     user.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+ 
   const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
   const handleClick = (page) => {

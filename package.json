@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.16.0",
@@ -19,6 +20,9 @@
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
+=======
+    "jwt-decode": "^4.0.0",
+>>>>>>> main
     "typeit-react": "^2.7.3"
   },
   "scripts": {

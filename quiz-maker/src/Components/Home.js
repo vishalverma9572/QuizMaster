@@ -6,6 +6,7 @@ import useWindowSize from "./UseWindowSize";
 import Loader from "./Loader";
 import TypeIt from "typeit-react";
 import Navbar from "./Navbar";
+import { jwtDecode } from "jwt-decode";
 
 const Home = () => {
   const window = useWindowSize();
