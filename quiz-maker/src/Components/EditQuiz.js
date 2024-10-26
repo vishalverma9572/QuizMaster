@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./EditQuiz.css";
 import { useNavigate, useParams } from "react-router-dom";
 import Layout from "./Layout";
 import { toast } from "react-toastify";
@@ -104,7 +103,6 @@ const EditQuiz = () => {
     const removeQuestion = (index) => {
         const newQuestions = [...quizData.questions];
         if (newQuestions[index]._id) {
-            // If the question has an _id (indicating it's a saved question), do not allow removal
             return;
         }
         newQuestions.splice(index, 1);
@@ -148,7 +146,6 @@ const EditQuiz = () => {
                 body: JSON.stringify(quizData),
             });
             const data = await response.json();
-            console.log(data);
             if (response.ok) {
                 toast.success("Quiz updated successfully", {
                     position: "top-center",
@@ -178,48 +175,47 @@ const EditQuiz = () => {
 
     return (
         <Layout>
-            <div className="edit-quiz bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
-                <h2>Edit Quiz</h2>
+            <div className="bg-[#0d1b2a] text-white rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll p-12 max-w-[800px] mx-auto">
+                <h2 className="mb-5">Edit Quiz</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="title">Quiz Title</label>
+                    <div className="mb-4">
+                        <label htmlFor="title" className="block mb-2 font-bold">Quiz Title</label>
                         <input
                             type="text"
                             id="title"
                             value={quizData.title}
                             onChange={handleTitleChange}
                             required
+                            className="w-full p-2 rounded-lg border-none"
                         />
                     </div>
-                    <div className="form-group">
-                        <label htmlFor="timeLimit">Time Limit (minutes)</label>
+                    <div className="mb-4">
+                        <label htmlFor="timeLimit" className="block mb-2 font-bold">Time Limit (minutes)</label>
                         <input
                             type="number"
                             id="timeLimit"
                             value={quizData.timeLimit}
                             onChange={handleTimeLimitChange}
                             required
+                            className="p-2 w-[100px] rounded-lg"
                         />
                     </div>
                     {quizData.questions.map((q, qIndex) => (
-                        <div key={qIndex} className="question-card">
-                            <div className="form-group">
-                                <label htmlFor={`question-${qIndex}`}>
-                                    Question
-                                </label>
+                        <div key={qIndex} className="bg-[#1a2a33] text-[#2d3b45] p-5 rounded-lg mb-5 relative">
+                            <div className="mb-4">
+                                <label htmlFor={`question-${qIndex}`} className="block mb-2 font-bold">Question</label>
                                 <input
                                     type="text"
                                     id={`question-${qIndex}`}
                                     value={q.question}
-                                    onChange={(e) =>
-                                        handleQuestionChange(qIndex, e)
-                                    }
+                                    onChange={(e) => handleQuestionChange(qIndex, e)}
                                     required
+                                    className="w-full p-2 rounded-lg border-none"
                                 />
                                 {!q._id && (
                                     <button
                                         type="button"
-                                        className="remove-button"
+                                        className="bg-[#ff4c4c] text-white rounded-lg p-2 absolute top-2 right-2"
                                         onClick={() => removeQuestion(qIndex)}
                                     >
                                         Remove Question
@@ -227,33 +223,20 @@ const EditQuiz = () => {
                                 )}
                             </div>
                             {q.options.map((option, oIndex) => (
-                                <div
-                                    key={oIndex}
-                                    className="form-group option-group"
-                                >
-                                    <label
-                                        htmlFor={`option-${qIndex}-${oIndex}`}
-                                    >
-                                        Option {oIndex + 1}
-                                    </label>
+                                <div key={oIndex} className="flex items-center mb-2">
+                                    <label htmlFor={`option-${qIndex}-${oIndex}`} className="mr-2">Option {oIndex + 1}</label>
                                     <input
                                         type="text"
                                         id={`option-${qIndex}-${oIndex}`}
                                         value={option}
-                                        onChange={(e) =>
-                                            handleOptionChange(
-                                                qIndex,
-                                                oIndex,
-                                                e
-                                            )
-                                        }
+                                        onChange={(e) => handleOptionChange(qIndex, oIndex, e)}
                                         required
+                                        className="w-full p-2 rounded-lg border-none mr-2"
                                     />
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            removeOption(qIndex, oIndex)
-                                        }
+                                        className="bg-[#1a2a33] text-white p-2 rounded-lg"
+                                        onClick={() => removeOption(qIndex, oIndex)}
                                     >
                                         Remove
                                     </button>
@@ -262,32 +245,34 @@ const EditQuiz = () => {
                                         id={`correctAnswer-${qIndex}-${oIndex}`}
                                         name={`correctAnswer-${qIndex}`}
                                         checked={q.correctAnswer === option}
-                                        onChange={() =>
-                                            handleCorrectAnswerChange(
-                                                qIndex,
-                                                oIndex
-                                            )
-                                        }
+                                        onChange={() => handleCorrectAnswerChange(qIndex, oIndex)}
+                                        className="ml-2"
                                     />
-                                    <label
-                                        htmlFor={`correctAnswer-${qIndex}-${oIndex}`}
-                                    >
-                                        Correct
-                                    </label>
+                                    <label htmlFor={`correctAnswer-${qIndex}-${oIndex}`} className="ml-1">Correct</label>
                                 </div>
                             ))}
                             <button
                                 type="button"
                                 onClick={() => addOption(qIndex)}
+                                className="bg-[#1a2a33] text-white p-2 rounded-lg mt-2"
                             >
                                 Add Option
                             </button>
                         </div>
                     ))}
-                    <button type="button" onClick={addQuestion}>
+                    <button
+                        type="button"
+                        onClick={addQuestion}
+                        className="bg-[#1a2a33] text-white p-2 rounded-lg mb-4"
+                    >
                         Add Question
                     </button>
-                    <button type="submit">Update Quiz</button>
+                    <button
+                        type="submit"
+                        className="bg-[#1a2a33] text-white p-2 rounded-lg w-full"
+                    >
+                        Save Quiz
+                    </button>
                 </form>
             </div>
         </Layout>
