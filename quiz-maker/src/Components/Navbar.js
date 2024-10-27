@@ -25,12 +25,12 @@ const Navbar = () => {
     const token = localStorage.getItem("token");
 
     return (
-        <nav className="w-[98vw] left-[1vw] h-[8vh] bg-[#0d1b2a] shadow-lg font-sans fixed top-[10px] rounded-xl z-50">
+        <nav className="w-[98vw] left-[1vw] h-[11vh] max-xl::h-[8vh] bg-[#0d1b2a] shadow-lg font-sans fixed top-[10px] rounded-xl z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <Link
-                            href="/"
+                            to="/"
                             className="flex-shrink-0 flex items-center"
                         >
                             <img className="w-[45px]" src={logo} alt="logo" />

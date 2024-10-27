@@ -69,7 +69,7 @@ const Home = () => {
                         className={`${
                             window.width <= 820 &&
                             "flex-col items-center gap-[50px]"
-                        } flex w-screen h-[92vh] relative top-[8vh]`}
+                        } flex w-screen h-[92vh] relative top-[15vh] max-lg:top-[8vh]`}
                     >
                         <div
                             className={`${
