@@ -1,10 +1,10 @@
 .create-quiz {
-  /* background-color: #2d3b45; */
+  background-color: #2d3b45;
   color: #fff;
-  /* padding: 20px; */
+  padding: 20px;
   border-radius: 10px;
-  /* width: 100%; */
-  max-width: 1000px;
+  width: 100%;
+  max-width: 800px;
   margin: 0 auto;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .create-quiz .question-card {
-  background-color: #415a77;
+  background-color: #fff;
   color: #2d3b45;
   padding: 20px;
   border-radius: 10px;
@@ -148,7 +148,5 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* For Firefox */
 input[type="number"] {
-  appearance: textfield;
   -moz-appearance: textfield;
-
 }

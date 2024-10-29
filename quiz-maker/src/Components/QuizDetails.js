@@ -3,11 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './QuizDetails.css';
 import Layout from './Layout';
 
-import { jwtDecode } from 'jwt-decode';
-
-import { toast } from 'react-toastify';
-
-
 const QuizDetails = () => {
     const navigate = useNavigate();
     document.title = 'Details Page | QuizMaster';
@@ -25,20 +20,6 @@ const QuizDetails = () => {
     window.location.href = "/login";
   }
   useEffect(() => {
-
-
-    const token = localStorage.getItem("token");
-        try {
-            const decoded = jwtDecode(token);
-            if (!decoded) {
-                localStorage.removeItem("token");
-                navigate("/");
-            }
-        } catch (error) {
-            localStorage.removeItem("token");
-            navigate("/");
-        }
-
     const fetchQuiz = async () => {
       try {
         const url = `${process.env.REACT_APP_BACKEND_URL}/quizzes/${quiz_id}`;
@@ -51,12 +32,7 @@ const QuizDetails = () => {
         if (response.ok) {
           setQuiz(data);
         } else {
-          toast.error(data.msg, {
-            position: "top-center",
-            autoClose: 3000,
-            theme: "colored",
-            style: { backgroundColor: "white", color: "#F04438" },
-          });
+          alert(data.msg);
         }
       } catch (error) {
         console.error('Error fetching quiz details:', error);
@@ -77,20 +53,10 @@ const QuizDetails = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        toast.success(data.msg, {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "colored",
-          style: { backgroundColor: "white", color: "#2d3b45" },
-        });
+        alert(data.msg);
         navigate('/dashboard');
       } else {
-        toast.error(data.msg, {
-          position: "top-center",
-          autoClose: 3000,
-          theme: "colored",
-          style: { backgroundColor: "white", color: "#F04438" },
-        });
+        alert(data.msg);
       }
     } catch (error) {
       console.error('Error deleting quiz:', error);
@@ -107,7 +73,8 @@ const QuizDetails = () => {
 
   return (
     <Layout >
-    <div className="quiz-details bg-[#0d1b2a] rounded-xl ml-[5px] h-[88vh] w-[80vw] fixed overflow-scroll">
+
+    <div className="quiz-details">
       
       <div className="buttons">
         <button onClick={() => setShowConfirmEdit(true)}>Edit Quiz</button>

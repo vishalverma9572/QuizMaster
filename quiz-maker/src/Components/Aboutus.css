@@ -50,9 +50,8 @@
   padding: 20px; 
   font-size: 18px;
   font-weight: 500;
-  background: #0d1b2a;
-  color: #ebebeb;
-  /* color: black; */
+  background: rgb(20, 210, 210);
+  color: black;
   margin-bottom: 2px;
   cursor: pointer;
   position: relative;

@@ -21,7 +21,6 @@
     "react-password-strength-bar": "^0.4.1",
     "react-router-dom": "^6.24.1",
     "react-scripts": "5.0.1",
-    "react-toastify": "^10.0.6",
     "typeit-react": "^2.7.3",
     "web-vitals": "^2.1.4"
   },

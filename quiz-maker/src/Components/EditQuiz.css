@@ -1,6 +1,6 @@
 
 .edit-quiz {
-    /* background-color: #2d3b45; */
+    background-color: #2d3b45;
     color: #fff;
     padding: 50px;
     /* border-radius: 10px; */
@@ -59,7 +59,7 @@
   }
   
   .edit-quiz .question-card {
-    background-color: #1a2a33;
+    background-color: #fff;
     color: #2d3b45;
     padding: 20px;
     border-radius: 10px;

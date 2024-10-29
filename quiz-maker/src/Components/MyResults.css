@@ -1,7 +1,7 @@
 .quiz-results-container {
     
     margin: 0 auto;
-    /* padding: 20px; */
+    padding: 20px;
   }
   
 
@@ -19,7 +19,6 @@
     width: 300px;
     border: 1px solid #235;
     border-radius: 5px;
-    margin: 15px;
   }
   
   .card-content {
