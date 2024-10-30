@@ -1,6 +1,6 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
+import "./Components/Footer.css";
 import Authorisation from "./Components/Authorisation";
 import Home from "./Components/Home";
 import Dashboard from "./Components/DashBoard";
@@ -12,6 +12,9 @@ import ForgotPassword from "./Components/ForGotPassword";
 import ResetPassword from "./Components/ResetPassword";
 import Aboutus from "./Components/Aboutus";
 import UserGuide from "./Components/UserGuide";
+import Footer from "./Components/Footer";
+// import Testimonial from "./Components/Testimonial";
+import Contact from "./Components/Contact";
 
 function App() {
   return (
@@ -36,8 +39,11 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword/>} />
           <Route path="/reset-password/:token" element={<ResetPassword/>} />
           <Route path="*" element={<Home/>} />
-
+          
         </Routes>
+        {/* <Testimonial/> */}
+        <Contact/>
+        <Footer/>
       </Router>
     </>
   );
