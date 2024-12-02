@@ -1,12 +1,19 @@
- ## Description
+## Pull Request Title
+<!-- Provide a clear and concise title for the pull request that summarizes the changes. -->
+
+## Description
 <!-- Detailed explanation of the changes. Include:
   - The problem being addressed.
   - How your changes resolve the issue.
   - Any additional context or reasoning for your approach.
 -->
 
+
 ## Related Issues
-<!-- List any issue numbers or links that are associated with this PR, e.g., "Fixes #123", or "Resolves [issue link]". -->
+<!-- List any issues related to this PR. Use keywords like 'Closes', 'Fixes', or 'Resolves' followed by the issue number. For example:
+Closes #123
+Fixes #456
+-->
 
 ## Type of Change
 <!-- Please select the relevant option and delete others that do not apply: -->
@@ -34,3 +41,4 @@
 
 ## Additional Information
 <!-- Any other information that may help the reviewers understand this PR better. -->
+
