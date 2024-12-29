@@ -65,7 +65,7 @@ const Home = () => {
                 <img src={logo} alt="QuizMaster Logo" />
               </div>
               <h1>Welcome to QuizMaster</h1>
-              <p>
+              <p className='para'>
                 Your ultimate destination to create quizzes and take quizzes. Join us to challenge your knowledge and improve your skills in a fun and engaging way.
               </p>
             </div>
